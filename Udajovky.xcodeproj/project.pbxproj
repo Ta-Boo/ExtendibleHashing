@@ -18,6 +18,7 @@
 		B33FB0AD2544A33700B3AB7E /* NSTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB0AC2544A33700B3AB7E /* NSTextField.swift */; };
 		B33FB0B22544A37B00B3AB7E /* SeededGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB0B12544A37B00B3AB7E /* SeededGenerator.swift */; };
 		B3457FCA2549B72700E9420F /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A27253624D400AB87F2 /* Plot.swift */; };
+		B3457FD8254A0B8600E9420F /* Realty.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A242536246700AB87F2 /* Realty.swift */; };
 		B366FBB62549B658002244F2 /* PDA.swift in Sources */ = {isa = PBXBuildFile; fileRef = B366FBB52549B658002244F2 /* PDA.swift */; };
 		B3A17A252536246700AB87F2 /* Realty.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A242536246700AB87F2 /* Realty.swift */; };
 		B3A17A28253624D400AB87F2 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A27253624D400AB87F2 /* Plot.swift */; };
@@ -315,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3457FD8254A0B8600E9420F /* Realty.swift in Sources */,
 				B3263AB225475A4400AE558F /* KDTreeNode.swift in Sources */,
 				B3263ABC25475E1000AE558F /* SeededGenerator.swift in Sources */,
 				B3263AB925475BA000AE558F /* KDTree.swift in Sources */,

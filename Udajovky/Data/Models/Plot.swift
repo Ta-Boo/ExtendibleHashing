@@ -14,9 +14,9 @@ enum PlotDimensions: Int {
     case gpsPossition = 4
 }
 
-final class Plot: KDTreeNode {
-    var leftSon: Plot?
-    var rightSon: Plot?
+final class Plot: KDNode {
+//    var leftSon: Plot?
+//    var rightSon: Plot?
     
     let registerNumber: Int
     let description: String
@@ -52,7 +52,7 @@ enum KDTreePointImplementationKeys: Int {
     case speed = 3
 }
 
-final class KDTreePointImplementation: KDTreeNode {
+final class KDTreePointImplementation: KDNode {
     static func == (lhs: KDTreePointImplementation, rhs: KDTreePointImplementation) -> Bool {
         true
     }

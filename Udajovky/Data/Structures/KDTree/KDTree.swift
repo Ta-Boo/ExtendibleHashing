@@ -7,9 +7,9 @@
 
 import Foundation
 
-class KDTree<T: KDTreeNode> {
+class KDTree<T: KDNode> {
     let dimensions: Int
-    var root: T?
+    var root: KDPoint<T>?
     
     init(dimensions: Int) {
         self.dimensions = dimensions
@@ -17,7 +17,7 @@ class KDTree<T: KDTreeNode> {
     
     func add(_ element: T) {
         guard let root = root else {
-            self.root = element
+            self.root?.value = element
             return
         }
         
@@ -36,12 +36,22 @@ class KDTree<T: KDTreeNode> {
             dimension = (dimension == dimensions+1) ? 1 : dimension
             direction = chooseDirection(for: element, presentNode: actualNode, dimension: dimension)
         }
-        actualNode.addSon(direction: direction, element: element)
+        addSon(element, to: actualNode, at: dimension)
         
     }
     
-    func chooseDirection(for addedNode: T, presentNode: T, dimension: Int) -> KDTreeDirection {
-        return addedNode.isLess(than: presentNode, dimension: dimension) ? .left : .right
+    private func addSon(_ new: T, to present: KDPoint<T>, at dimension: Int) {
+        let direction = chooseDirection(for: new, presentNode: present, dimension: dimension)
+        switch direction {
+        case .left:
+            present.leftSon = KDPoint(value: new)
+        case .right:
+            present.rightSon = KDPoint(value: new)
+        }
+    }
+    
+    func chooseDirection(for addedNode: T, presentNode: KDPoint<T>, dimension: Int) -> KDTreeDirection {
+        return (addedNode.isLess(than: presentNode.value!, dimension: dimension)) ? .left : .right
     }
     
     

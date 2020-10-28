@@ -1,19 +1,9 @@
 import Foundation
 
-class KDTreePoint<T: Kdtr> {
-    var leftSon: Self?
-    var rightSon: Self?
-    var value
-}
-
-protocol KDTreeNode {
-    var leftSon: Self? { get set }
-    var rightSon: Self? { get set }
-    func sonOccupied(direction: KDTreeDirection) -> Bool
-    func isLess(than other: Self, dimension: Int) -> Bool
-}
-
-extension KDTreeNode {
+class KDPoint<T: KDNode> {
+    var leftSon: KDPoint?
+    var rightSon: KDPoint?
+    var value: T?
     func sonOccupied(direction: KDTreeDirection) -> Bool {
         switch direction {
         case .left:
@@ -23,16 +13,23 @@ extension KDTreeNode {
         }
     }
     
-    mutating func addSon(direction: KDTreeDirection, element: Self) {
-        switch direction {
-        case .left:
-            leftSon = element
-        case .right:
-            rightSon = element
-        }
+    init(value: T) {
+        self.value = value
     }
+    
+//    func addSon(direction: KDTreeDirection, element: T) {
+//        switch direction {
+//        case .left:
+//            leftSon = Kdpo
+//        case .right:
+//            rightSon = element
+//        }
+//    }
 }
 
+protocol KDNode {
+    func isLess(than other: Self, dimension: Int) -> Bool
+}
 
 
 enum KDTreeDirection {

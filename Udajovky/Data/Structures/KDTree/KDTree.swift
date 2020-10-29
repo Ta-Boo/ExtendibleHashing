@@ -18,7 +18,7 @@ class KDTree<T: KDNode> {
     //MARK: 🔓 PUBLIC LAYER 🔓
     func add(_ element: T) {
         guard let root = root else {
-            self.root = KDPoint(value: element)
+            self.root = KDPoint(value: element, dimension: 1)
             return
         }
 
@@ -41,33 +41,88 @@ class KDTree<T: KDNode> {
     }
     
     func delete(_ element: T) {
-        guard var actualPoint = root else  {
+        if root == nil  {
             fatalError("You are trying to perform deletion on empty tree! Bad, bad developer 🙅‍♂️")
         }
-        if actualPoint === root && actualPoint.isLeaf  {
+        guard var toBeDeleted = findDimensionedPoint(element)?.point else {
+            fatalError("There is no such an element in Tree 🙅‍♂️")
+        }
+        if toBeDeleted.parrent == nil && toBeDeleted.isLeaf  {
             root = nil
         }
         
-        var parentPoint: KDPoint<T>? = nil
-        var parentDirection: KDDirection? = nil
-        var actualDimension = 1
-        //TODO: check direction
+        let parentDirection: KDDirection? = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
         
-        while !actualPoint.isLeaf {
-            let tempPoint = actualPoint
-            if actualPoint.hasLeftSon {
-                actualPoint = leftMaximum(for: actualPoint, by: actualDimension).point
-            } else if actualPoint.hasRightSon {
-                
+//                toBeDeleted.parrent?.replaceSon(at: parentDirection, with: KDPoint<KDNode>)
+        var replacement: KDPoint<T>?
+        while !toBeDeleted.isLeaf {
+//            let tempPoint = toBeDeleted
+            if toBeDeleted.hasLeftSon {
+                replacement = leftMaximum(for: toBeDeleted, by: toBeDeleted.dimension).point
+                let replacementCopy = KDPoint(replacement!)
+                replacement?.deleted = true
+                let temp = KDPoint(toBeDeleted)
+                replacementCopy.parrent = temp.parrent
+                replacementCopy.leftSon = temp.leftSon
+                replacementCopy.rightSon = temp.rightSon
+                replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
+                toBeDeleted = replacement!
+            } else if toBeDeleted.hasRightSon {
+                replacement = rightMinimum(for: toBeDeleted, by: toBeDeleted.dimension).point
             }
         }
     }
 
     //MARK: 🔒 PRIVATE API 🔒
     
+     func findDimensionedPoint(_ element: T) -> DimensionedPoint<T>? {
+        guard var actualPoint = root else  {
+            return nil
+        }
+        var actualDimension = 1
+        let dimensions = self.dimensions + 1
+        //TODO: Mozno by stalo za zvazenie, ci by som nemal vracat [] namiesto jedneho Pointu
+        while !actualPoint.isLeaf {
+            if case .less = element.compare(to: actualPoint.value, dimension: actualDimension) {
+                if actualPoint.hasLeftSon {
+                    actualPoint = actualPoint.leftSon!
+                    actualDimension += 1
+                    actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
+                    continue
+                }
+            }
+            
+            if case .more = element.compare(to: actualPoint.value, dimension: actualDimension){
+                if actualPoint.hasRightSon {
+                    actualPoint = actualPoint.rightSon!
+                    actualDimension += 1
+                    actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
+                    continue
+                }
+            }
+            
+            if case .equals = element.compare(to: actualPoint.value, dimension: actualDimension) {
+                if actualPoint.value == element{
+                    return DimensionedPoint(point: actualPoint, dimension: actualDimension)
+                } else {
+                    if actualPoint.hasRightSon {
+                        actualPoint = actualPoint.rightSon!
+                        actualDimension += 1
+                        actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
+                        continue
+                    } else {return nil}
+                }
+            }
+            actualDimension += 1
+            actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
+        }
+        return DimensionedPoint(point: actualPoint, dimension: actualDimension)
+    }
+    
     private func addSon(_ new: T, to present: KDPoint<T>, at dimension: Int) {
         let direction = chooseDirection(for: new, presentNode: present, dimension: dimension)
-        let son = KDPoint(value: new, parrent: present)
+        let sonDimension = dimension + 1 == dimensions + 1 ? 1 : dimension + 1
+        let son = KDPoint(value: new, dimension: sonDimension, parrent: present)
         switch direction {
         case .left:
             present.leftSon = son
@@ -96,20 +151,19 @@ class KDTree<T: KDNode> {
             fatalError("You are trying to find minimum, while right subtree is empty!")
         }
         var toBeChecked: [KDPoint<T>] = [minimumPoint]
-        var actualDimension = dimension
 
         while !toBeChecked.isEmpty {
             let actualPoint = toBeChecked.first!
             toBeChecked.remove(at: 0)
             if case .more = actualPoint.value.compare(to: minimumPoint.value, dimension: dimension) {
-                minimumPoint = actualPoint
+                if !actualPoint.deleted {
+                    minimumPoint = actualPoint
+                }
             }
             toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap{ $0 }
-            actualDimension += 1
-            actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
 
         }
-        return PointWrapper<T>(point: minimumPoint, direction: .left, dimension: actualDimension)
+        return PointWrapper<T>(point: minimumPoint, direction: .left)
     }
     
     func rightMinimum(for startingNode: KDPoint<T>, by dimension: Int) -> PointWrapper<T> {
@@ -117,19 +171,18 @@ class KDTree<T: KDNode> {
             fatalError("You are trying to find minimum, while right subtree is empty!")
         }
         var toBeChecked: [KDPoint<T>] = [minimumPoint]
-        var actualDimension = dimension
         
         while !toBeChecked.isEmpty {
             let actualPoint = toBeChecked.first!
             toBeChecked.remove(at: 0)
             if case .less = actualPoint.value.compare(to: minimumPoint.value, dimension: dimension) {
-                minimumPoint = actualPoint
+                if !actualPoint.deleted {
+                    minimumPoint = actualPoint
+                }
             }
             toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap{ $0 }
-//            actualDimension += 1
-//            actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
         }
-        return PointWrapper<T>(point: minimumPoint, direction: .left, dimension: actualDimension)
+        return PointWrapper<T>(point: minimumPoint, direction: .left)
     }
 
 }

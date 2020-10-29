@@ -15,6 +15,13 @@ enum PlotDimensions: Int {
 }
 
 final class Plot: KDNode {
+    static func == (lhs: Plot, rhs: Plot) -> Bool {
+        return lhs.registerNumber == rhs.registerNumber &&
+            lhs.description == rhs.description &&
+            lhs.realties == rhs.realties &&
+            lhs.gpsPossition == rhs.gpsPossition
+    }
+    
     var desc: String {
         get {
             return "Number: \(registerNumber) \n Description: \(description) \n Realties: \(realties.count) \n GPS: \(gpsPossition) \n"

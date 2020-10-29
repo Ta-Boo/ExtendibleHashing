@@ -4,7 +4,9 @@ class KDPoint<T: KDNode> {
     var leftSon: KDPoint?
     var rightSon: KDPoint?
     var parrent: KDPoint?
+    var deleted: Bool = false
     var value: T
+    var dimension: Int
     
     var isLeaf: Bool {
         get {
@@ -12,10 +14,20 @@ class KDPoint<T: KDNode> {
         }
     }
     
+    init(_ other: KDPoint) {
+        self.leftSon = other.leftSon
+        self.rightSon = other.rightSon
+        self.parrent = other.parrent
+        self.deleted = other.deleted
+        self.value = other.value
+        self.dimension = other.dimension
+    }
     
-    init(value: T, parrent: KDPoint? = nil) {
+    
+    init(value: T,dimension: Int, parrent: KDPoint? = nil) {
         self.value = value
         self.parrent = parrent
+        self.dimension = dimension
     }
     
     func sonOccupied(direction: KDDirection) -> Bool {
@@ -34,6 +46,15 @@ class KDPoint<T: KDNode> {
             leftSon = nil
         case .right:
             rightSon = nil
+        }
+    }
+    
+    func replaceSon(at direction: KDDirection, with element: KDPoint<T>) {
+        switch direction {
+        case .left:
+            leftSon = element
+        case .right:
+            rightSon = element
         }
     }
     
@@ -56,6 +77,7 @@ extension KDPoint {
 protocol KDNode {
     var desc: String { get }
     func compare(to other: Self, dimension: Int) -> KDCompare
+    static func == (lhs: Self, rhs: Self) -> Bool
 }
 
 enum KDDirection {
@@ -66,17 +88,12 @@ enum KDCompare {
     case less, equals, more
 }
 
+struct DimensionedPoint<T: KDNode> {
+    let point: KDPoint<T>
+    let dimension: Int
+}
+
 struct PointWrapper<T: KDNode> {
     let point: KDPoint<T>
     let direction: KDDirection
-    let dimension: Int
-    
-//    func unwrap() -> KDPoint<T>? {
-//        switch direction {
-//        case .left:
-//            return point.parrent?.leftSon
-//        case .right:
-//            return point.parrent?.rightSon
-//        }
-//    }
 }

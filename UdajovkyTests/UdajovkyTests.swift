@@ -31,16 +31,17 @@ class UdajovkyTests: XCTestCase {
         for element in list {
             tree.add(element)
         }
-//        print(tree.leftMaximum(for: tree.root!, by: 1)?.point.value.desc!)
-//        print(tree.leftMaximum(for: tree.root!, by: 2)?.point.value.desc!)
-//        print(tree.leftMaximum(for: tree.root!, by: 3)?.point.value.desc!)
-//        print(tree.rightMinimum(for: tree.root!, by: 1)?.point.value.desc!)
-        print(tree.rightMinimum(for: tree.root!, by: 1).point.value.desc)
-        print(tree.rightMinimum(for: tree.root!, by: 1).dimension)
 
-        print(tree.rightMinimum(for: tree.root!, by: 3).point.value.desc)
-        print(tree.rightMinimum(for: tree.root!, by: 3).dimension)
+//        let ahoj = (tree.rightMinimum(for: tree.root!.leftSon!.leftSon!, by: 3).point.value.desc)
+//        print(ahoj)
+//        print(tree.rightMinimum(for: tree.root!, by: 3).point.value.desc)
 
+        tree.delete(list[2])
+
+        XCTAssert(tree.root?.dimension == 1)
+        XCTAssert(tree.root?.leftSon?.dimension == 2)
+        XCTAssert(tree.root?.leftSon?.leftSon?.dimension == 3)
+        XCTAssert(tree.root?.leftSon?.leftSon?.leftSon?.dimension == 1)
         XCTAssert(tree.root?.value === list.first)
         XCTAssert(tree.root?.leftSon?.value === list[1])
         XCTAssert(tree.root?.rightSon?.value === list[4])

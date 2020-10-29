@@ -23,17 +23,257 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B973FB6F-4702-437B-8A7A-7A4199336DA4"
+            uuid = "13353EE6-4AA4-4193-9DE3-378AB2D381A8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "findDimensionedPoint(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "13353EE6-4AA4-4193-9DE3-378AB2D381A8 - 4024edb97900e919"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.findDimensionedPoint(A) -&gt; Swift.Optional&lt;Udajovky.DimensionedPoint&lt;A&gt;&gt;"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "104"
+                  endingLineNumber = "104"
+                  offsetFromSymbolStart = "3131">
+               </Location>
+               <Location
+                  uuid = "13353EE6-4AA4-4193-9DE3-378AB2D381A8 - 8daf75ffeb3e38c5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.findDimensionedPoint(A) -&gt; Swift.Optional&lt;UdajovkyTests.DimensionedPoint&lt;A&gt;&gt;"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "104"
+                  endingLineNumber = "104"
+                  offsetFromSymbolStart = "3131">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "818617E2-41A1-42BA-B3A4-9D90D4ECDB77"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "findDimensionedPoint(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "818617E2-41A1-42BA-B3A4-9D90D4ECDB77 - 4024edb97900edda"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.findDimensionedPoint(A) -&gt; Swift.Optional&lt;Udajovky.DimensionedPoint&lt;A&gt;&gt;"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "406">
+               </Location>
+               <Location
+                  uuid = "818617E2-41A1-42BA-B3A4-9D90D4ECDB77 - 8daf75ffeb3e3c06"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.findDimensionedPoint(A) -&gt; Swift.Optional&lt;UdajovkyTests.DimensionedPoint&lt;A&gt;&gt;"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "406">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "971D4A32-0BD8-45B7-8B01-EF2741114154"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "findDimensionedPoint(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "971D4A32-0BD8-45B7-8B01-EF2741114154 - 4024edb97900ecad"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.findDimensionedPoint(A) -&gt; Swift.Optional&lt;Udajovky.DimensionedPoint&lt;A&gt;&gt;"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "84"
+                  endingLineNumber = "84"
+                  offsetFromSymbolStart = "1272">
+               </Location>
+               <Location
+                  uuid = "971D4A32-0BD8-45B7-8B01-EF2741114154 - 8daf75ffeb3e3d71"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.findDimensionedPoint(A) -&gt; Swift.Optional&lt;UdajovkyTests.DimensionedPoint&lt;A&gt;&gt;"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "84"
+                  endingLineNumber = "84"
+                  offsetFromSymbolStart = "1272">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "060D9EFB-34DA-4D0D-A55C-AE76229A6974"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "delete(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "060D9EFB-34DA-4D0D-A55C-AE76229A6974 - b3fe7115839d2247"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.delete(A) -&gt; ()"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "736">
+               </Location>
+               <Location
+                  uuid = "060D9EFB-34DA-4D0D-A55C-AE76229A6974 - 6c74709c373f3597"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.delete(A) -&gt; ()"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "736">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D845156B-EE73-4B58-8BD9-42B63105C23A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "UdajovkyTests/UdajovkyTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "testReferencesInStaticStructure()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AA128F48-BC73-4EEF-8D73-60A4A2FF7517"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "delete(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AA128F48-BC73-4EEF-8D73-60A4A2FF7517 - b3fe7115839d2075"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.delete(A) -&gt; ()"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "68"
+                  endingLineNumber = "68"
+                  offsetFromSymbolStart = "2242">
+               </Location>
+               <Location
+                  uuid = "AA128F48-BC73-4EEF-8D73-60A4A2FF7517 - 6c74709c373f37a5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.delete(A) -&gt; ()"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "68"
+                  endingLineNumber = "68"
+                  offsetFromSymbolStart = "2242">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

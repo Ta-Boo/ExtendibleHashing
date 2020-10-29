@@ -16,23 +16,23 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "12"
             endingLineNumber = "12"
-            landmarkName = "UdajovkyTests"
-            landmarkType = "3">
+            landmarkName = "testReferencesInStaticStructure()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D61B9F50-3AB8-40A5-AA30-D8429FCA1E75"
+            uuid = "B973FB6F-4702-437B-8A7A-7A4199336DA4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "UdajovkyTests/UdajovkyTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "testRandomOperations()"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "testReferencesInStaticStructure()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

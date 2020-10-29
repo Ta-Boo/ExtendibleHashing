@@ -3,8 +3,22 @@ import Foundation
 class KDPoint<T: KDNode> {
     var leftSon: KDPoint?
     var rightSon: KDPoint?
-    var value: T?
-    func sonOccupied(direction: KDTreeDirection) -> Bool {
+    var parrent: KDPoint?
+    var value: T
+    
+    var isLeaf: Bool {
+        get {
+            return leftSon == nil && rightSon == nil
+        }
+    }
+    
+    
+    init(value: T, parrent: KDPoint? = nil) {
+        self.value = value
+        self.parrent = parrent
+    }
+    
+    func sonOccupied(direction: KDDirection) -> Bool {
         switch direction {
         case .left:
             return leftSon != nil
@@ -12,26 +26,57 @@ class KDPoint<T: KDNode> {
             return rightSon != nil
         }
     }
+
     
-    init(value: T) {
-        self.value = value
+    func deleteSon(at direction: KDDirection) {
+        switch direction {
+        case .left:
+            leftSon = nil
+        case .right:
+            rightSon = nil
+        }
     }
     
-//    func addSon(direction: KDTreeDirection, element: T) {
-//        switch direction {
-//        case .left:
-//            leftSon = Kdpo
-//        case .right:
-//            rightSon = element
-//        }
-//    }
+}
+
+extension KDPoint {
+    var hasLeftSon: Bool {
+        get {
+            return leftSon != nil
+        }
+    }
+    
+    var hasRightSon: Bool {
+        get {
+            return rightSon != nil
+        }
+    }
 }
 
 protocol KDNode {
-    func isLess(than other: Self, dimension: Int) -> Bool
+    var desc: String { get }
+    func compare(to other: Self, dimension: Int) -> KDCompare
 }
 
+enum KDDirection {
+    case left, right
+}
 
-enum KDTreeDirection {
-    case left,right
+enum KDCompare {
+    case less, equals, more
+}
+
+struct PointWrapper<T: KDNode> {
+    let point: KDPoint<T>
+    let direction: KDDirection
+    let dimension: Int
+    
+//    func unwrap() -> KDPoint<T>? {
+//        switch direction {
+//        case .left:
+//            return point.parrent?.leftSon
+//        case .right:
+//            return point.parrent?.rightSon
+//        }
+//    }
 }

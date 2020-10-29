@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RoundedBackgroundStyle: ButtonStyle {
     let color: Color
- 
+
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .frame(minWidth: 0, maxWidth: .infinity)
@@ -14,9 +14,10 @@ struct RoundedBackgroundStyle: ButtonStyle {
             .padding(.horizontal, 20)
     }
 }
+
 enum PresentableView: Identifiable {
     case placeForm, none
-    
+
     var id: Int {
         hashValue
     }
@@ -39,14 +40,12 @@ struct MainView: View {
                     .frame(width: 30)
                 TextField("Type to search", text: $viewModel.querry)
                     .textFieldStyle(PlainTextFieldStyle())
-                    
             }
             .frame(height: 30)
             .background(Color.primary)
             .cornerRadius(50)
             .padding()
-           
-                
+
             Text(viewModel.querry)
             Spacer()
             HStack {
@@ -54,13 +53,13 @@ struct MainView: View {
                 Button("Add something") {
                     viewModel.activeSheet = .placeForm
                 }
-                .buttonStyle(RoundedBackgroundStyle(color:.accent))
+                .buttonStyle(RoundedBackgroundStyle(color: .accent))
                 Spacer()
                 Button("Remove something") {
                     viewModel.activeSheet = PresentableView.none
                     self.presentationMode.wrappedValue.dismiss()
                 }
-                .buttonStyle(RoundedBackgroundStyle(color:.accent))
+                .buttonStyle(RoundedBackgroundStyle(color: .accent))
                 Spacer()
             }.padding()
         }
@@ -74,12 +73,8 @@ struct MainView: View {
                 PlaceFormView()
             }
         }
-        
     }
-
-    
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

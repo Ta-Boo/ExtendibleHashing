@@ -22,7 +22,7 @@ struct GpsPossition {
     var widthPossition: Double
     let length: GpsLength
     let lengthPossition: Double
-    
+
     init(width: GpsWidth, widthPossition: Double, length: GpsLength, lengthPossition: Double) {
         self.width = width
         self.widthPossition = widthPossition
@@ -30,4 +30,3 @@ struct GpsPossition {
         self.lengthPossition = lengthPossition
     }
 }
-

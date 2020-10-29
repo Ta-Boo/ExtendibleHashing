@@ -1,9 +1,8 @@
 import Foundation
-import GameplayKit
 import GameKit
+import GameplayKit
 
-struct SeededGenerator : RandomNumberGenerator {
-
+struct SeededGenerator: RandomNumberGenerator {
     mutating func next() -> UInt64 {
         let next1 = UInt64(bitPattern: Int64(gkrandom.nextInt()))
         let next2 = UInt64(bitPattern: Int64(gkrandom.nextInt()))
@@ -11,7 +10,7 @@ struct SeededGenerator : RandomNumberGenerator {
     }
 
     init(seed: UInt64) {
-        self.gkrandom = GKMersenneTwisterRandomSource(seed: seed)
+        gkrandom = GKMersenneTwisterRandomSource(seed: seed)
     }
 
     private let gkrandom: GKRandom

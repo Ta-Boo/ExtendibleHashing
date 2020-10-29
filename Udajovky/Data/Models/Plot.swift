@@ -15,37 +15,68 @@ enum PlotDimensions: Int {
 }
 
 final class Plot: KDNode {
-//    var leftSon: Plot?
-//    var rightSon: Plot?
+    var desc: String {
+        get {
+            return "Number: \(registerNumber) \n Description: \(description) \n Realties: \(realties.count) \n GPS: \(gpsPossition) \n"
+        }
+    }
     
+
     let registerNumber: Int
     let description: String
     let realties: [Realty]
     let gpsPossition: Double
-    
+
     init(registerNumber: Int, description: String, realties: [Realty], gpsPossition: Double) {
         self.registerNumber = registerNumber
         self.description = description
         self.realties = realties
         self.gpsPossition = gpsPossition
     }
-    
-    func isLess(than other: Plot, dimension: Int) -> Bool {
+
+    func compare(to other: Plot, dimension: Int) -> KDCompare {
         switch dimension {
         case PlotDimensions.registerNumber.rawValue:
-            return self.registerNumber < other.registerNumber
+            if registerNumber == other.registerNumber {
+                return .equals
+            } else {
+                return registerNumber < other.registerNumber ? .less : .more
+            }
         case PlotDimensions.description.rawValue:
-            return self.description < other.description
+            if description == other.description {
+                return .equals
+            } else {
+                return description < other.description ? .less : .more
+            }
         case PlotDimensions.realties.rawValue:
-            return self.realties.count < other.realties.count
+            if realties == other.realties {
+                return .equals
+            } else {
+                return realties.count < other.realties.count ? .less : .more
+            }
         case PlotDimensions.gpsPossition.rawValue:
-            return self.gpsPossition < other.gpsPossition
+            if gpsPossition == other.gpsPossition {
+                return .equals
+            } else {
+                return gpsPossition < other.gpsPossition ? .less : .more
+            }
         default:
             fatalError("Dimension \(dimension) is not present in this type! Choose dimension bellow: \(PlotDimensions.RawValue.max)!")
         }
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+//MARK: Testing purposes only
 enum KDTreePointImplementationKeys: Int {
     case number = 1
     case name = 2
@@ -53,31 +84,51 @@ enum KDTreePointImplementationKeys: Int {
 }
 
 final class KDTreePointImplementation: KDNode {
-    static func == (lhs: KDTreePointImplementation, rhs: KDTreePointImplementation) -> Bool {
+    
+    var desc: String  {
+        get {
+            return "\(number), \(name), \(speed)"
+        }
+    }
+    
+    static func == (_: KDTreePointImplementation, _: KDTreePointImplementation) -> Bool {
         true
     }
     
+
     var leftSon: KDTreePointImplementation?
     var rightSon: KDTreePointImplementation?
-    
+
     var number: Int
     var name: Int
     var speed: Int
-    
-    init( number: Int, name: Int, speed: Int) {
+
+    init(number: Int, name: Int, speed: Int) {
         self.number = number
         self.name = name
         self.speed = speed
     }
-    
-    func isLess(than other: KDTreePointImplementation, dimension: Int) -> Bool {
+
+    func compare(to other: KDTreePointImplementation, dimension: Int) -> KDCompare {
         switch dimension {
         case KDTreePointImplementationKeys.number.rawValue:
-            return self.number < other.number
+            if number == other.number {
+                return .equals
+            } else {
+                return number < other.number ? .less : .more
+            }
         case KDTreePointImplementationKeys.name.rawValue:
-            return self.name < other.name
+            if name == other.name {
+                return .equals
+            } else {
+                return name < other.name ? .less : .more
+            }
         case KDTreePointImplementationKeys.speed.rawValue:
-            return self.speed < other.speed
+            if speed == other.speed {
+                return .equals
+            } else {
+                return speed < other.speed ? .less : .more
+            }
         default:
             fatalError("Selected dimension is not present in this type!")
         }

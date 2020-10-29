@@ -51,31 +51,64 @@ class KDTree<T: KDNode> {
             root = nil
         }
         
-        let parentDirection: KDDirection? = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
+        var parentDirection: KDDirection?
         
-//                toBeDeleted.parrent?.replaceSon(at: parentDirection, with: KDPoint<KDNode>)
+        if toBeDeleted.parrent?.leftSon == nil {
+            parentDirection = .right
+        } else {
+            parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
+        }
+
+        
         var replacement: KDPoint<T>?
-        while !toBeDeleted.isLeaf {
-//            let tempPoint = toBeDeleted
+        var inProgress = true
+        while inProgress {
             if toBeDeleted.hasLeftSon {
                 replacement = leftMaximum(for: toBeDeleted, by: toBeDeleted.dimension).point
-                let replacementCopy = KDPoint(replacement!)
+                let replacementCopy = KDPoint(value: replacement!.value, dimension: toBeDeleted.dimension)
                 replacement?.deleted = true
-                let temp = KDPoint(toBeDeleted)
-                replacementCopy.parrent = temp.parrent
-                replacementCopy.leftSon = temp.leftSon
-                replacementCopy.rightSon = temp.rightSon
+                replacementCopy.parrent = toBeDeleted.parrent
+                replacementCopy.leftSon = toBeDeleted.leftSon
+                replacementCopy.rightSon = toBeDeleted.rightSon
+                replacementCopy.leftSon?.parrent = replacementCopy
                 replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
+                if toBeDeleted.parrent?.leftSon == nil {
+                    parentDirection = .right
+                } else {
+                    parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
+                }
+                inProgress = !toBeDeleted.isLeaf
                 toBeDeleted = replacement!
             } else if toBeDeleted.hasRightSon {
+                //FIXME: remove DUplicity
                 replacement = rightMinimum(for: toBeDeleted, by: toBeDeleted.dimension).point
+                let replacementCopy = KDPoint(value: replacement!.value, dimension: toBeDeleted.dimension)
+                replacement?.deleted = true
+                replacementCopy.parrent = toBeDeleted.parrent
+                replacementCopy.leftSon = toBeDeleted.leftSon
+                replacementCopy.rightSon = toBeDeleted.rightSon
+                replacementCopy.rightSon?.parrent = replacementCopy
+                replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
+                if toBeDeleted.parrent?.leftSon == nil {
+                    parentDirection = .right
+                } else {
+                    parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
+                }
+                inProgress = !toBeDeleted.isLeaf
+                toBeDeleted = replacement!
+            } else  {
+                inProgress = false
+                toBeDeleted.leftSon = nil
+                toBeDeleted.rightSon = nil
+                toBeDeleted.parrent?.replaceSon(at: parentDirection!, with: nil)
             }
+
         }
     }
 
     //MARK: 🔒 PRIVATE API 🔒
     
-     func findDimensionedPoint(_ element: T) -> DimensionedPoint<T>? {
+    private func findDimensionedPoint(_ element: T) -> DimensionedPoint<T>? {
         guard var actualPoint = root else  {
             return nil
         }
@@ -98,6 +131,8 @@ class KDTree<T: KDNode> {
                     actualDimension += 1
                     actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
                     continue
+                } else {
+                    fatalError()
                 }
             }
             
@@ -132,9 +167,6 @@ class KDTree<T: KDNode> {
         
     }
     
-    private func deletePoint( parental:KDPoint<T>, direction: KDDirection) {
-        parental.deleteSon(at: direction)
-    }
     
     private func chooseDirection(for addedNode: T, presentNode: KDPoint<T>, dimension: Int) -> KDDirection {
         let comparation = addedNode.compare(to: presentNode.value, dimension: dimension)
@@ -146,7 +178,7 @@ class KDTree<T: KDNode> {
         }
     }
     
-    func leftMaximum(for startingNode: KDPoint<T>, by dimension: Int) -> PointWrapper<T> {
+    private func leftMaximum(for startingNode: KDPoint<T>, by dimension: Int) -> PointWrapper<T> {
         guard var minimumPoint = startingNode.leftSon else {
             fatalError("You are trying to find minimum, while right subtree is empty!")
         }
@@ -166,7 +198,7 @@ class KDTree<T: KDNode> {
         return PointWrapper<T>(point: minimumPoint, direction: .left)
     }
     
-    func rightMinimum(for startingNode: KDPoint<T>, by dimension: Int) -> PointWrapper<T> {
+    private func rightMinimum(for startingNode: KDPoint<T>, by dimension: Int) -> PointWrapper<T> {
         guard var minimumPoint = startingNode.rightSon else {
             fatalError("You are trying to find minimum, while right subtree is empty!")
         }

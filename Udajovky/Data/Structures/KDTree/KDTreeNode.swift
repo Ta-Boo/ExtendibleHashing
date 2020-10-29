@@ -49,7 +49,7 @@ class KDPoint<T: KDNode> {
         }
     }
     
-    func replaceSon(at direction: KDDirection, with element: KDPoint<T>) {
+    func replaceSon(at direction: KDDirection, with element: KDPoint<T>?) {
         switch direction {
         case .left:
             leftSon = element
@@ -57,6 +57,15 @@ class KDPoint<T: KDNode> {
             rightSon = element
         }
     }
+    func replaceParentOfSon(at direction: KDDirection, with element: KDPoint<T>?) {
+        switch direction {
+        case .left:
+            leftSon?.parrent = element
+        case .right:
+            rightSon?.parrent = element
+        }
+    }
+    
     
 }
 

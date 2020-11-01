@@ -33,10 +33,7 @@ final class Plot: KDNode {
     }
 
     static func == (lhs: Plot, rhs: Plot) -> Bool {
-        return lhs.registerNumber == rhs.registerNumber &&
-            lhs.description == rhs.description &&
-            lhs.realties == rhs.realties &&
-            lhs.gpsPossition == rhs.gpsPossition
+        return lhs.gpsPossition == rhs.gpsPossition
     }
 
     func equals(to other: Plot) -> Bool {

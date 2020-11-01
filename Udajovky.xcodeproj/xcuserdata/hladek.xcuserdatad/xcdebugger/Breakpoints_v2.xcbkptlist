@@ -33,7 +33,7 @@
             startingLineNumber = "149"
             endingLineNumber = "149"
             landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            landmarkType = "9">
             <Locations>
                <Location
                   uuid = "13353EE6-4AA4-4193-9DE3-378AB2D381A8 - 4024edb97900e919"
@@ -81,7 +81,7 @@
             startingLineNumber = "113"
             endingLineNumber = "113"
             landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            landmarkType = "9">
             <Locations>
                <Location
                   uuid = "818617E2-41A1-42BA-B3A4-9D90D4ECDB77 - 41390938d58ab37b"
@@ -129,7 +129,7 @@
             startingLineNumber = "138"
             endingLineNumber = "138"
             landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            landmarkType = "9">
             <Locations>
                <Location
                   uuid = "971D4A32-0BD8-45B7-8B01-EF2741114154 - 41390938d58ab2a2"
@@ -225,7 +225,7 @@
             startingLineNumber = "112"
             endingLineNumber = "112"
             landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            landmarkType = "9">
             <Locations>
                <Location
                   uuid = "78C6BD65-8548-4AFB-B743-446CF54457BA - 41390938d58abf5d"
@@ -273,7 +273,7 @@
             startingLineNumber = "115"
             endingLineNumber = "115"
             landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            landmarkType = "9">
             <Locations>
                <Location
                   uuid = "9C63FB66-0DBE-47FA-8396-E33867B0AABB - 41390938d58ab3b9"
@@ -369,7 +369,7 @@
             startingLineNumber = "124"
             endingLineNumber = "124"
             landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            landmarkType = "9">
             <Locations>
                <Location
                   uuid = "FF3AEE25-7E51-49A5-BCA6-51471A8C0769 - 41390938d58abe84"
@@ -416,8 +416,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "125"
             endingLineNumber = "125"
-            landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            landmarkName = "robit mozno memory leaky &#x2757;&#xfe0f;&#x2757;&#xfe0f;&#x2757;&#xfe0f;&#x2757;&#xfe0f;&#x2757;&#xfe0f; "
+            landmarkType = "19">
             <Locations>
                <Location
                   uuid = "9D08C6B2-777C-49BA-A4EE-E6C46BA62E1D - 41390938d58ab900"
@@ -712,7 +712,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "40EFDDF6-B4B1-4D8F-98C0-3FE587860F63"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "UdajovkyTests/UdajovkyTests.swift"
@@ -728,7 +728,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "40F0091F-9496-43D7-9343-1FD59B8ABF87"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
@@ -768,6 +768,102 @@
                   startingLineNumber = "62"
                   endingLineNumber = "62"
                   offsetFromSymbolStart = "843">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BE800186-A768-4621-AD1A-A378FA8F19F5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "delete(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "BE800186-A768-4621-AD1A-A378FA8F19F5 - b3fe7115839d201a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.delete(A) -&gt; ()"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "1403">
+               </Location>
+               <Location
+                  uuid = "BE800186-A768-4621-AD1A-A378FA8F19F5 - 6c74709c373f37ca"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.delete(A) -&gt; ()"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "1403">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6A90C7A8-11EE-425E-B83B-43D23D5641F6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "delete(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6A90C7A8-11EE-425E-B83B-43D23D5641F6 - b3fe7115839d2054"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.delete(A) -&gt; ()"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69"
+                  offsetFromSymbolStart = "1902">
+               </Location>
+               <Location
+                  uuid = "6A90C7A8-11EE-425E-B83B-43D23D5641F6 - 6c74709c373f3784"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.delete(A) -&gt; ()"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "69"
+                  endingLineNumber = "69"
+                  offsetFromSymbolStart = "1902">
                </Location>
             </Locations>
          </BreakpointContent>

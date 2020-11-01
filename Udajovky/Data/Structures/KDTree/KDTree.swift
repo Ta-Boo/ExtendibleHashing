@@ -64,7 +64,7 @@ class KDTree<T: KDNode> {
             } else if toBeDeleted.parrent!.leftSon == nil {
                 parentDirection = .right
             } else {
-                parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
+                parentDirection = toBeDeleted.parrent!.leftSon! === toBeDeleted ? .left : .right
             }
             sonDirection = toBeDeleted.hasLeftSon ? .left : .right
             if toBeDeleted.hasSon(sonDirection) { // has son - direction

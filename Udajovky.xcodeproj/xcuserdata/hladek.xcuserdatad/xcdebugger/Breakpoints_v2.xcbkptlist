@@ -3,4 +3,86 @@
    uuid = "A5B21E5D-1815-4DD5-9C3E-3D7CDE2E2DA8"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "080521CC-EAAC-4680-99B4-C718AF3A03CC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UdajovkyTests/UdajovkyTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "testRandomOperations()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B85DA7B2-6AD4-4DF7-90C1-2CEA3112613F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UdajovkyTests/UdajovkyTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "testDeletionOnStaticTree()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6B6A4C4D-CAB6-4FF6-97F1-F0D8DEFFDEF9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
+            landmarkName = "suitableReplacement(for:by:direction:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6B6A4C4D-CAB6-4FF6-97F1-F0D8DEFFDEF9 - 52ec8490825ab1b2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.KDTree.(suitableReplacement in _D44E1139C2D348D8FD184ADA98125822)(for: Udajovky.KDPoint&lt;A&gt;, by: Swift.Int, direction: Udajovky.KDDirection) -&gt; Udajovky.KDPoint&lt;A&gt;"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "293">
+               </Location>
+               <Location
+                  uuid = "6B6A4C4D-CAB6-4FF6-97F1-F0D8DEFFDEF9 - 4288cf2374d673c1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.KDTree.(suitableReplacement in _CA28FB13FCEA7BBF8E32C8542849897A)(for: UdajovkyTests.KDPoint&lt;A&gt;, by: Swift.Int, direction: UdajovkyTests.KDDirection) -&gt; UdajovkyTests.KDPoint&lt;A&gt;"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "197"
+                  endingLineNumber = "197"
+                  offsetFromSymbolStart = "293">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -95,6 +95,15 @@ class KDTree<T: KDNode> {
                 toBeDeleted = replacement!
             } else if toBeDeleted.isLeaf {
                 inProgress = false
+                
+//                toBeDeleted.leftSon = nil
+//                toBeDeleted.rightSon = nil
+                if parentDirection != nil {
+                    toBeDeleted.parrent?.replaceSon(at: parentDirection!, with: nil)
+                } else {
+                    root = toBeDeleted
+
+                }
             }
         }
     }

@@ -83,10 +83,12 @@ extension KDPoint {
     }
 }
 
-protocol KDNode {
+protocol KDNode: Identifiable {
+    var id : Int { get }
     var desc: String { get }
     func compare(to other: Self, dimension: Int) -> KDCompare
     static func == (lhs: Self, rhs: Self) -> Bool
+    func equals(to other: Self) -> Bool
 }
 
 enum KDDirection {

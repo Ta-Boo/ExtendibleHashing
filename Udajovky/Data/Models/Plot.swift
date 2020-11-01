@@ -15,30 +15,37 @@ enum PlotDimensions: Int {
 }
 
 final class Plot: KDNode {
-    static func == (lhs: Plot, rhs: Plot) -> Bool {
-        return lhs.registerNumber == rhs.registerNumber &&
-            lhs.description == rhs.description &&
-            lhs.realties == rhs.realties &&
-            lhs.gpsPossition == rhs.gpsPossition
-    }
+    var id: Int
+    let registerNumber: Int
+    let description: Int
+    let realties: [Realty]
+    let gpsPossition: Int
     
     var desc: String {
         get {
             return "Number: \(registerNumber) \n Description: \(description) \n Realties: \(realties.count) \n GPS: \(gpsPossition) \n"
         }
     }
-    
 
-    let registerNumber: Int
-    let description: String
-    let realties: [Realty]
-    let gpsPossition: Double
-
-    init(registerNumber: Int, description: String, realties: [Realty], gpsPossition: Double) {
+    init(registerNumber: Int, description: Int, realties: [Realty], gpsPossition: Int, id: Int) {
         self.registerNumber = registerNumber
         self.description = description
         self.realties = realties
         self.gpsPossition = gpsPossition
+        self.id = id
+    }
+    
+    
+    static func == (lhs: Plot, rhs: Plot) -> Bool {
+        
+        return lhs.registerNumber == rhs.registerNumber &&
+            lhs.description == rhs.description &&
+            lhs.realties == rhs.realties &&
+            lhs.gpsPossition == rhs.gpsPossition
+    }
+    
+    func equals(to other: Plot) -> Bool {
+        return self.id == other.id
     }
 
     func compare(to other: Plot, dimension: Int) -> KDCompare {
@@ -56,7 +63,7 @@ final class Plot: KDNode {
                 return description < other.description ? .less : .more
             }
         case PlotDimensions.realties.rawValue:
-            if realties == other.realties {
+            if realties.count == other.realties.count {
                 return .equals
             } else {
                 return realties.count < other.realties.count ? .less : .more
@@ -91,6 +98,8 @@ enum KDTreePointImplementationKeys: Int {
 }
 
 final class KDTreePointImplementation: KDNode {
+    let id: Int
+    
     
     var desc: String  {
         get {
@@ -98,11 +107,6 @@ final class KDTreePointImplementation: KDNode {
         }
     }
     
-    static func == (_: KDTreePointImplementation, _: KDTreePointImplementation) -> Bool {
-        true
-    }
-    
-
     var leftSon: KDTreePointImplementation?
     var rightSon: KDTreePointImplementation?
 
@@ -110,12 +114,21 @@ final class KDTreePointImplementation: KDNode {
     var name: Int
     var speed: Int
 
-    init(number: Int, name: Int, speed: Int) {
+    init(number: Int, name: Int, speed: Int, id: Int) {
         self.number = number
         self.name = name
         self.speed = speed
+        self.id = id
     }
 
+    static func == (_: KDTreePointImplementation, _: KDTreePointImplementation) -> Bool {
+        true
+    }
+    
+    func equals(to other: KDTreePointImplementation) -> Bool {
+        return self.id == other.id
+    }
+    
     func compare(to other: KDTreePointImplementation, dimension: Int) -> KDCompare {
         switch dimension {
         case KDTreePointImplementationKeys.number.rawValue:

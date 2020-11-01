@@ -49,11 +49,14 @@ class KDTree<T: KDNode> {
         }
         if toBeDeleted.parrent == nil && toBeDeleted.isLeaf  {
             root = nil
+            return
         }
         
         var parentDirection: KDDirection?
         
-        if toBeDeleted.parrent?.leftSon == nil {
+        if toBeDeleted.parrent == nil {
+            parentDirection = nil
+        } else if toBeDeleted.parrent!.leftSon == nil {
             parentDirection = .right
         } else {
             parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
@@ -62,6 +65,7 @@ class KDTree<T: KDNode> {
         
         var replacement: KDPoint<T>?
         var inProgress = true
+        var element = element
         while inProgress {
             if toBeDeleted.hasLeftSon {
                 replacement = leftMaximum(for: toBeDeleted, by: toBeDeleted.dimension).point
@@ -70,15 +74,23 @@ class KDTree<T: KDNode> {
                 replacementCopy.parrent = toBeDeleted.parrent
                 replacementCopy.leftSon = toBeDeleted.leftSon
                 replacementCopy.rightSon = toBeDeleted.rightSon
+//                replacementCopy.value = toBeDeleted.value
                 replacementCopy.leftSon?.parrent = replacementCopy
-                replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
-                if toBeDeleted.parrent?.leftSon == nil {
-                    parentDirection = .right
+                if parentDirection != nil {
+                    replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
                 } else {
-                    parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
+                    root = replacementCopy
                 }
+                
                 inProgress = !toBeDeleted.isLeaf
                 toBeDeleted = replacement!
+                if toBeDeleted.parrent == nil {
+                    parentDirection = nil
+                } else if toBeDeleted.parrent?.leftSon == nil {
+                    parentDirection = .right
+                } else {
+                    parentDirection = toBeDeleted.parrent!.leftSon!.value == toBeDeleted.value ? .left : .right
+                }
             } else if toBeDeleted.hasRightSon {
                 //FIXME: remove DUplicity
                 replacement = rightMinimum(for: toBeDeleted, by: toBeDeleted.dimension).point
@@ -87,20 +99,39 @@ class KDTree<T: KDNode> {
                 replacementCopy.parrent = toBeDeleted.parrent
                 replacementCopy.leftSon = toBeDeleted.leftSon
                 replacementCopy.rightSon = toBeDeleted.rightSon
+//                replacementCopy.value = toBeDeleted.value
                 replacementCopy.rightSon?.parrent = replacementCopy
-                replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
-                if toBeDeleted.parrent?.leftSon == nil {
-                    parentDirection = .right
+                if parentDirection != nil {
+                    replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
                 } else {
-                    parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
+                    root = replacementCopy
                 }
                 inProgress = !toBeDeleted.isLeaf
                 toBeDeleted = replacement!
+                if toBeDeleted.parrent == nil {
+                    parentDirection = nil
+                } else if toBeDeleted.parrent?.leftSon == nil {
+                    parentDirection = .right
+                } else {
+                    parentDirection = toBeDeleted.parrent!.leftSon!.value == toBeDeleted.value ? .left : .right
+                }
             } else  {
                 inProgress = false
+//                if toBeDeleted.parrent == nil {
+//                    parentDirection = nil
+//                } else if toBeDeleted.parrent?.leftSon == nil {
+//                    parentDirection = .right
+//                } else {
+//                    parentDirection = toBeDeleted.parrent!.leftSon!.value == toBeDeleted.value ? .left : .right
+//                }
                 toBeDeleted.leftSon = nil
                 toBeDeleted.rightSon = nil
-                toBeDeleted.parrent?.replaceSon(at: parentDirection!, with: nil)
+                if parentDirection != nil {
+                    toBeDeleted.parrent?.replaceSon(at: parentDirection!, with: nil)
+                } else {
+                    root = toBeDeleted
+
+                }
             }
 
         }
@@ -123,15 +154,7 @@ class KDTree<T: KDNode> {
                     actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
                     continue
                 }
-            }
-            
-            if case .more = element.compare(to: actualPoint.value, dimension: actualDimension){
-                if actualPoint.hasRightSon {
-                    actualPoint = actualPoint.rightSon!
-                    actualDimension += 1
-                    actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
-                    continue
-                } else {
+                else {
                     fatalError()
                 }
             }
@@ -148,6 +171,19 @@ class KDTree<T: KDNode> {
                     } else {return nil}
                 }
             }
+            
+            if case .more = element.compare(to: actualPoint.value, dimension: actualDimension){
+                if actualPoint.hasRightSon {
+                    actualPoint = actualPoint.rightSon!
+                    actualDimension += 1
+                    actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
+                    continue
+                } else {
+                    fatalError()
+                }
+            }
+            
+            
             actualDimension += 1
             actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
         }

@@ -62,10 +62,8 @@ class KDTree<T: KDNode> {
             parentDirection = toBeDeleted.parrent!.leftSon!.value == element ? .left : .right
         }
 
-        
         var replacement: KDPoint<T>?
         var inProgress = true
-        var element = element
         while inProgress {
             if toBeDeleted.hasLeftSon {
                 replacement = leftMaximum(for: toBeDeleted, by: toBeDeleted.dimension).point
@@ -74,7 +72,6 @@ class KDTree<T: KDNode> {
                 replacementCopy.parrent = toBeDeleted.parrent
                 replacementCopy.leftSon = toBeDeleted.leftSon
                 replacementCopy.rightSon = toBeDeleted.rightSon
-//                replacementCopy.value = toBeDeleted.value
                 replacementCopy.leftSon?.parrent = replacementCopy
                 if parentDirection != nil {
                     replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
@@ -99,7 +96,6 @@ class KDTree<T: KDNode> {
                 replacementCopy.parrent = toBeDeleted.parrent
                 replacementCopy.leftSon = toBeDeleted.leftSon
                 replacementCopy.rightSon = toBeDeleted.rightSon
-//                replacementCopy.value = toBeDeleted.value
                 replacementCopy.rightSon?.parrent = replacementCopy
                 if parentDirection != nil {
                     replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
@@ -117,13 +113,6 @@ class KDTree<T: KDNode> {
                 }
             } else  {
                 inProgress = false
-//                if toBeDeleted.parrent == nil {
-//                    parentDirection = nil
-//                } else if toBeDeleted.parrent?.leftSon == nil {
-//                    parentDirection = .right
-//                } else {
-//                    parentDirection = toBeDeleted.parrent!.leftSon!.value == toBeDeleted.value ? .left : .right
-//                }
                 toBeDeleted.leftSon = nil
                 toBeDeleted.rightSon = nil
                 if parentDirection != nil {
@@ -134,6 +123,40 @@ class KDTree<T: KDNode> {
                 }
             }
 
+        }
+    }
+    
+    private func refactorDelete(_ element: T) {
+        guard var toBeDeleted = findDimensionedPoint(element)?.point else {
+            fatalError("There is no such an element in Tree 🙅‍♂️")
+        }
+        var replacement: KDPoint<T>?
+        var parentDirection: KDDirection?
+
+
+        if toBeDeleted.hasLeftSon { // has son - direction
+            replacement = leftMaximum(for: toBeDeleted, by: toBeDeleted.dimension).point // findReplacement(.direction)
+            let replacementCopy = KDPoint(value: replacement!.value, dimension: toBeDeleted.dimension)
+            replacement?.deleted = true
+            replacementCopy.parrent = toBeDeleted.parrent
+            replacementCopy.leftSon = toBeDeleted.leftSon
+            replacementCopy.rightSon = toBeDeleted.rightSon
+            replacementCopy.leftSon?.parrent = replacementCopy
+            if parentDirection != nil {
+                replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
+            } else {
+                root = replacementCopy
+            }
+            
+            inProgress = !toBeDeleted.isLeaf
+            toBeDeleted = replacement!
+            if toBeDeleted.parrent == nil {
+                parentDirection = nil
+            } else if toBeDeleted.parrent?.leftSon == nil {
+                parentDirection = .right
+            } else {
+                parentDirection = toBeDeleted.parrent!.leftSon!.value == toBeDeleted.value ? .left : .right
+            }
         }
     }
 
@@ -160,8 +183,8 @@ class KDTree<T: KDNode> {
             }
             
             if case .equals = element.compare(to: actualPoint.value, dimension: actualDimension) {
-                if actualPoint.value == element{
-                    return DimensionedPoint(point: actualPoint, dimension: actualDimension)
+                if actualPoint.value.equals(to: element) {
+                    return DimensionedPoint(point: actualPoint, dimension: actualDimension) //TODO: Toto bude robit mozno memory leaky ❗️❗️❗️❗️❗️
                 } else {
                     if actualPoint.hasRightSon {
                         actualPoint = actualPoint.rightSon!
@@ -188,6 +211,17 @@ class KDTree<T: KDNode> {
             actualDimension = actualDimension % dimensions == 0 ? 1: actualDimension
         }
         return DimensionedPoint(point: actualPoint, dimension: actualDimension)
+    }
+    
+    private func findPoint(of element: T) -> [KDPoint<T>]? {
+        guard let root = root else {
+            fatalError("You are searching in empty tree.")
+        }
+        
+        var result: [KDPoint<T>] = []
+
+        return nil
+        
     }
     
     private func addSon(_ new: T, to present: KDPoint<T>, at dimension: Int) {

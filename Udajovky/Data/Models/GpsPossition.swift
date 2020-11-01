@@ -1,10 +1,3 @@
-//
-//  GpsPossition.swift
-//  Udajovky
-//
-//  Created by hladek on 13/10/2020.
-//
-
 import Foundation
 
 enum GpsWidth: Character {
@@ -18,15 +11,29 @@ enum GpsLength: Character {
 }
 
 struct GpsPossition {
-    let width: GpsWidth
-    var widthPossition: Double
-    let length: GpsLength
-    let lengthPossition: Double
+    
+    
+//    let width: GpsWidth
+//    let length: GpsLength
+    //TODO: isthis really needed ? lat/ long is defined on both - possitive and negative intervals, so it  is abvious
+    var lattitude: Int
+    let longitude: Int
+    //FIXME: double
 
-    init(width: GpsWidth, widthPossition: Double, length: GpsLength, lengthPossition: Double) {
-        self.width = width
-        self.widthPossition = widthPossition
-        self.length = length
-        self.lengthPossition = lengthPossition
+    init(
+//        width: GpsWidth,
+//        length: GpsLength,
+        lattitude: Int,
+        longitude: Int
+    ) {
+//        self.width = width
+//        self.length = length
+        self.lattitude = lattitude
+        self.longitude = longitude
     }
+    
+    static func == (lhs: GpsPossition, rhs: GpsPossition) -> Bool {
+        return lhs.longitude == rhs.longitude && lhs.lattitude == rhs.lattitude
+    }
+    
 }

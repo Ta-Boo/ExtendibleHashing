@@ -8,10 +8,8 @@
 import Foundation
 
 enum PlotDimensions: Int {
-    case registerNumber = 1
-    case description = 2
-    case realties = 3
-    case gpsPossition = 4
+    case latitude = 1
+    case longitude = 2
 }
 
 final class Plot: KDNode {
@@ -19,15 +17,16 @@ final class Plot: KDNode {
     let registerNumber: Int
     let description: Int
     let realties: [Realty]
-    let gpsPossition: Int
+    let gpsPossition: GpsPossition
     
     var desc: String {
         get {
-            return "Number: \(registerNumber) \n Description: \(description) \n Realties: \(realties.count) \n GPS: \(gpsPossition) \n"
+            return "GPS: \(gpsPossition)"
+//            return "Number: \(registerNumber) \n Description: \(description) \n Realties: \(realties.count) \n GPS: \(gpsPossition) \n"
         }
     }
 
-    init(registerNumber: Int, description: Int, realties: [Realty], gpsPossition: Int, id: Int) {
+    init(registerNumber: Int, description: Int, realties: [Realty], gpsPossition: GpsPossition, id: Int) {
         self.registerNumber = registerNumber
         self.description = description
         self.realties = realties
@@ -47,33 +46,23 @@ final class Plot: KDNode {
     func equals(to other: Plot) -> Bool {
         return self.id == other.id
     }
+    
 
     func compare(to other: Plot, dimension: Int) -> KDCompare {
         switch dimension {
-        case PlotDimensions.registerNumber.rawValue:
-            if registerNumber == other.registerNumber {
+        case PlotDimensions.latitude.rawValue:
+            if self.gpsPossition.lattitude == other.gpsPossition.lattitude {
                 return .equals
             } else {
-                return registerNumber < other.registerNumber ? .less : .more
+                return self.gpsPossition.lattitude < other.gpsPossition.lattitude ? .less : .more
             }
-        case PlotDimensions.description.rawValue:
-            if description == other.description {
+        case PlotDimensions.longitude.rawValue:
+            if self.gpsPossition.longitude == other.gpsPossition.longitude {
                 return .equals
             } else {
-                return description < other.description ? .less : .more
+                return self.gpsPossition.longitude < other.gpsPossition.longitude ? .less : .more
             }
-        case PlotDimensions.realties.rawValue:
-            if realties.count == other.realties.count {
-                return .equals
-            } else {
-                return realties.count < other.realties.count ? .less : .more
-            }
-        case PlotDimensions.gpsPossition.rawValue:
-            if gpsPossition == other.gpsPossition {
-                return .equals
-            } else {
-                return gpsPossition < other.gpsPossition ? .less : .more
-            }
+    
         default:
             fatalError("Dimension \(dimension) is not present in this type! Choose dimension bellow: \(PlotDimensions.RawValue.max)!")
         }
@@ -98,15 +87,16 @@ enum KDTreePointImplementationKeys: Int {
 }
 
 final class KDTreePointImplementation: KDNode {
+
     let id: Int
-    
-    
+
+
     var desc: String  {
         get {
             return "\(number), \(name), \(speed)"
         }
     }
-    
+
     var leftSon: KDTreePointImplementation?
     var rightSon: KDTreePointImplementation?
 
@@ -124,11 +114,11 @@ final class KDTreePointImplementation: KDNode {
     static func == (_: KDTreePointImplementation, _: KDTreePointImplementation) -> Bool {
         true
     }
-    
+
     func equals(to other: KDTreePointImplementation) -> Bool {
         return self.id == other.id
     }
-    
+
     func compare(to other: KDTreePointImplementation, dimension: Int) -> KDCompare {
         switch dimension {
         case KDTreePointImplementationKeys.number.rawValue:

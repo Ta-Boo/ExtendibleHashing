@@ -74,16 +74,12 @@ class UdajovkyTests: XCTestCase {
     }
     
     func testRandomOperations() throws {
-        
-        //        measure {
-        //        }
-        
-        for seed in 973...10000 {
-            let tree = KDTree<Plot>(dimensions: 3)
+        for seed in 9570...10000 {
+            let tree = KDTree<Plot>(dimensions: 2)
             var helperList: [Plot] = []
             print(seed)
             var generator = SeededGenerator(seed: UInt64(seed))
-            for y in 1...8 {
+            for y in 1...5 {
                 if y % 2_500 == 0 {print(Double(y) / 100.0,"%")}
                 
                 let probability = Double.random(in: 0.0...1.0, using: &generator)
@@ -100,7 +96,8 @@ class UdajovkyTests: XCTestCase {
                     let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
                                     description: Int.random(in: 1 ... 50, using: &generator),
                                     realties: realties,
-                                    gpsPossition: Double.random(in: 0...90.000000, using: &generator),
+                                    gpsPossition: GpsPossition(lattitude: Int.random(in: 0...10, using: &generator),
+                                                               longitude: Int.random(in: 0...10, using: &generator)),
                                     id: y)
                     
                     helperList.append(plot)
@@ -146,7 +143,8 @@ class UdajovkyTests: XCTestCase {
                 let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
                                 description: Int.random(in: 1 ... 50, using: &generator),
                                 realties: realties,
-                                gpsPossition: Double.random(in: 0...90.000000, using: &generator),
+                                gpsPossition: GpsPossition(lattitude: Int.random(in: 0...10, using: &generator),
+                                                           longitude: Int.random(in: 0...10, using: &generator)),
                                 id: y)
                 
                 tree.add(plot)

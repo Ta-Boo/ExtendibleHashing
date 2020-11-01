@@ -7,29 +7,26 @@ class KDPoint<T: KDNode> {
     var deleted: Bool = false
     var value: T
     var dimension: Int
-    
+
     var isLeaf: Bool {
-        get {
-            return leftSon == nil && rightSon == nil
-        }
+        return leftSon == nil && rightSon == nil
     }
-    
+
     init(_ other: KDPoint) {
-        self.leftSon = other.leftSon
-        self.rightSon = other.rightSon
-        self.parrent = other.parrent
-        self.deleted = other.deleted
-        self.value = other.value
-        self.dimension = other.dimension
+        leftSon = other.leftSon
+        rightSon = other.rightSon
+        parrent = other.parrent
+        deleted = other.deleted
+        value = other.value
+        dimension = other.dimension
     }
-    
-    
-    init(value: T,dimension: Int, parrent: KDPoint? = nil) {
+
+    init(value: T, dimension: Int, parrent: KDPoint? = nil) {
         self.value = value
         self.parrent = parrent
         self.dimension = dimension
     }
-    
+
     func sonOccupied(direction: KDDirection) -> Bool {
         switch direction {
         case .left:
@@ -39,7 +36,6 @@ class KDPoint<T: KDNode> {
         }
     }
 
-    
     func deleteSon(at direction: KDDirection) {
         switch direction {
         case .left:
@@ -48,7 +44,7 @@ class KDPoint<T: KDNode> {
             rightSon = nil
         }
     }
-    
+
     func replaceSon(at direction: KDDirection, with element: KDPoint<T>?) {
         switch direction {
         case .left:
@@ -57,6 +53,7 @@ class KDPoint<T: KDNode> {
             rightSon = element
         }
     }
+
     func replaceParentOfSon(at direction: KDDirection, with element: KDPoint<T>?) {
         switch direction {
         case .left:
@@ -65,29 +62,31 @@ class KDPoint<T: KDNode> {
             rightSon?.parrent = element
         }
     }
-    
-    
 }
 
 extension KDPoint {
     var hasLeftSon: Bool {
-        get {
-            return leftSon != nil
-        }
+        return leftSon != nil
     }
-    
+
     var hasRightSon: Bool {
-        get {
-            return rightSon != nil
+        return rightSon != nil
+    }
+
+    func hasSon(_ direction: KDDirection) -> Bool {
+        switch direction {
+        case .left:
+            return hasLeftSon
+        case .right:
+            return hasRightSon
         }
     }
 }
 
 protocol KDNode: Identifiable, KDComparable {
-    var id : Int { get }
+    var id: Int { get }
     var desc: String { get }
-    
-    
+
     func equals(to other: Self) -> Bool
 }
 

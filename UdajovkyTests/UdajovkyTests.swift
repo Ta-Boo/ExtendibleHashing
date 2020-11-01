@@ -27,13 +27,13 @@ class UdajovkyTests: XCTestCase {
         KDTreePointImplementation(number: 821, name: 310, speed: 110, id: 15), // 15
         KDTreePointImplementation(number: 216, name: 511, speed: 532, id: 16), // 16
     ]
-    
+
     func testReferencesInStaticStructure() throws {
         let tree = KDTree<KDTreePointImplementation>(dimensions: 3)
         for element in list {
             tree.add(element)
         }
-        
+
         XCTAssert(tree.root?.dimension == 1)
         XCTAssert(tree.root?.leftSon?.dimension == 2)
         XCTAssert(tree.root?.leftSon?.leftSon?.dimension == 3)
@@ -48,6 +48,7 @@ class UdajovkyTests: XCTestCase {
         XCTAssert(tree.root?.leftSon?.rightSon?.rightSon?.rightSon?.value === list[14])
         XCTAssert(tree.root?.rightSon?.leftSon?.leftSon?.value === list[15])
     }
+
     func testDeletionOnStaticTree() throws {
         let tree = KDTree<KDTreePointImplementation>(dimensions: 3)
         for element in list {
@@ -57,96 +58,93 @@ class UdajovkyTests: XCTestCase {
         XCTAssert(tree.root?.leftSon?.leftSon?.value === list[10])
         XCTAssert(tree.root?.leftSon?.leftSon?.leftSon?.value === list[7])
         XCTAssert(tree.root?.leftSon?.leftSon?.leftSon?.leftSon?.value === list[16])
-        
-        
     }
-    
+
     func testSeededGenerator() throws {
         var array: [Int] = []
         var generator = SeededGenerator(seed: 50)
-        
+
         for _ in 1 ... 10000 {
             array.append(Int.random(in: 1 ... 10000, using: &generator))
         }
-        
+
         let std = Int(Double(array.count) * 0.025)
         XCTAssert(((array.count / 2 - std) ... (array.count / 2 + std)).contains(array.reduce(0, +) / array.count))
     }
-    
+
     func testRandomOperations() throws {
-        for seed in 9570...10000 {
+        //9570
+        // 180 1...6
+        for seed in 9570 ... 10000 {
             let tree = KDTree<Plot>(dimensions: 2)
             var helperList: [Plot] = []
             print(seed)
             var generator = SeededGenerator(seed: UInt64(seed))
             for y in 1...5 {
-                if y % 2_500 == 0 {print(Double(y) / 100.0,"%")}
-                
-                let probability = Double.random(in: 0.0...1.0, using: &generator)
-                if probability < 0.7  || helperList.isEmpty {
+                if y % 2500 == 0 { print(Double(y) / 100.0, "%") }
+
+                let probability = Double.random(in: 0.0 ... 1.0, using: &generator)
+                if probability < 0.7 || helperList.isEmpty {
                     var realties: [Realty] = []
-                    for _ in 1...Int.random(in: 1...8, using: &generator) {
+                    for _ in 1 ... Int.random(in: 1 ... 8, using: &generator) {
                         realties.append(
                             Realty(registerNumber: Int.random(in: 1 ... 50, using: &generator),
-                                   description: String.random(length: 32)
-                            )
+                                   description: String.random(length: 32))
                         )
                     }
-                    
+
                     let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
                                     description: Int.random(in: 1 ... 50, using: &generator),
                                     realties: realties,
-                                    gpsPossition: GpsPossition(lattitude: Int.random(in: 0...10, using: &generator),
-                                                               longitude: Int.random(in: 0...10, using: &generator)),
+                                    gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 10, using: &generator),
+                                                               longitude: Int.random(in: 0 ... 10, using: &generator)),
                                     id: y)
-                    
+
                     helperList.append(plot)
-                    print("Adding: ",plot.desc )
+                    print("Adding: ", plot.desc)
                     tree.add(plot)
                 } else {
-                    let number = Int.random(in: 0..<helperList.count, using: &generator)
+                    let number = Int.random(in: 0 ..< helperList.count, using: &generator)
                     let element = helperList[number]
                     helperList.remove(at: number)
-                    print("Removing: ",element.desc )
-                    
+                    print("Removing: ", element.desc)
+
                     tree.delete(element)
                 }
             }
-            
         }
     }
-    
+
     func testTreeDeletion() throws {
         let tree = KDTree<KDTreePointImplementation>(dimensions: 3)
         tree.add(list.first!)
         tree.add(list[1])
         tree.delete(list[1])
     }
-    
+
     func testInsert() throws {
         measure {
             let tree = KDTree<Plot>(dimensions: 3)
             var generator = SeededGenerator(seed: UInt64(300))
 
-            for y in 1...100_000 {
-                if y % 2_500 == 0 {print(Double(y) / 1000.0,"%")}
-                
+            for y in 1 ... 100_000 {
+                if y % 2500 == 0 { print(Double(y) / 1000.0, "%") }
+
                 var realties: [Realty] = []
                 //                for _ in 1...Int.random(in: 1...8, using: &generator) {
                 realties.append(
                     Realty(registerNumber: Int.random(in: 1 ... 50, using: &generator),
-                           description: String.random(length: 32)
-                    )
+                           description: String.random(length: 32))
                 )
                 //                }
-                
+
                 let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
                                 description: Int.random(in: 1 ... 50, using: &generator),
                                 realties: realties,
-                                gpsPossition: GpsPossition(lattitude: Int.random(in: 0...10, using: &generator),
-                                                           longitude: Int.random(in: 0...10, using: &generator)),
+                                gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 10, using: &generator),
+                                                           longitude: Int.random(in: 0 ... 10, using: &generator)),
                                 id: y)
-                
+
                 tree.add(plot)
             }
         }

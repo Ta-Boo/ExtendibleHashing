@@ -11,17 +11,15 @@ enum GpsLength: Character {
 }
 
 struct GpsPossition {
-    
-    
 //    let width: GpsWidth
 //    let length: GpsLength
-    //TODO: isthis really needed ? lat/ long is defined on both - possitive and negative intervals, so it  is abvious
+    // TODO: isthis really needed ? lat/ long is defined on both - possitive and negative intervals, so it  is abvious
     var lattitude: Int
     let longitude: Int
-    //FIXME: double
+    // FIXME: double
 
     init(
-//        width: GpsWidth,
+        //        width: GpsWidth,
 //        length: GpsLength,
         lattitude: Int,
         longitude: Int
@@ -31,9 +29,8 @@ struct GpsPossition {
         self.lattitude = lattitude
         self.longitude = longitude
     }
-    
+
     static func == (lhs: GpsPossition, rhs: GpsPossition) -> Bool {
         return lhs.longitude == rhs.longitude && lhs.lattitude == rhs.lattitude
     }
-    
 }

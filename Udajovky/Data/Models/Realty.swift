@@ -8,7 +8,6 @@
 import Foundation
 
 class Realty: Equatable {
-    
     let registerNumber: Int
     let description: String
 
@@ -16,6 +15,7 @@ class Realty: Equatable {
         self.registerNumber = registerNumber
         self.description = description
     }
+
     static func == (lhs: Realty, rhs: Realty) -> Bool {
         return lhs.registerNumber == rhs.registerNumber && lhs.description == rhs.description
     }

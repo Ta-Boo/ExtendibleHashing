@@ -46,8 +46,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
             landmarkName = "suitableReplacement(for:by:direction:)"
             landmarkType = "7">
             <Locations>

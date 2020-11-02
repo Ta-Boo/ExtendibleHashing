@@ -62,6 +62,19 @@ class KDPoint<T: KDNode> {
             rightSon?.parrent = element
         }
     }
+    
+    func removeReferenceInParent() -> Bool {
+        guard let parrent = parrent else {
+            return false // it is root point
+        }
+        if parrent.leftSon === self {
+            parrent.leftSon = nil
+            return true
+        } else {
+            parrent.rightSon = nil
+            return true
+        }
+    }
 }
 
 extension KDPoint {

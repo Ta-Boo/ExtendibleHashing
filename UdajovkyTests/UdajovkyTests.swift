@@ -75,43 +75,47 @@ class UdajovkyTests: XCTestCase {
     func testRandomOperations() throws {
         //9570
         // 180 1...6
-        for seed in 9570 ... 10000 {
-            let tree = KDTree<Plot>(dimensions: 2)
-            var helperList: [Plot] = []
-            print(seed)
+        for seed in 1266 ... 10000 {
+
+            print("Seed: \(seed)")
             var generator = SeededGenerator(seed: UInt64(seed))
-            for y in 1...5 {
-                if y % 2500 == 0 { print(Double(y) / 100.0, "%") }
+//            for operations in 23...10000 {
+//                print("Number of operations: \(operations)")
+                print("⭕️OPERATIONS CYCLE⭕️")
+                let tree = KDTree<Plot>(dimensions: 2)
+                var helperList: [Plot] = []
+                for y in 1...10 {
+//                    if y % 2500 == 0 { print(Double(y) / 100.0, "%") }
 
-                let probability = Double.random(in: 0.0 ... 1.0, using: &generator)
-                if probability < 0.7 || helperList.isEmpty {
-                    var realties: [Realty] = []
-                    for _ in 1 ... Int.random(in: 1 ... 8, using: &generator) {
-                        realties.append(
-                            Realty(registerNumber: Int.random(in: 1 ... 50, using: &generator),
-                                   description: String.random(length: 32))
-                        )
+                    let probability = Double.random(in: 0.0 ... 1.0, using: &generator)
+                    if probability < 0.7 || helperList.isEmpty {
+                        var realties: [Realty] = []
+                        for _ in 1 ... Int.random(in: 1 ... 8, using: &generator) {
+                            realties.append(
+                                Realty(registerNumber: Int.random(in: 1 ... 50, using: &generator),
+                                       description: String.random(length: 32))
+                            )
+                        }
+
+                        let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
+                                        description: Int.random(in: 1 ... 50, using: &generator),
+                                        realties: realties,
+                                        gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 5, using: &generator),
+                                                                   longitude: Int.random(in: 0 ... 5, using: &generator)),
+                                        id: y)
+
+                        helperList.append(plot)
+                        print("Adding:   ", plot.desc)
+                        tree.add(plot)
+                    } else {
+                        let number = Int.random(in: 0 ..< helperList.count, using: &generator)
+                        let element = helperList[number]
+                        helperList.remove(at: number)
+                        print("Removing: ", element.desc)
+                        tree.delete(element)
                     }
-
-                    let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
-                                    description: Int.random(in: 1 ... 50, using: &generator),
-                                    realties: realties,
-                                    gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 10, using: &generator),
-                                                               longitude: Int.random(in: 0 ... 10, using: &generator)),
-                                    id: y)
-
-                    helperList.append(plot)
-                    print("Adding: ", plot.desc)
-                    tree.add(plot)
-                } else {
-                    let number = Int.random(in: 0 ..< helperList.count, using: &generator)
-                    let element = helperList[number]
-                    helperList.remove(at: number)
-                    print("Removing: ", element.desc)
-
-                    tree.delete(element)
                 }
-            }
+//            }
         }
     }
 

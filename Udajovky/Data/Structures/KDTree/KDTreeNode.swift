@@ -116,6 +116,35 @@ enum KDCompare {
     case less, equals, more
 }
 
+extension KDCompare {
+    var isLess: Bool {
+        switch self {
+        case .less:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var isEqual: Bool {
+        switch self {
+        case .equals:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var isMore: Bool {
+        switch self {
+        case .more:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 struct DimensionedPoint<T: KDNode> {
     let point: KDPoint<T>
     let dimension: Int

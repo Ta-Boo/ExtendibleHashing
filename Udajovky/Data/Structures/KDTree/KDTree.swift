@@ -45,7 +45,7 @@ class KDTree<T: KDNode> {
         if root == nil {
             fatalError("🚫 You are trying to perform deletion on empty tree! 🚫")
         }
-        guard var toBeDeleted = findDimensionedPoint(element)?.point else {
+        guard var toBeDeleted = findDimensionedPoint(element) else {
             fatalError("🚫 There is no such an element in Tree 🚫")
         }
         if toBeDeleted.parrent == nil, toBeDeleted.isLeaf {
@@ -72,11 +72,6 @@ class KDTree<T: KDNode> {
             if toBeDeleted.hasSon(sonDirection) { // has son - direction
                 replacement = suitableReplacement(for: toBeDeleted, by: toBeDeleted.dimension, direction: sonDirection)
                 let replacementCopy = KDPoint(value: replacement!.value, dimension: toBeDeleted.dimension)
-                if firstRound {
-                    firstRound = false
-                    firstReplacement = KDPoint(replacement!)
-//                    firstReplacement!.dimension = toBeDeleted.dimension
-                }
                 replacement?.deleted = true
                 replacementCopy.parrent = toBeDeleted.parrent
                 replacementCopy.leftSon = toBeDeleted.leftSon
@@ -90,7 +85,7 @@ class KDTree<T: KDNode> {
                 }
                 if firstRound {
                     firstRound = false
-                    firstReplacement = KDPoint(replacementCopy)
+                    firstReplacement = replacementCopy
                 }
                 if parentDirection != nil {
                     replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
@@ -110,38 +105,49 @@ class KDTree<T: KDNode> {
                 }
             }
         }
-        rotateAfterDeletion(point: firstReplacement!)
+        rotateAfterDeletion(point: firstReplacement)
     }
 
     // MARK: 🔒 PRIVATE API 🔒
     
-    private func rotateAfterDeletion(point: KDPoint<T>) {
+    private func rotateAfterDeletion(point: KDPoint<T>?) {
+        guard let point = point else {
+            return
+        }
         if point.hasLeftSon {
-            if case .equals = point.value.compare(to: point.leftSon!.value, dimension: point.dimension) {
+            let comparation = point.value.compare(to: point.leftSon!.value, dimension: point.dimension)
+            if comparation.isMore || comparation.isEqual {
                 var subTreePoints = subTreepoints(of: point.leftSon!)
+                
                 while !subTreePoints.isEmpty  {
                     let actualPoint = subTreePoints.first!
                     subTreePoints.remove(at: 0)
-                    actualPoint.leftSon = nil
-                    actualPoint.rightSon = nil
-                    if !actualPoint.removeReferenceInParent() {
-                        root = nil
-                    }
+
+                        actualPoint.leftSon = nil
+                        actualPoint.rightSon = nil
+                        if !actualPoint.removeReferenceInParent() {
+                            root = nil
+                        }
+                        add(actualPoint.value)
+                    
                 }
             }
         }
         //TODO: DUPLICITY ❗️
         if point.hasRightSon {
-            if case .equals = point.value.compare(to: point.rightSon!.value, dimension: point.dimension) {
+            let comparation = point.value.compare(to: point.rightSon!.value, dimension: point.dimension)
+            if comparation.isEqual {
                 var subTreePoints = subTreepoints(of: point.rightSon!)
+
                 while !subTreePoints.isEmpty  {
                     let actualPoint = subTreePoints.first!
                     subTreePoints.remove(at: 0)
-                    actualPoint.leftSon = nil
-                    actualPoint.rightSon = nil
-                    if !actualPoint.removeReferenceInParent() {
-                        root = nil
-                    }
+                        actualPoint.leftSon = nil
+                        actualPoint.rightSon = nil
+                        if !actualPoint.removeReferenceInParent() {
+                            root = nil
+                        }
+                        add(actualPoint.value)
                 }
             }
         }
@@ -153,6 +159,7 @@ class KDTree<T: KDNode> {
         var result: [KDPoint<T>] = []
         var toBeChecked: [KDPoint<T>] = [point]
 
+        
         while !toBeChecked.isEmpty {
             let actualPoint = toBeChecked.first!
             toBeChecked.remove(at: 0)
@@ -163,7 +170,7 @@ class KDTree<T: KDNode> {
         return result
     }
 
-    private func findDimensionedPoint(_ element: T) -> DimensionedPoint<T>? {
+    private func findDimensionedPoint(_ element: T) -> KDPoint<T>? {
         guard var actualPoint = root else {
             return nil
         }
@@ -184,7 +191,7 @@ class KDTree<T: KDNode> {
 
             if case .equals = element.compare(to: actualPoint.value, dimension: actualDimension) {
                 if actualPoint.value.equals(to: element) {
-                    return DimensionedPoint(point: actualPoint, dimension: actualDimension) // TODO: Toto bude robit mozno memory leaky ❗️❗️❗️❗️❗️
+                    return actualPoint // TODO: Toto bude robit mozno memory leaky ❗️❗️❗️❗️❗️
                 } else {
                     if actualPoint.hasRightSon {
                         actualPoint = actualPoint.rightSon!
@@ -209,7 +216,7 @@ class KDTree<T: KDNode> {
             actualDimension += 1
             actualDimension = actualDimension % dimensions == 0 ? 1 : actualDimension
         }
-        return DimensionedPoint(point: actualPoint, dimension: actualDimension)
+        return actualPoint
     }
 
     private func findPoint(_ element : T) -> [KDPoint<T>]? {

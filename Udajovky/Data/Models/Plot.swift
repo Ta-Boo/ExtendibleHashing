@@ -13,11 +13,11 @@ enum PlotDimensions: Int {
 }
 
 final class Plot: KDNode {
+    let gpsPossition: GpsPossition
     var id: Int
     let registerNumber: Int
     let description: Int
     let realties: [Realty]
-    let gpsPossition: GpsPossition
 
     var desc: String {
         return "GPS: \(gpsPossition)"

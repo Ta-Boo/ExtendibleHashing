@@ -56,7 +56,9 @@ class KDTree<T: KDNode> {
         var parentDirection: KDDirection?
         var sonDirection: KDDirection
         var replacement: KDPoint<T>?
+        var firstReplacementValue: T?
         var firstReplacement: KDPoint<T>?
+
         var firstRound = true
 
         var inProgress = true
@@ -72,26 +74,34 @@ class KDTree<T: KDNode> {
             if toBeDeleted.hasSon(sonDirection) { // has son - direction
                 replacement = suitableReplacement(for: toBeDeleted, by: toBeDeleted.dimension, direction: sonDirection)
                 let replacementCopy = KDPoint(value: replacement!.value, dimension: toBeDeleted.dimension)
+//                replacementCopy.parrent = toBeDeleted.parrent
+//                replacementCopy.leftSon = toBeDeleted.leftSon
+//                replacementCopy.rightSon = toBeDeleted.rightSon
+//                replacementCopy.dimension = toBeDeleted.dimension
+//                switch sonDirection {
+//                case .left:
+//                    replacementCopy.leftSon?.parrent = replacementCopy
+//                case .right:
+//                    replacementCopy.rightSon?.parrent = replacementCopy
+//                }
                 replacement?.deleted = true
-                replacementCopy.parrent = toBeDeleted.parrent
-                replacementCopy.leftSon = toBeDeleted.leftSon
-                replacementCopy.rightSon = toBeDeleted.rightSon
-                replacementCopy.dimension = toBeDeleted.dimension
-                switch sonDirection {
-                case .left:
-                    replacementCopy.leftSon?.parrent = replacementCopy
-                case .right:
-                    replacementCopy.rightSon?.parrent = replacementCopy
-                }
+                toBeDeleted.value = replacement!.value
+                toBeDeleted.deleted = false
                 if firstRound {
                     firstRound = false
-                    firstReplacement = replacementCopy
+//                    if parentDirection == nil {
+//                        firstReplacement = root
+//                    } else {
+//                        firstReplacement = parentDirection!.isRight ? toBeDeleted.parrent?.rightSon : toBeDeleted.parrent?.leftSon
+//                    }
+                    firstReplacementValue = replacement?.value
+                    firstReplacement = replacement
                 }
-                if parentDirection != nil {
-                    replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
-                } else {
-                    root = replacementCopy
-                }
+//                if parentDirection != nil {
+//                    replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
+//                } else {
+//                    root = replacementCopy
+//                }
 
                 inProgress = !toBeDeleted.isLeaf
                 toBeDeleted = replacement!
@@ -99,13 +109,20 @@ class KDTree<T: KDNode> {
                 inProgress = false
                 if parentDirection != nil {
                     toBeDeleted.parrent?.replaceSon(at: parentDirection!, with: nil)
-                    toBeDeleted.parrent = nil //TODO: INSPECT REFERENCE CYCLE without this statement  ⭕️
+                    toBeDeleted.parrent = nil
                 } else {
                     root = toBeDeleted
                 }
             }
         }
-        rotateAfterDeletion(point: firstReplacement)
+        
+        guard let firstReplac = firstReplacement,
+              let firstVal = firstReplacementValue else {
+            return
+        }
+        let result = KDPoint(firstReplac)
+        result.value =  firstVal
+        rotateAfterDeletion(point: result)
     }
 
     // MARK: 🔒 PRIVATE API 🔒

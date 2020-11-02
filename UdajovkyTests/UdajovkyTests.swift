@@ -75,7 +75,7 @@ class UdajovkyTests: XCTestCase {
     func testRandomOperations() throws {
         //9570
         // 180 1...6
-        for seed in 1266 ... 10000 {
+        for seed in 480 ... 10000 {
 
             print("Seed: \(seed)")
             var generator = SeededGenerator(seed: UInt64(seed))
@@ -84,7 +84,8 @@ class UdajovkyTests: XCTestCase {
                 print("⭕️OPERATIONS CYCLE⭕️")
                 let tree = KDTree<Plot>(dimensions: 2)
                 var helperList: [Plot] = []
-                for y in 1...10 {
+                for y in 1...8 {
+                    
 //                    if y % 2500 == 0 { print(Double(y) / 100.0, "%") }
 
                     let probability = Double.random(in: 0.0 ... 1.0, using: &generator)
@@ -100,8 +101,8 @@ class UdajovkyTests: XCTestCase {
                         let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
                                         description: Int.random(in: 1 ... 50, using: &generator),
                                         realties: realties,
-                                        gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 5, using: &generator),
-                                                                   longitude: Int.random(in: 0 ... 5, using: &generator)),
+                                        gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 3, using: &generator),
+                                                                   longitude: Int.random(in: 0 ... 3, using: &generator)),
                                         id: y)
 
                         helperList.append(plot)

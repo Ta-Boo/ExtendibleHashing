@@ -1,11 +1,11 @@
 import Foundation
 
 class KDPoint<T: KDNode> {
+    var value: T
     var leftSon: KDPoint?
     var rightSon: KDPoint?
     var parrent: KDPoint?
     var deleted: Bool = false
-    var value: T
     var dimension: Int
 
     var isLeaf: Bool {
@@ -110,6 +110,23 @@ protocol KDComparable {
 
 enum KDDirection {
     case left, right
+    var isLeft: Bool {
+        switch self {
+        case .left:
+            return true
+        default:
+            return false
+        }
+    }
+    var isRight: Bool {
+        switch self {
+        case .right:
+            return true
+        default:
+            return false
+        }
+    }
+    
 }
 
 enum KDCompare {

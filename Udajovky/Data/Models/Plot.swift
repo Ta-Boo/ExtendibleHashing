@@ -13,6 +13,11 @@ enum PlotDimensions: Int {
 }
 
 final class Plot: KDNode {
+    func isBetween(lower: Plot, upper: Plot) -> Bool {
+        return (lower.gpsPossition.lattitude ... upper.gpsPossition.lattitude).contains(self.gpsPossition.lattitude) &&
+            (lower.gpsPossition.longitude ... upper.gpsPossition.longitude).contains(self.gpsPossition.longitude)
+    }
+    
     let gpsPossition: GpsPossition
     var id: Int
     let registerNumber: Int
@@ -70,6 +75,7 @@ enum KDTreePointImplementationKeys: Int {
 }
 
 final class KDTreePointImplementation: KDNode {
+   
     let id: Int
 
     var desc: String {
@@ -94,6 +100,12 @@ final class KDTreePointImplementation: KDNode {
         true
     }
 
+    func isBetween(lower: KDTreePointImplementation, upper: KDTreePointImplementation) -> Bool {
+        return (lower.speed...upper.speed).contains(self.speed) &&
+            (lower.name...upper.name).contains(self.name) &&
+            (lower.speed...upper.speed).contains(self.speed)
+    }
+    
     func equals(to other: KDTreePointImplementation) -> Bool {
         return id == other.id
     }

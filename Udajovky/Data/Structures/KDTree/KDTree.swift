@@ -15,6 +15,12 @@ class KDTree<T: KDNode> {
         self.dimensions = dimensions
     }
 
+    //TODO: ▴ Node compare can be wrapped in Point<T>, which  will leads to less disturbing code
+    //      ▴ Refactor duplicity
+    //      ▴ Remove useless coments, everything is gitted
+    //      ▴
+    //      ▴
+
     // MARK: 🔓 PUBLIC LAYER 🔓
 
     func add(_ element: T) {
@@ -73,36 +79,17 @@ class KDTree<T: KDNode> {
             sonDirection = toBeDeleted.hasLeftSon ? .left : .right
             if toBeDeleted.hasSon(sonDirection) { // has son - direction
                 replacement = suitableReplacement(for: toBeDeleted, by: toBeDeleted.dimension, direction: sonDirection)
-                let replacementCopy = KDPoint(value: replacement!.value, dimension: toBeDeleted.dimension)
-//                replacementCopy.parrent = toBeDeleted.parrent
-//                replacementCopy.leftSon = toBeDeleted.leftSon
-//                replacementCopy.rightSon = toBeDeleted.rightSon
-//                replacementCopy.dimension = toBeDeleted.dimension
-//                switch sonDirection {
-//                case .left:
-//                    replacementCopy.leftSon?.parrent = replacementCopy
-//                case .right:
-//                    replacementCopy.rightSon?.parrent = replacementCopy
-//                }
+                
+                if firstRound {
+                    firstRound = false
+                    firstReplacementValue = replacement?.value
+                    firstReplacement = toBeDeleted
+                }
+
                 replacement?.deleted = true
                 toBeDeleted.value = replacement!.value
                 toBeDeleted.deleted = false
-                if firstRound {
-                    firstRound = false
-//                    if parentDirection == nil {
-//                        firstReplacement = root
-//                    } else {
-//                        firstReplacement = parentDirection!.isRight ? toBeDeleted.parrent?.rightSon : toBeDeleted.parrent?.leftSon
-//                    }
-                    firstReplacementValue = replacement?.value
-                    firstReplacement = replacement
-                }
-//                if parentDirection != nil {
-//                    replacementCopy.parrent?.replaceSon(at: parentDirection!, with: replacementCopy)
-//                } else {
-//                    root = replacementCopy
-//                }
-
+                
                 inProgress = !toBeDeleted.isLeaf
                 toBeDeleted = replacement!
             } else if toBeDeleted.isLeaf {
@@ -124,8 +111,85 @@ class KDTree<T: KDNode> {
         result.value =  firstVal
         rotateAfterDeletion(point: result)
     }
+    
+    func findElements(lowerBound: T, upperBound: T) -> [T?] {
+        return findPoints(lowerBound: lowerBound, upperBound: upperBound).map{ $0.value }
+    }
 
-    // MARK: 🔒 PRIVATE API 🔒
+    // MARK: 🔒 PRIVATE LAYER 🔒
+    
+//    private func findSplitNode (lowerBound: T, upperBound: T) -> KDPoint<T> {
+//        guard var actualPoint = root else {
+//            fatalError()
+//        }
+//        while !actualPoint.isLeaf && (actualPoint.value.compare(to: lowerBound, dimension: actualPoint.dimension).isMoreOrEqual || actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension).isLessOrEqual) {
+//            if actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension).isMoreOrEqual {
+//
+//            }
+//        }
+//
+//    }
+//    private func refactoredSearch(lowerBound: T, upperBound: T? = nil) -> [KDPoint<T>] {
+//    }
+//
+    private func findPoints(lowerBound: T, upperBound: T? = nil) -> [KDPoint<T>] {
+        guard let root = root else {
+            return []
+        }
+        
+        var result: [KDPoint<T>] = []
+        var toBeChecked: [KDPoint<T>] = [root]
+
+        guard let upperBound = upperBound else {
+            let point = findDimensionedPoint(lowerBound)
+            result.safeAppend(point)
+            return [] // toto treba refaktornut. to najde bod na zaklade id
+        }
+        
+        var actualPoint: KDPoint<T>
+        while !toBeChecked.isEmpty {
+            actualPoint = toBeChecked.pop(at: 0)
+            if actualPoint.value.isBetween(lower: lowerBound, upper: upperBound) {
+                toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap { $0 }
+                result.append(actualPoint)
+            } else {
+                let lowerComparation = actualPoint.value.compare(to: lowerBound, dimension: actualPoint.dimension)
+                let upperComparation = actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension)
+                if lowerComparation.isLess {
+                    toBeChecked.safeAppend(actualPoint.rightSon)
+                }
+                if upperComparation.isMore {
+                    toBeChecked.safeAppend(actualPoint.leftSon)
+                }
+            }
+            
+//            let lowerComparation = actualPoint.value.compare(to: lowerBound, dimension: actualPoint.dimension)
+//            let upperComparation = actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension)
+//
+//            if lowerComparation.isMoreOrEqual && upperComparation.isLessOrEqual{
+////                    toBeChecked.append(actualPoint)
+//                    result.append(actualPoint)
+//                    if actualPoint.hasLeftSon {
+//                        let leftSonLowerComparation =  actualPoint.leftSon!.value.compare(to: lowerBound, dimension: actualPoint.dimension)
+//                        let leftSonUpperComparation =  actualPoint.leftSon!.value.compare(to: upperBound, dimension: actualPoint.dimension)
+//                        if leftSonLowerComparation.isMoreOrEqual && leftSonUpperComparation .isLessOrEqual {
+//                            toBeChecked.append(actualPoint.leftSon!)
+//                        }
+//                    }
+//
+//                if actualPoint.hasRightSon {
+//                    let rightSonLowerComparation =  actualPoint.rightSon!.value.compare(to: lowerBound, dimension: actualPoint.dimension)
+//                    let rightSonUpperComparation =  actualPoint.rightSon!.value.compare(to: upperBound, dimension: actualPoint.dimension)
+//                    if rightSonLowerComparation.isMoreOrEqual && rightSonUpperComparation.isLessOrEqual {
+//                        toBeChecked.append(actualPoint.rightSon!)
+//                    }
+//                }
+//            }
+        }
+        return result
+        
+        
+    }
     
     private func rotateAfterDeletion(point: KDPoint<T>?) {
         guard let point = point else {
@@ -150,7 +214,7 @@ class KDTree<T: KDNode> {
                 }
             }
         }
-        //TODO: DUPLICITY ❗️
+        //TODO: DUPLICITY  ?
         if point.hasRightSon {
             let comparation = point.value.compare(to: point.rightSon!.value, dimension: point.dimension)
             if comparation.isEqual {
@@ -208,7 +272,7 @@ class KDTree<T: KDNode> {
 
             if case .equals = element.compare(to: actualPoint.value, dimension: actualDimension) {
                 if actualPoint.value.equals(to: element) {
-                    return actualPoint // TODO: Toto bude robit mozno memory leaky ❗️❗️❗️❗️❗️
+                    return actualPoint // TODO: reference cycle?
                 } else {
                     if actualPoint.hasRightSon {
                         actualPoint = actualPoint.rightSon!
@@ -236,15 +300,15 @@ class KDTree<T: KDNode> {
         return actualPoint
     }
 
-    private func findPoint(_ element : T) -> [KDPoint<T>]? {
-        guard let root = root else {
-            fatalError("You are searching in empty tree.")
-        }
-
-        var result: [KDPoint<T>] = []
-
-        return nil
-    }
+//    private func findPoint(_ element : T) -> [KDPoint<T>]? {
+//        guard let root = root else {
+//            fatalError("You are searching in empty tree.")
+//        }
+//
+//        var result: [KDPoint<T>] = []
+//
+//        return nil
+//    }
 
     private func addSon(_ new: T, to present: KDPoint<T>, at dimension: Int) {
         let direction = chooseDirection(for: new, presentNode: present, dimension: dimension)

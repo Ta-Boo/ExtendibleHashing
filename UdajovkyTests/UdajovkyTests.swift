@@ -26,6 +26,7 @@ class UdajovkyTests: XCTestCase {
         KDTreePointImplementation(number: 540, name: 880, speed: 490, id: 14), // 14
         KDTreePointImplementation(number: 821, name: 310, speed: 110, id: 15), // 15
         KDTreePointImplementation(number: 216, name: 511, speed: 532, id: 16), // 16
+
     ]
 
     func testReferencesInStaticStructure() throws {
@@ -71,11 +72,21 @@ class UdajovkyTests: XCTestCase {
         let std = Int(Double(array.count) * 0.025)
         XCTAssert(((array.count / 2 - std) ... (array.count / 2 + std)).contains(array.reduce(0, +) / array.count))
     }
+    
+    func testFind() throws {
+        let lowerBound = KDTreePointImplementation(number: 550, name: 112, speed: 212, id: 0)
+        let upperBound = KDTreePointImplementation(number: 1000, name: 1000, speed: 1000, id: 1000)
+        let tree = KDTree<KDTreePointImplementation>(dimensions: 3)
+        for element in list {
+            tree.add(element)
+        }
+        let between = tree.findElements(lowerBound: lowerBound, upperBound: upperBound)
+    }
 
     func testRandomOperations() throws {
         //9570
         // 180 1...6
-        for seed in 480 ... 10000 {
+        for seed in 1152 ... 10000 {
 
             print("Seed: \(seed)")
             var generator = SeededGenerator(seed: UInt64(seed))

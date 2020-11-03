@@ -105,6 +105,7 @@ protocol KDNode: Identifiable, KDComparable {
 
 protocol KDComparable {
     func compare(to other: Self, dimension: Int) -> KDCompare
+    func isBetween (lower: Self, upper: Self) -> Bool
     static func == (lhs: Self, rhs: Self) -> Bool
 }
 
@@ -160,6 +161,25 @@ extension KDCompare {
             return false
         }
     }
+    
+    var isMoreOrEqual: Bool {
+        switch self {
+        case .more, .equals:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var isLessOrEqual: Bool {
+        switch self {
+        case .less, .equals:
+            return true
+        default:
+            return false
+        }
+    }
+
 }
 
 struct DimensionedPoint<T: KDNode> {

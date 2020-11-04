@@ -33,32 +33,23 @@ struct MainView: View {
 
 //    @State viewModel
     @ObservedObject var viewModel = MainviewModel()
+    
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                    .frame(width: 30)
-                TextField("Type to search", text: $viewModel.querry)
-                    .textFieldStyle(PlainTextFieldStyle())
-            }
-            .frame(height: 30)
-            .background(Color.primary)
-            .cornerRadius(50)
-            .padding()
-
             Text(viewModel.querry)
             Spacer()
             HStack {
+                VStack {
+                    Spacer()
+                        .background(Color.red)
+                        .frame(width:180)
+                }
                 Spacer()
-                Button("Add something") {
+                Button("Pridať objekt") {
                     viewModel.activeSheet = .placeForm
                 }
                 .buttonStyle(RoundedBackgroundStyle(color: .accent))
                 Spacer()
-                Button("Remove something") {
-                    viewModel.activeSheet = PresentableView.none
-                    self.presentationMode.wrappedValue.dismiss()
-                }
                 .buttonStyle(RoundedBackgroundStyle(color: .accent))
                 Spacer()
             }.padding()

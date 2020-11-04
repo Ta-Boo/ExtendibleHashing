@@ -18,8 +18,8 @@ class KDTree<T: KDNode> {
     //TODO: ▴ Node compare can be wrapped in Point<T>, which  will leads to less disturbing code
     //      ▴ Refactor duplicity
     //      ▴ Remove useless coments, everything is gitted
-    //      ▴
-    //      ▴
+    //      ▴ ID -> RegisterNumber. wrap it inside as getter computed variable
+    //      ▴ change accesibilities
 
     // MARK: 🔓 PUBLIC LAYER 🔓
 
@@ -112,7 +112,7 @@ class KDTree<T: KDNode> {
         rotateAfterDeletion(point: result)
     }
     
-    func findElements(lowerBound: T, upperBound: T) -> [T?] {
+    func findElements(lowerBound: T, upperBound: T) -> [T] {
         return findPoints(lowerBound: lowerBound, upperBound: upperBound).map{ $0.value }
     }
 
@@ -162,29 +162,6 @@ class KDTree<T: KDNode> {
                     toBeChecked.safeAppend(actualPoint.leftSon)
                 }
             }
-            
-//            let lowerComparation = actualPoint.value.compare(to: lowerBound, dimension: actualPoint.dimension)
-//            let upperComparation = actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension)
-//
-//            if lowerComparation.isMoreOrEqual && upperComparation.isLessOrEqual{
-////                    toBeChecked.append(actualPoint)
-//                    result.append(actualPoint)
-//                    if actualPoint.hasLeftSon {
-//                        let leftSonLowerComparation =  actualPoint.leftSon!.value.compare(to: lowerBound, dimension: actualPoint.dimension)
-//                        let leftSonUpperComparation =  actualPoint.leftSon!.value.compare(to: upperBound, dimension: actualPoint.dimension)
-//                        if leftSonLowerComparation.isMoreOrEqual && leftSonUpperComparation .isLessOrEqual {
-//                            toBeChecked.append(actualPoint.leftSon!)
-//                        }
-//                    }
-//
-//                if actualPoint.hasRightSon {
-//                    let rightSonLowerComparation =  actualPoint.rightSon!.value.compare(to: lowerBound, dimension: actualPoint.dimension)
-//                    let rightSonUpperComparation =  actualPoint.rightSon!.value.compare(to: upperBound, dimension: actualPoint.dimension)
-//                    if rightSonLowerComparation.isMoreOrEqual && rightSonUpperComparation.isLessOrEqual {
-//                        toBeChecked.append(actualPoint.rightSon!)
-//                    }
-//                }
-//            }
         }
         return result
         

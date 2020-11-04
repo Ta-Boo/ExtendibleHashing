@@ -13,4 +13,9 @@ extension Color {
     static let secondary = Color("Secondary")
     static let terciary = Color("Terciary")
     static let accent = Color("Accent")
+    
+//    static let primary = Color.red
+//    static let secondary = Color.green
+//    static let terciary = Color.yellow
+//    static let accent = Color.black
 }

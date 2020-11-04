@@ -21,7 +21,7 @@ final class Plot: KDNode {
     let gpsPossition: GpsPossition
     var id: Int
     let registerNumber: Int
-    let description: Int
+    let description: String
     let realties: [Realty]
 
     var desc: String {
@@ -29,12 +29,20 @@ final class Plot: KDNode {
 //            return "Number: \(registerNumber) \n Description: \(description) \n Realties: \(realties.count) \n GPS: \(gpsPossition) \n"
     }
 
-    init(registerNumber: Int, description: Int, realties: [Realty], gpsPossition: GpsPossition, id: Int) {
+    init(registerNumber: Int, description: String, realties: [Realty], gpsPossition: GpsPossition, id: Int) {
         self.registerNumber = registerNumber
         self.description = description
         self.realties = realties
         self.gpsPossition = gpsPossition
         self.id = id
+    }
+    
+    init(gpsPossition: GpsPossition) {
+        self.registerNumber = 0
+        self.description = ""
+        self.realties = []
+        self.gpsPossition = gpsPossition
+        self.id = 0
     }
 
     static func == (lhs: Plot, rhs: Plot) -> Bool {
@@ -101,9 +109,13 @@ final class KDTreePointImplementation: KDNode {
     }
 
     func isBetween(lower: KDTreePointImplementation, upper: KDTreePointImplementation) -> Bool {
+        let ahoj1 = (lower.speed...upper.speed).contains(self.speed)
+        let ahoj2 = (lower.name...upper.name).contains(self.name)
+        let ahoj3 = (lower.number...upper.number).contains(self.number)
+        
         return (lower.speed...upper.speed).contains(self.speed) &&
             (lower.name...upper.name).contains(self.name) &&
-            (lower.speed...upper.speed).contains(self.speed)
+            (lower.number...upper.number).contains(self.number)
     }
     
     func equals(to other: KDTreePointImplementation) -> Bool {

@@ -22,7 +22,7 @@
 		B3457FD8254A0B8600E9420F /* Realty.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A242536246700AB87F2 /* Realty.swift */; };
 		B3457FDC254B7B8D00E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
 		B3457FE1254B7C5300E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
-		B366FBB62549B658002244F2 /* PDA.swift in Sources */ = {isa = PBXBuildFile; fileRef = B366FBB52549B658002244F2 /* PDA.swift */; };
+		B366FBB62549B658002244F2 /* PDAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B366FBB52549B658002244F2 /* PDAState.swift */; };
 		B3A17A252536246700AB87F2 /* Realty.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A242536246700AB87F2 /* Realty.swift */; };
 		B3A17A28253624D400AB87F2 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A27253624D400AB87F2 /* Plot.swift */; };
 		B3A17A2B2536252B00AB87F2 /* GpsPossition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A2A2536252B00AB87F2 /* GpsPossition.swift */; };
@@ -34,6 +34,7 @@
 		B3D026D825273672009E63C3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D026D725273672009E63C3 /* Preview Assets.xcassets */; };
 		B3D026DB25273672009E63C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3D026D925273672009E63C3 /* Main.storyboard */; };
 		B3FA6DB72551EBD000EAE655 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32119872551E9BF0079B449 /* Array.swift */; };
+		B3FA6DBB255324B000EAE655 /* EditableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FA6DBA255324B000EAE655 /* EditableTextView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +59,7 @@
 		B33FB0AC2544A33700B3AB7E /* NSTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextField.swift; sourceTree = "<group>"; };
 		B33FB0B12544A37B00B3AB7E /* SeededGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededGenerator.swift; sourceTree = "<group>"; };
 		B3457FDB254B7B8D00E9420F /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		B366FBB52549B658002244F2 /* PDA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDA.swift; sourceTree = "<group>"; };
+		B366FBB52549B658002244F2 /* PDAState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDAState.swift; sourceTree = "<group>"; };
 		B3A17A242536246700AB87F2 /* Realty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realty.swift; sourceTree = "<group>"; };
 		B3A17A27253624D400AB87F2 /* Plot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
 		B3A17A2A2536252B00AB87F2 /* GpsPossition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpsPossition.swift; sourceTree = "<group>"; };
@@ -71,6 +72,7 @@
 		B3D026DA25273672009E63C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B3D026DC25273672009E63C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B3D026DD25273672009E63C3 /* Udajovky.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Udajovky.entitlements; sourceTree = "<group>"; };
+		B3FA6DBA255324B000EAE655 /* EditableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableTextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				B3263A7B2545B55600AE558F /* CustomColorToggleStyle.swift */,
+				B3FA6DBA255324B000EAE655 /* EditableTextView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -150,7 +153,7 @@
 		B3A17A212536243A00AB87F2 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				B366FBB52549B658002244F2 /* PDA.swift */,
+				B366FBB52549B658002244F2 /* PDAState.swift */,
 				B3A17A232536244E00AB87F2 /* Models */,
 				B3A17A222536244700AB87F2 /* Structures */,
 			);
@@ -352,8 +355,9 @@
 				B3B65B87253325F9000C9442 /* Color.swift in Sources */,
 				B3263A782545AE7D00AE558F /* PlaceFormView.swift in Sources */,
 				B3263A842545C15800AE558F /* KDTreeNode.swift in Sources */,
+				B3FA6DBB255324B000EAE655 /* EditableTextView.swift in Sources */,
 				B3263A7C2545B55600AE558F /* CustomColorToggleStyle.swift in Sources */,
-				B366FBB62549B658002244F2 /* PDA.swift in Sources */,
+				B366FBB62549B658002244F2 /* PDAState.swift in Sources */,
 				B3263AB625475B0400AE558F /* KDTree.swift in Sources */,
 				B3A17A2B2536252B00AB87F2 /* GpsPossition.swift in Sources */,
 			);

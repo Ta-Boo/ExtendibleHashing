@@ -25,7 +25,7 @@ class KDTree<T: KDNode> {
         return counter
 
     }
-    private var root: KDPoint<T>?
+    public  var root: KDPoint<T>? //FIXME: Public only for tests ❗️❗️❗️
 
      public init(dimensions: Int) {
         self.dimensions = dimensions

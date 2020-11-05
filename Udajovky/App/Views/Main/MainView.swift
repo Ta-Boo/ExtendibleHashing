@@ -12,14 +12,6 @@ struct Listable: Identifiable {
     let text: String
 }
 
-//struct ShakeEffect: GeometryEffect {
-//    var distance: CGFloat = 6
-//    var shakes: CGFloat = 4
-//    var data: Bool
-//    func effectValue(size: CGSize) -> ProjectionTransform {
-//        ProjectionTransform(CGAffineTransform(translationX: distance * sin(data ? 2.0 : 0.0 * .pi * shakes ), y: 0))
-//    }
-//}
 struct MainView: View {
     @Environment(\.presentationMode) var presentationMode
     
@@ -119,7 +111,6 @@ struct MainView: View {
             .padding()
         }
         .frame(minWidth: 600, minHeight: 400)
-        //        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(LinearGradient(gradient: Gradient(colors: [Color.secondary, Color.primary]), startPoint: .top, endPoint: .bottom))
         .sheet(item: $viewModel.activeSheet) { item in
             switch item {

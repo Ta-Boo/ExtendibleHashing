@@ -10,6 +10,22 @@ import Foundation
 class KDTree<T: KDNode> {
     let dimensions: Int
     var root: KDPoint<T>?
+    
+    var count: Int {
+        guard let root = root else {
+            return 0
+        }
+        var counter = 0
+        var toBeChecked: [KDPoint<T>] = [root]
+        
+        while !toBeChecked.isEmpty {
+            counter += 1
+            let actualPoint = toBeChecked.pop(at: 0)
+            toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap { $0 }
+        }
+        return counter
+
+    }
 
     init(dimensions: Int) {
         self.dimensions = dimensions
@@ -134,6 +150,47 @@ class KDTree<T: KDNode> {
             toBeDeleted.parrent?.delete(son: toBeDeleted)
         }
         
+        var replacement: KDPoint<T>?
+        while !toBeDeleted.isLeaf {
+            if toBeDeleted.hasRightSon {
+                replacement = findMinimum(of: toBeDeleted.rightSon!)
+                replacement!.deleted = true
+                toBeDeleted.value = replacement!.value
+                toBeDeleted.deleted = false
+                toBeDeleted = replacement!
+            } else if toBeDeleted.hasLeftSon{ //TODO: if  is redundant IMO
+                replacement = findMinimum(of: toBeDeleted.leftSon!)
+                replacement!.deleted = true
+                toBeDeleted.value = replacement!.value
+                toBeDeleted.deleted = false
+                toBeDeleted.rightSon = toBeDeleted.leftSon
+                toBeDeleted.leftSon = nil
+                toBeDeleted = replacement!
+            }
+        }
+        replacement?.parrent?.delete(son: replacement!)
+    }
+    
+    private func findMinimum(of startingPoint: KDPoint<T>) -> KDPoint<T> {
+        var toBeChecked: [KDPoint<T>] = [startingPoint]
+        var result = startingPoint
+        if startingPoint.isLeaf {
+            return startingPoint //TODO: seems to redundant 👮🏻‍♂️
+        }
+
+        while !toBeChecked.isEmpty {
+            let actualPoint = toBeChecked.first!
+            toBeChecked.remove(at: 0)
+            
+            if actualPoint.value.compare(to: result.value, dimension: startingPoint.parrent?.dimension ?? 1).isLessOrEqual {
+                if !actualPoint.deleted {
+                    result = actualPoint
+                }
+            }
+            
+            toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap { $0 }
+        }
+        return result
         
     }
     
@@ -259,7 +316,6 @@ class KDTree<T: KDNode> {
         }
         var actualDimension = 1
         let dimensions = self.dimensions + 1
-        // TODO: Mozno by stalo za zvazenie, ci by som nemal vracat [] namiesto jedneho Pointu
         while !actualPoint.isLeaf {
             if case .less = element.compare(to: actualPoint.value, dimension: actualDimension) {
                 if actualPoint.hasLeftSon {
@@ -274,7 +330,7 @@ class KDTree<T: KDNode> {
 
             if case .equals = element.compare(to: actualPoint.value, dimension: actualDimension) {
                 if actualPoint.value.equals(to: element) {
-                    return actualPoint // TODO: reference cycle?
+                    return actualPoint
                 } else {
                     if actualPoint.hasRightSon {
                         actualPoint = actualPoint.rightSon!
@@ -302,15 +358,6 @@ class KDTree<T: KDNode> {
         return actualPoint
     }
 
-//    private func findPoint(_ element : T) -> [KDPoint<T>]? {
-//        guard let root = root else {
-//            fatalError("You are searching in empty tree.")
-//        }
-//
-//        var result: [KDPoint<T>] = []
-//
-//        return nil
-//    }
 
     private func addSon(_ new: T, to present: KDPoint<T>, at dimension: Int) {
         let direction = chooseDirection(for: new, presentNode: present, dimension: dimension)

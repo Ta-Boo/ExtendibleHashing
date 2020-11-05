@@ -13,17 +13,17 @@ class PDAState {
     var realties: KDTree<Realty> = KDTree(dimensions: 2)
     
     private init () {
-        addPlot(Plot(registerNumber: 2, description: "Parcela 1", realties: [], gpsPossition: GpsPossition(lattitude: 8.0, longitude: 8.0), id: 1))
-        addPlot(Plot(registerNumber: 0, description: "Parcela 2", realties: [], gpsPossition: GpsPossition(lattitude: 10.0, longitude: 10.0), id: 2))
-        addPlot(Plot(registerNumber: 1, description: "Parcela 3", realties: [], gpsPossition: GpsPossition(lattitude: 9.0, longitude: 9.0), id: 3))
-        addPlot(Plot(registerNumber: 4, description: "Parcela 4", realties: [], gpsPossition: GpsPossition(lattitude: 6.0, longitude: 6.0), id: 4))
-        addPlot(Plot(registerNumber: 3, description: "Parcela 5", realties: [], gpsPossition: GpsPossition(lattitude: 7.0, longitude: 7.0), id: 5))
-        
-        addRealty(Realty(registerNumber: 1, description: "Nehnutelnost 1", plots: [], gpsPossition: GpsPossition(lattitude: 9.0, longitude: 9.0), id: 1))
-        addRealty(Realty(registerNumber: 2, description: "Nehnutelnost 2", plots: [], gpsPossition: GpsPossition(lattitude: 10.0, longitude: 10.0), id: 2))
-        addRealty(Realty(registerNumber: 3, description: "Nehnutelnost 3", plots: [], gpsPossition: GpsPossition(lattitude: 7.0, longitude: 7.0), id: 3))
-        addRealty(Realty(registerNumber: 4, description: "Nehnutelnost 4", plots: [], gpsPossition: GpsPossition(lattitude: 6.0, longitude: 6.0), id: 4))
-        addRealty(Realty(registerNumber: 5, description: "Nehnutelnost 5", plots: [], gpsPossition: GpsPossition(lattitude: 8.0, longitude: 8.0), id: 5))
+//        addPlot(Plot(registerNumber: 2, description: "Parcela 1", realties: [], gpsPossition: GpsPossition(lattitude: 8.0, longitude: 8.0), id: 1))
+//        addPlot(Plot(registerNumber: 0, description: "Parcela 2", realties: [], gpsPossition: GpsPossition(lattitude: 10.0, longitude: 10.0), id: 2))
+//        addPlot(Plot(registerNumber: 1, description: "Parcela 3", realties: [], gpsPossition: GpsPossition(lattitude: 9.0, longitude: 9.0), id: 3))
+//        addPlot(Plot(registerNumber: 4, description: "Parcela 4", realties: [], gpsPossition: GpsPossition(lattitude: 6.0, longitude: 6.0), id: 4))
+//        addPlot(Plot(registerNumber: 3, description: "Parcela 5", realties: [], gpsPossition: GpsPossition(lattitude: 7.0, longitude: 7.0), id: 5))
+//        
+//        addRealty(Realty(registerNumber: 1, description: "Nehnutelnost 1", plots: [], gpsPossition: GpsPossition(lattitude: 9.0, longitude: 9.0), id: 1))
+//        addRealty(Realty(registerNumber: 2, description: "Nehnutelnost 2", plots: [], gpsPossition: GpsPossition(lattitude: 10.0, longitude: 10.0), id: 2))
+//        addRealty(Realty(registerNumber: 3, description: "Nehnutelnost 3", plots: [], gpsPossition: GpsPossition(lattitude: 7.0, longitude: 7.0), id: 3))
+//        addRealty(Realty(registerNumber: 4, description: "Nehnutelnost 4", plots: [], gpsPossition: GpsPossition(lattitude: 6.0, longitude: 6.0), id: 4))
+//        addRealty(Realty(registerNumber: 5, description: "Nehnutelnost 5", plots: [], gpsPossition: GpsPossition(lattitude: 8.0, longitude: 8.0), id: 5))
     }
     
     //MARK: PLOTS

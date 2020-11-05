@@ -70,7 +70,7 @@ class KDPoint<T: KDNode> {
         if leftSon == nil {
             rightSon = nil
         } else {
-            if  leftSon === son {
+            if  leftSon!.value.equals(to: son.value) {
                 leftSon!.parrent = nil
                 leftSon = nil
             } else {

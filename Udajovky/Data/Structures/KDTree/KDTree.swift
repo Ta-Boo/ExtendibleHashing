@@ -115,7 +115,7 @@ class KDTree<T: KDNode> {
     func findElements(lowerBound: T, upperBound: T) -> [T] {
         return findPoints(lowerBound: lowerBound, upperBound: upperBound).map{ $0.value }
     }
-
+     MARK: REFACTOR 
     // MARK: 🔒 PRIVATE LAYER 🔒
     
 //    private func findSplitNode (lowerBound: T, upperBound: T) -> KDPoint<T> {

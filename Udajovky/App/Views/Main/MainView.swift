@@ -33,7 +33,7 @@ struct MainView: View {
             GeometryReader { geometry in
                 HStack {
                     List(){
-                        Section(header: Text("Parcely").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)){
+                        Section(header: Text("Parcely").font(.title).foregroundColor(.white)){
                             ForEach(viewModel.foundPlots) { item in
                                 HStack {
                                     Text("\(item.registerNumber)")
@@ -44,7 +44,7 @@ struct MainView: View {
                             }
                         }
                         Spacer().frame(height: 30)
-                        Section(header: Text("Nehnutelnosti").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)){
+                        Section(header: Text("Nehnutelnosti").font(.title).foregroundColor(.white)){
                             ForEach(viewModel.foundRealties) { item in
                                 HStack {
                                     Text("\(item.registerNumber)")
@@ -90,7 +90,6 @@ struct MainView: View {
                                     EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolderB)
                                     EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.longitudeHolderB)
                                 }
-                                .animation(.default).transition(AnyTransition.opacity.animation(.easeInOut))
                             }
                             HStack{
                                 Spacer()
@@ -102,6 +101,8 @@ struct MainView: View {
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
                                 .frame(width: 75)
                             }
+                            Image("owl").resizable().scaledToFit().frame(width: geometry.size.width / 8)
+
                         }
                         Spacer()
                         Button("Pridať objekt") {

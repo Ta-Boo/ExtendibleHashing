@@ -14,8 +14,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "315"
-            endingLineNumber = "315"
+            startingLineNumber = "319"
+            endingLineNumber = "319"
             landmarkName = "suitableReplacement(for:by:direction:)"
             landmarkType = "7">
             <Locations>
@@ -62,8 +62,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -110,8 +110,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -158,8 +158,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
             landmarkName = "subTreepoints(of:)"
             landmarkType = "7">
             <Locations>
@@ -206,8 +206,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -254,8 +254,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -334,8 +334,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -382,10 +382,10 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
-            landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            startingLineNumber = "255"
+            endingLineNumber = "255"
+            landmarkName = "reference cycle?"
+            landmarkType = "19">
             <Locations>
                <Location
                   uuid = "C58DF1A6-A577-46FC-986F-B962BC6A9E9B - 41390938d58ac5cb"
@@ -583,54 +583,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "23D7426C-0C77-4409-BC85-721B2DABFA90"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
-            landmarkName = "findPoints(lowerBound:upperBound:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "23D7426C-0C77-4409-BC85-721B2DABFA90 - a660ed752ad5be78"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Udajovky.KDTree.(findPoints in _D44E1139C2D348D8FD184ADA98125822)(lowerBound: A, upperBound: Swift.Optional&lt;A&gt;) -&gt; Swift.Array&lt;Udajovky.KDPoint&lt;A&gt;&gt;"
-                  moduleName = "Udajovky"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "152"
-                  endingLineNumber = "152"
-                  offsetFromSymbolStart = "1165">
-               </Location>
-               <Location
-                  uuid = "23D7426C-0C77-4409-BC85-721B2DABFA90 - 59b26611dff53971"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "UdajovkyTests.KDTree.(findPoints in _CA28FB13FCEA7BBF8E32C8542849897A)(lowerBound: A, upperBound: Swift.Optional&lt;A&gt;) -&gt; Swift.Array&lt;UdajovkyTests.KDPoint&lt;A&gt;&gt;"
-                  moduleName = "UdajovkyTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hladek/School/Udajovky/Udajovky/Data/Structures/KDTree/KDTree.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "152"
-                  endingLineNumber = "152"
-                  offsetFromSymbolStart = "1165">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "67C881B3-0732-4886-A2C2-45A0101F1DB4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -641,6 +593,166 @@
             startingLineNumber = "97"
             endingLineNumber = "97"
             landmarkName = "testRandomOperations()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D6E733A9-A0E2-4148-99C9-5CD6F3CF9A2A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/PDAState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "addPlot(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "713F824F-F817-4BB7-890B-4B6BE8389D1E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/PDAState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "addRealty(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B112B11B-C8FD-4C21-A501-4296D85E5654"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/PDAState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "getRealties(matching:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "86CFD87D-E060-45A5-BFBE-F3E0F5447F71"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "findPoints(lowerBound:upperBound:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "79AD1589-CBD4-4A45-B4A3-2A0BEB50103D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/PDAState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "getPlots(matching:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2178BD0-2213-4852-BA9F-E359EC900CA4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "findPoints(lowerBound:upperBound:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EAA62EDB-2C84-4074-B624-927F5AE8347A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/Views/Main/MainViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "findObjects()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D988E580-4431-455D-A9CE-228877031D98"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/PDAState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "getRealties(matching:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "49AC0DD9-31A2-431F-9D83-EBED6C83381C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/PDAState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "addRealty(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CF51D343-4ECF-43AC-B493-47E0DAFDCCAD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/App/PDAState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "addRealty(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

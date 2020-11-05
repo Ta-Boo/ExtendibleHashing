@@ -3,21 +3,35 @@ import SwiftUI
 class MainviewModel: ObservableObject {
     @Published var querry = ""
     @Published var activeSheet: PresentableView?
-    let items = [Listable(id: 1, text: "Prvy"),
-                 Listable(id: 2, text: "Prvy"),
-                 Listable(id: 3, text: "Prvy"),
-                 Listable(id: 3, text: "Prvy"),
-                 Listable(id: 4, text: "Prvy"),
-                 Listable(id: 5, text: "5"),
-                 Listable(id: 6, text: "Prvy"),
-                 Listable(id: 7, text: "Prvy"),
-                 Listable(id: 8, text: "Prvy"),
-                 Listable(id: 9, text: "Prvy"),
-                 Listable(id: 10, text: "10"),
-                 Listable(id: 12, text: "Prvy"),
-                 Listable(id: 13, text: "Prvy"),
-                 Listable(id: 14, text: "14"),
-                 Listable(id: 15, text: "Prvy"),
-                 Listable(id: 16, text: "Prvy"),
-                 Listable(id: 12, text: "posledny")]
+    
+    @Published var latitudeHolderA: String = ""
+    @Published var longitudeHolderA: String = ""
+    @Published var latitudeHolderB: String = ""
+    @Published var longitudeHolderB: String = ""
+    
+    @Published var pointSearch = false
+    
+    @Published var foundPlots: [Plot] = []
+    @Published var foundRealties: [Realty] = []
+
+    
+    var isFilled: Bool {
+        
+        if pointSearch {
+            return !latitudeHolderA.isEmpty &&
+            !longitudeHolderA.isEmpty
+        } else {
+                return !latitudeHolderA.isEmpty &&
+                !longitudeHolderA.isEmpty &&
+                !latitudeHolderB.isEmpty &&
+                !longitudeHolderB.isEmpty
+        }
+    }
+    
+    func findObjects() {
+        let lowerBound = GpsPossition(lattitude: Double(latitudeHolderA)!, longitude: Double(longitudeHolderA)!)
+        let upperBound = GpsPossition(lattitude: Double(latitudeHolderB) ?? Double(latitudeHolderA)!, longitude: Double(longitudeHolderB) ?? Double(longitudeHolderA)!)
+        foundPlots = PDAState.shared.getPlots(matching: GPSRange(upper: upperBound, lower: lowerBound))
+        foundRealties = PDAState.shared.getRealties(matching: GPSRange(upper: upperBound, lower: lowerBound))
+    }
 }

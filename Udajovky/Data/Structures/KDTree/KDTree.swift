@@ -157,10 +157,14 @@ class KDTree<T: KDNode> {
                 let upperComparation = actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension)
                 if lowerComparation.isLess {
                     toBeChecked.safeAppend(actualPoint.rightSon)
-                }
-                if upperComparation.isMore {
+                } else if upperComparation.isMore {
                     toBeChecked.safeAppend(actualPoint.leftSon)
+                } else {
+                    toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap { $0 }
                 }
+//                if upperComparation.isMore {
+//                    toBeChecked.safeAppend(actualPoint.leftSon)
+//                }
             }
         }
         return result

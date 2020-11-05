@@ -22,11 +22,10 @@ final class Plot: KDNode {
     var id: Int
     let registerNumber: Int
     let description: String
-    let realties: [Realty]
+    var realties: [Realty]
 
     var desc: String {
         return "GPS: \(gpsPossition)"
-//            return "Number: \(registerNumber) \n Description: \(description) \n Realties: \(realties.count) \n GPS: \(gpsPossition) \n"
     }
 
     init(registerNumber: Int, description: String, realties: [Realty], gpsPossition: GpsPossition, id: Int) {
@@ -109,10 +108,6 @@ final class KDTreePointImplementation: KDNode {
     }
 
     func isBetween(lower: KDTreePointImplementation, upper: KDTreePointImplementation) -> Bool {
-        let ahoj1 = (lower.speed...upper.speed).contains(self.speed)
-        let ahoj2 = (lower.name...upper.name).contains(self.name)
-        let ahoj3 = (lower.number...upper.number).contains(self.number)
-        
         return (lower.speed...upper.speed).contains(self.speed) &&
             (lower.name...upper.name).contains(self.name) &&
             (lower.number...upper.number).contains(self.number)

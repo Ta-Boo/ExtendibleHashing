@@ -23,17 +23,18 @@ class PlaceFormViewModel: ObservableObject {
     
     func addPDAObject() {
         if isParcel {
-            PDAState.shared.addRealty(Realty(registerNumber: Int(numberHolder)!,
-                                           description: descriptionHolder,
-                                           plots: [],
-                                           gpsPossition: GpsPossition(lattitude: Int(latitudeHolder)!, longitude: Int(longitudeHolder)!),
-                                           id: 0))
-        } else {
             PDAState.shared.addPlot(Plot(registerNumber: Int(numberHolder)!,
                                          description: descriptionHolder,
                                          realties: [],
-                                         gpsPossition: GpsPossition(lattitude: Int(latitudeHolder)!, longitude: Int(longitudeHolder)!),
+                                         gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)!, longitude: Double(longitudeHolder)!),
                                          id: 0))
+            
+        } else {
+            PDAState.shared.addRealty(Realty(registerNumber: Int(numberHolder)!,
+                                           description: descriptionHolder,
+                                           plots: [],
+                                           gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)!, longitude: Double(longitudeHolder)!),
+                                           id: 0))
         }
     }
     

@@ -18,7 +18,7 @@ class Realty: KDNode {
     let gpsPossition: GpsPossition
     let registerNumber: Int
     let description: String
-    let plots: [Plot]
+    var plots: [Plot]
     var id: Int
     var desc: String {
         return "GPS: \(gpsPossition)"
@@ -43,6 +43,12 @@ class Realty: KDNode {
     
     func equals(to other: Realty) -> Bool {
         return id == other.id
+    }
+    
+    func addPlots(_ plots: [Plot]) {
+        for plot in plots {
+            self.plots.append(plot)
+        }
     }
     
     func compare(to other: Realty, dimension: Int) -> KDCompare {

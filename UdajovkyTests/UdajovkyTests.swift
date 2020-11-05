@@ -116,8 +116,8 @@ class UdajovkyTests: XCTestCase {
                         let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
                                         description: String.random(length: 5),
                                         realties: [],
-                                        gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 30000, using: &generator),
-                                                                   longitude: Int.random(in: 0 ... 30000, using: &generator)),
+                                        gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 30000, using: &generator),
+                                                                   longitude: Double.random(in: 0 ... 30000, using: &generator)),
                                         id: y)
 
                         helperList.append(plot)
@@ -143,14 +143,13 @@ class UdajovkyTests: XCTestCase {
     }
 
     func testInsert() throws {
-        measure {
-            // 100K 13,2s
-            // 50K 3,3 s
+//        measure {
+            // 100M 13,2s
             let tree = KDTree<Plot>(dimensions: 2)
             var generator = SeededGenerator(seed: UInt64(300))
 
-            for y in 1 ... 50_000 {
-                if y % 2500 == 0 { print(Double(y) / 500.0, "%") }
+            for y in 1 ... 1_000_000 {
+                if y % 2500 == 0 { print(Double(y) / 10000.0, "%") }
 
 //                var realties: [Realty] = []
                 //                for _ in 1...Int.random(in: 1...8, using: &generator) {
@@ -161,14 +160,14 @@ class UdajovkyTests: XCTestCase {
                 //                }
 
                 let plot = Plot(registerNumber: Int.random(in: 1 ... 50, using: &generator),
-                                description: String.random(length: 5),
+                                description: "asd",
                                 realties: [],
-                                gpsPossition: GpsPossition(lattitude: Int.random(in: 0 ... 10, using: &generator),
-                                                           longitude: Int.random(in: 0 ... 10, using: &generator)),
+                                gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 100, using: &generator),
+                                                           longitude: Double.random(in: 0 ... 100, using: &generator)),
                                 id: y)
 
                 tree.add(plot)
             }
-        }
+//        }
     }
 }

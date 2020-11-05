@@ -23,7 +23,6 @@ struct EditTextView: View {
         }
         .frame(height: 30)
         .background(Color.primary)
-        .cornerRadius(50)
-        .padding()
+        .cornerRadius(15)
     }
 }

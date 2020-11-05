@@ -11,6 +11,6 @@ struct RoundedBackgroundStyle: ButtonStyle {
             .foregroundColor(.white)
             .background(color)
             .cornerRadius(40)
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 12)
     }
 }

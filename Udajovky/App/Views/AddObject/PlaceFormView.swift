@@ -36,10 +36,12 @@ struct PlaceFormView: View {
                     if viewModel.isFilled {
                         self.presentationMode.wrappedValue.dismiss()
                         viewModel.addPDAObject()
-//                        result = viewModel.result!
                         
                     } else {
-                        self.wrongAttempt.toggle()
+                        wrongAttempt.toggle()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            wrongAttempt.toggle()
+                        }
                     }
                     
                 }

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B30BAFE02554004A0055CCDF /* RoundedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30BAFDF2554004A0055CCDF /* RoundedButtonStyle.swift */; };
+		B30BAFE6255408BF0055CCDF /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30BAFE5255408BF0055CCDF /* List.swift */; };
+		B30BAFEB255414AA0055CCDF /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30BAFEA255414AA0055CCDF /* MainViewModel.swift */; };
+		B30BAFF2255414ED0055CCDF /* PlaceFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30BAFF1255414ED0055CCDF /* PlaceFormViewModel.swift */; };
 		B32119882551E9BF0079B449 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32119872551E9BF0079B449 /* Array.swift */; };
 		B3263A782545AE7D00AE558F /* PlaceFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3263A772545AE7D00AE558F /* PlaceFormView.swift */; };
 		B3263A7C2545B55600AE558F /* CustomColorToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3263A7B2545B55600AE558F /* CustomColorToggleStyle.swift */; };
@@ -48,6 +52,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B30BAFDF2554004A0055CCDF /* RoundedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButtonStyle.swift; sourceTree = "<group>"; };
+		B30BAFE5255408BF0055CCDF /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		B30BAFEA255414AA0055CCDF /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		B30BAFF1255414ED0055CCDF /* PlaceFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFormViewModel.swift; sourceTree = "<group>"; };
 		B32119872551E9BF0079B449 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		B3263A772545AE7D00AE558F /* PlaceFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceFormView.swift; sourceTree = "<group>"; };
 		B3263A7B2545B55600AE558F /* CustomColorToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColorToggleStyle.swift; sourceTree = "<group>"; };
@@ -93,9 +101,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B30BAFDE255400380055CCDF /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				B30BAFDF2554004A0055CCDF /* RoundedButtonStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		B30BAFE9255414920055CCDF /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				B3D026D225273672009E63C3 /* MaintView.swift */,
+				B30BAFEA255414AA0055CCDF /* MainViewModel.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		B30BAFF0255414D10055CCDF /* AddObject */ = {
+			isa = PBXGroup;
+			children = (
+				B3263A772545AE7D00AE558F /* PlaceFormView.swift */,
+				B30BAFF1255414ED0055CCDF /* PlaceFormViewModel.swift */,
+			);
+			path = AddObject;
+			sourceTree = "<group>";
+		};
 		B3263A7A2545B53A00AE558F /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				B30BAFDE255400380055CCDF /* Styles */,
 				B3263A7B2545B55600AE558F /* CustomColorToggleStyle.swift */,
 				B3FA6DBA255324B000EAE655 /* EditableTextView.swift */,
 			);
@@ -105,8 +140,8 @@
 		B3263A7F2545BB1E00AE558F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B3D026D225273672009E63C3 /* MaintView.swift */,
-				B3263A772545AE7D00AE558F /* PlaceFormView.swift */,
+				B30BAFF0255414D10055CCDF /* AddObject */,
+				B30BAFE9255414920055CCDF /* Main */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -185,6 +220,7 @@
 				B33FB0AC2544A33700B3AB7E /* NSTextField.swift */,
 				B3457FDB254B7B8D00E9420F /* String.swift */,
 				B32119872551E9BF0079B449 /* Array.swift */,
+				B30BAFE5255408BF0055CCDF /* List.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -344,6 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B30BAFF2255414ED0055CCDF /* PlaceFormViewModel.swift in Sources */,
 				B3A17A252536246700AB87F2 /* Realty.swift in Sources */,
 				B33FB0B22544A37B00B3AB7E /* SeededGenerator.swift in Sources */,
 				B3D026D325273672009E63C3 /* MaintView.swift in Sources */,
@@ -352,14 +389,17 @@
 				B33FB0AD2544A33700B3AB7E /* NSTextField.swift in Sources */,
 				B32119882551E9BF0079B449 /* Array.swift in Sources */,
 				B3A17A28253624D400AB87F2 /* Plot.swift in Sources */,
+				B30BAFE02554004A0055CCDF /* RoundedButtonStyle.swift in Sources */,
 				B3B65B87253325F9000C9442 /* Color.swift in Sources */,
 				B3263A782545AE7D00AE558F /* PlaceFormView.swift in Sources */,
 				B3263A842545C15800AE558F /* KDTreeNode.swift in Sources */,
 				B3FA6DBB255324B000EAE655 /* EditableTextView.swift in Sources */,
+				B30BAFEB255414AA0055CCDF /* MainViewModel.swift in Sources */,
 				B3263A7C2545B55600AE558F /* CustomColorToggleStyle.swift in Sources */,
 				B366FBB62549B658002244F2 /* PDAState.swift in Sources */,
 				B3263AB625475B0400AE558F /* KDTree.swift in Sources */,
 				B3A17A2B2536252B00AB87F2 /* GpsPossition.swift in Sources */,
+				B30BAFE6255408BF0055CCDF /* List.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

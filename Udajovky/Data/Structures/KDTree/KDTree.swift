@@ -8,10 +8,9 @@
 import Foundation
 
 class KDTree<T: KDNode> {
-    let dimensions: Int
-    var root: KDPoint<T>?
+    public let dimensions: Int
     
-    var count: Int {
+    public var count: Int {
         guard let root = root else {
             return 0
         }
@@ -26,20 +25,21 @@ class KDTree<T: KDNode> {
         return counter
 
     }
+    private var root: KDPoint<T>?
 
-    init(dimensions: Int) {
+     public init(dimensions: Int) {
         self.dimensions = dimensions
     }
 
-    //TODO: ▴ Node compare can be wrapped in Point<T>, which  will leads to less disturbing code
-    //      ▴ Refactor duplicity
-    //      ▴ Remove useless coments, everything is gitted
+    //TODO: ▴ Node compare can be wrapped in Point<T>, which  will leads to less disturbing code ❗️
+    //      ▴ Refactor duplicity 🔎
+    //      ▴ Remove useless coments, everything is gitted 🔎
     //      ▴ ID -> RegisterNumber. wrap it inside as getter computed variable
-    //      ▴ change accesibilities
+    //      ▴ change accesibilities 🔎
 
     // MARK: 🔓 PUBLIC LAYER 🔓
 
-    func add(_ element: T) {
+    public func add(_ element: T) {
         guard let root = root else {
             self.root = KDPoint(value: element, dimension: 1)
             return
@@ -62,77 +62,12 @@ class KDTree<T: KDNode> {
         }
         addSon(element, to: actualNode, at: dimension)
     }
-
-    func delete(_ element: T) {
-        if root == nil {
-            fatalError("🚫 You are trying to perform deletion on empty tree! 🚫")
-        }
-        guard var toBeDeleted = findPoint(element) else {
-            fatalError("🚫 There is no such an element in Tree 🚫")
-        }
-        if toBeDeleted.parrent == nil, toBeDeleted.isLeaf {
-            root = nil
-            return
-        }
-
-        var parentDirection: KDDirection?
-        var sonDirection: KDDirection
-        var replacement: KDPoint<T>?
-        var firstReplacementValue: T?
-        var firstReplacement: KDPoint<T>?
-
-        var firstRound = true
-
-        var inProgress = true
-        while inProgress {
-            if toBeDeleted.parrent == nil {
-                parentDirection = nil
-            } else if toBeDeleted.parrent!.leftSon == nil {
-                parentDirection = .right
-            } else {
-                parentDirection = toBeDeleted.parrent!.leftSon! === toBeDeleted ? .left : .right
-            }
-            sonDirection = toBeDeleted.hasLeftSon ? .left : .right
-            if toBeDeleted.hasSon(sonDirection) { // has son - direction
-                replacement = suitableReplacement(for: toBeDeleted, by: toBeDeleted.dimension, direction: sonDirection)
-                
-                if firstRound {
-                    firstRound = false
-                    firstReplacementValue = replacement?.value
-                    firstReplacement = toBeDeleted
-                }
-
-                replacement?.deleted = true
-                toBeDeleted.value = replacement!.value
-                toBeDeleted.deleted = false
-                
-                inProgress = !toBeDeleted.isLeaf
-                toBeDeleted = replacement!
-            } else if toBeDeleted.isLeaf {
-                inProgress = false
-                if parentDirection != nil {
-                    toBeDeleted.parrent?.replaceSon(at: parentDirection!, with: nil)
-                    toBeDeleted.parrent = nil
-                } else {
-                    root = toBeDeleted
-                }
-            }
-        }
-        
-        guard let firstReplac = firstReplacement,
-              let firstVal = firstReplacementValue else {
-            return
-        }
-        let result = KDPoint(firstReplac)
-        result.value =  firstVal
-        rotateAfterDeletion(point: result)
-    }
     
-    func findElements(lowerBound: T, upperBound: T) -> [T] {
+    public func findElements(lowerBound: T, upperBound: T) -> [T] {
         return findPoints(lowerBound: lowerBound, upperBound: upperBound).map{ $0.value }
     }
-    // MARK: REFACTOR DELETE 🏭
-    func refactorDelete(_ element: T) {
+
+    public func delete(_ element: T) {
         if root == nil {
             fatalError("🚫 You are trying to perform deletion on empty tree! 🚫")
         }
@@ -171,11 +106,12 @@ class KDTree<T: KDNode> {
         replacement?.parrent?.delete(son: replacement!)
     }
     
+    // MARK: 🔒 PRIVATE LAYER 🔒
     private func findMinimum(of startingPoint: KDPoint<T>) -> KDPoint<T> {
         var toBeChecked: [KDPoint<T>] = [startingPoint]
         var result = startingPoint
         if startingPoint.isLeaf {
-            return startingPoint //TODO: seems to redundant 👮🏻‍♂️
+            return startingPoint //TODO: seems to be redundant
         }
 
         while !toBeChecked.isEmpty {
@@ -194,22 +130,6 @@ class KDTree<T: KDNode> {
         
     }
     
-    // MARK: 🔒 PRIVATE LAYER 🔒
-    
-//    private func findSplitNode (lowerBound: T, upperBound: T) -> KDPoint<T> {
-//        guard var actualPoint = root else {
-//            fatalError()
-//        }
-//        while !actualPoint.isLeaf && (actualPoint.value.compare(to: lowerBound, dimension: actualPoint.dimension).isMoreOrEqual || actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension).isLessOrEqual) {
-//            if actualPoint.value.compare(to: upperBound, dimension: actualPoint.dimension).isMoreOrEqual {
-//
-//            }
-//        }
-//
-//    }
-//    private func refactoredSearch(lowerBound: T, upperBound: T? = nil) -> [KDPoint<T>] {
-//    }
-//
     private func findPoints(lowerBound: T, upperBound: T? = nil) -> [KDPoint<T>] {
         guard let root = root else {
             return []
@@ -221,7 +141,7 @@ class KDTree<T: KDNode> {
         guard let upperBound = upperBound else {
             let point = findPoint(lowerBound)
             result.safeAppend(point)
-            return [] // toto treba refaktornut. to najde bod na zaklade id
+            return result //TODO: why did i put this here ????
         }
         
         var actualPoint: KDPoint<T>
@@ -240,57 +160,9 @@ class KDTree<T: KDNode> {
                 } else {
                     toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap { $0 }
                 }
-//                if upperComparation.isMore {
-//                    toBeChecked.safeAppend(actualPoint.leftSon)
-//                }
             }
         }
         return result
-        
-        
-    }
-    
-    private func rotateAfterDeletion(point: KDPoint<T>?) {
-        guard let point = point else {
-            return
-        }
-        if point.hasLeftSon {
-            let comparation = point.value.compare(to: point.leftSon!.value, dimension: point.dimension)
-            if comparation.isMore || comparation.isEqual {
-                var subTreePoints = subTreepoints(of: point.leftSon!)
-                
-                while !subTreePoints.isEmpty  {
-                    let actualPoint = subTreePoints.first!
-                    subTreePoints.remove(at: 0)
-
-                        actualPoint.leftSon = nil
-                        actualPoint.rightSon = nil
-                        if !actualPoint.removeReferenceInParent() {
-                            root = nil
-                        }
-                        add(actualPoint.value)
-                    
-                }
-            }
-        }
-        //TODO: DUPLICITY  ?
-        if point.hasRightSon {
-            let comparation = point.value.compare(to: point.rightSon!.value, dimension: point.dimension)
-            if comparation.isEqual {
-                var subTreePoints = subTreepoints(of: point.rightSon!)
-
-                while !subTreePoints.isEmpty  {
-                    let actualPoint = subTreePoints.first!
-                    subTreePoints.remove(at: 0)
-                        actualPoint.leftSon = nil
-                        actualPoint.rightSon = nil
-                        if !actualPoint.removeReferenceInParent() {
-                            root = nil
-                        }
-                        add(actualPoint.value)
-                }
-            }
-        }
         
         
     }
@@ -380,42 +252,4 @@ class KDTree<T: KDNode> {
             return .right
         }
     }
-    
-    private func suitableReplacement(for startingNode: KDPoint<T>, by dimension: Int , direction: KDDirection) -> KDPoint<T> {
-        var suitablePoint: KDPoint<T>?
-        
-        switch direction {
-        case .left:
-            suitablePoint = startingNode.leftSon
-        case .right:
-            suitablePoint = startingNode.rightSon
-        }
-        guard var result = suitablePoint else {
-            fatalError("Subtree is empty")
-        }
-        var toBeChecked: [KDPoint<T>] = [result]
-
-        while !toBeChecked.isEmpty {
-            let actualPoint = toBeChecked.first!
-            toBeChecked.remove(at: 0)
-            switch direction {
-            case .right:
-                if case .less = actualPoint.value.compare(to: result.value, dimension: dimension) {
-                    if !actualPoint.deleted {
-                        result = actualPoint
-                    }
-                }
-            case .left:
-                if case .more = actualPoint.value.compare(to: result.value, dimension: dimension) {
-                    if !actualPoint.deleted {
-                        result = actualPoint
-                    }
-                }
-            }
-            
-            toBeChecked += [actualPoint.leftSon, actualPoint.rightSon].compactMap { $0 }
-        }
-        return result
-    }
-
 }

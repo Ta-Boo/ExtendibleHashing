@@ -53,6 +53,34 @@ class KDPoint<T: KDNode> {
             rightSon = element
         }
     }
+    
+    func replace(son: KDPoint<T>, with replacement: KDPoint<T> ) {
+        if leftSon == nil {
+            rightSon!.value = replacement.value
+        } else {
+            if  leftSon === son {
+                leftSon!.value = replacement.value
+            } else {
+                rightSon!.value = replacement.value
+            }
+        }
+    }
+    
+    func delete(son: KDPoint<T>) {
+        if leftSon == nil {
+            rightSon = nil
+        } else {
+            if  leftSon === son {
+                leftSon!.parrent = nil
+                leftSon = nil
+            } else {
+                rightSon!.parrent = nil
+                rightSon = nil
+            }
+        }
+    }
+    
+    
 
     func replaceParentOfSon(at direction: KDDirection, with element: KDPoint<T>?) {
         switch direction {

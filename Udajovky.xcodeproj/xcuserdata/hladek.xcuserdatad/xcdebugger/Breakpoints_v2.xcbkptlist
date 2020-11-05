@@ -14,8 +14,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "319"
-            endingLineNumber = "319"
+            startingLineNumber = "340"
+            endingLineNumber = "340"
             landmarkName = "suitableReplacement(for:by:direction:)"
             landmarkType = "7">
             <Locations>
@@ -62,8 +62,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -110,8 +110,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -158,8 +158,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "225"
-            endingLineNumber = "225"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
             landmarkName = "subTreepoints(of:)"
             landmarkType = "7">
             <Locations>
@@ -206,8 +206,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
+            startingLineNumber = "238"
+            endingLineNumber = "238"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -254,8 +254,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -334,8 +334,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
             landmarkName = "rotateAfterDeletion(point:)"
             landmarkType = "7">
             <Locations>
@@ -382,10 +382,10 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "255"
-            endingLineNumber = "255"
-            landmarkName = "findDimensionedPoint(_:)"
-            landmarkType = "7">
+            startingLineNumber = "276"
+            endingLineNumber = "276"
+            landmarkName = "reference cycle?"
+            landmarkType = "19">
             <Locations>
                <Location
                   uuid = "C58DF1A6-A577-46FC-986F-B962BC6A9E9B - 41390938d58ac5cb"
@@ -654,8 +654,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "191"
+            endingLineNumber = "191"
             landmarkName = "findPoints(lowerBound:upperBound:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -686,8 +686,8 @@
             filePath = "Udajovky/Data/Structures/KDTree/KDTree.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "findPoints(lowerBound:upperBound:)"
             landmarkType = "7">
          </BreakpointContent>

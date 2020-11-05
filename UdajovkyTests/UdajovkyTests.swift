@@ -134,6 +134,10 @@ class UdajovkyTests: XCTestCase {
 //            }
         }
     }
+    
+    func testRefactoredDelete() {
+        
+    }
 
     func testTreeDeletion() throws {
         let tree = KDTree<KDTreePointImplementation>(dimensions: 3)

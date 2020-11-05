@@ -51,7 +51,7 @@ class KDTree<T: KDNode> {
         if root == nil {
             fatalError("🚫 You are trying to perform deletion on empty tree! 🚫")
         }
-        guard var toBeDeleted = findDimensionedPoint(element) else {
+        guard var toBeDeleted = findPoint(element) else {
             fatalError("🚫 There is no such an element in Tree 🚫")
         }
         if toBeDeleted.parrent == nil, toBeDeleted.isLeaf {
@@ -115,7 +115,28 @@ class KDTree<T: KDNode> {
     func findElements(lowerBound: T, upperBound: T) -> [T] {
         return findPoints(lowerBound: lowerBound, upperBound: upperBound).map{ $0.value }
     }
-     MARK: REFACTOR 
+    // MARK: REFACTOR DELETE 🏭
+    func refactorDelete(_ element: T) {
+        if root == nil {
+            fatalError("🚫 You are trying to perform deletion on empty tree! 🚫")
+        }
+        
+        guard var toBeDeleted = findPoint(element) else {
+            fatalError("🚫 There is no such an element in Tree 🚫")
+        }
+        
+        if toBeDeleted.parrent == nil, toBeDeleted.isLeaf {
+            root = nil
+            return
+        }
+        
+        if toBeDeleted.isLeaf {
+            toBeDeleted.parrent?.delete(son: toBeDeleted)
+        }
+        
+        
+    }
+    
     // MARK: 🔒 PRIVATE LAYER 🔒
     
 //    private func findSplitNode (lowerBound: T, upperBound: T) -> KDPoint<T> {
@@ -141,7 +162,7 @@ class KDTree<T: KDNode> {
         var toBeChecked: [KDPoint<T>] = [root]
 
         guard let upperBound = upperBound else {
-            let point = findDimensionedPoint(lowerBound)
+            let point = findPoint(lowerBound)
             result.safeAppend(point)
             return [] // toto treba refaktornut. to najde bod na zaklade id
         }
@@ -232,7 +253,7 @@ class KDTree<T: KDNode> {
         return result
     }
 
-    private func findDimensionedPoint(_ element: T) -> KDPoint<T>? {
+    private func findPoint(_ element: T) -> KDPoint<T>? {
         guard var actualPoint = root else {
             return nil
         }

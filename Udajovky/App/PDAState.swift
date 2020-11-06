@@ -74,6 +74,29 @@ class PDAState {
         return realties.findElements(lowerBound: lowerBound, upperBound: upperBound)
     }
     
+    func generate () {
+        for y in 1 ... 100 {
+            let plot = Plot(registerNumber: 1,
+                            description: String.random(length: 12),
+                            realties: [],
+                            gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 10),
+                                                       longitude: Double.random(in: 0 ... 10)),
+                            id: y)
+            
+            addPlot(plot)
+        }
+        for y in 1 ... 100 {
+            let realty = Realty(registerNumber: 1,
+                            description: String.random(length: 12),
+                            plots: [],
+                            gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 10),
+                                                       longitude: Double.random(in: 0 ... 10)),
+                            id: y)
+            
+            addRealty(realty)
+        }
+    }
+    
     //MARK: HELPERS
     
     func save() {

@@ -95,6 +95,9 @@ struct MainView: View {
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
                                 .frame(width: 75)
                             }
+                            Button("Generate") {
+                                viewModel.generate()
+                            }
                             Image("owl")
                                 .resizable()
                                 .scaledToFit()

@@ -28,6 +28,10 @@ class MainviewModel: ObservableObject {
         }
     }
     
+    func generate() {
+        PDAState.shared.generate()
+    }
+    
     func findObjects() {
         let lowerBound = GpsPossition(lattitude: Double(latitudeHolderA)!, longitude: Double(longitudeHolderA)!)
         let upperBound = GpsPossition(lattitude: Double(latitudeHolderB) ?? Double(latitudeHolderA)!, longitude: Double(longitudeHolderB) ?? Double(longitudeHolderA)!)

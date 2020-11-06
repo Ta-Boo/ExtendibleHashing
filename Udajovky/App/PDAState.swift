@@ -76,7 +76,7 @@ class PDAState {
     
     func generate () {
         for y in 1 ... 100 {
-            let plot = Plot(registerNumber: 1,
+            let plot = Plot(registerNumber: y,
                             description: String.random(length: 12),
                             realties: [],
                             gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 10),
@@ -86,7 +86,7 @@ class PDAState {
             addPlot(plot)
         }
         for y in 1 ... 100 {
-            let realty = Realty(registerNumber: 1,
+            let realty = Realty(registerNumber: y,
                             description: String.random(length: 12),
                             plots: [],
                             gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 10),

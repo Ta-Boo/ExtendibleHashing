@@ -33,7 +33,9 @@ struct MainView: View {
                                     Text("[\(item.gpsPossition.lattitude),\(item.gpsPossition.longitude)]")
                                     Text("Nehnutelnosti: \(item.realties.count)")
                                 }
-                            }
+                            }.onDelete(perform: { indexSet in
+                                print(index)
+                            })
                         }
                         Spacer().frame(height: 30)
                         Section(header: Text("Nehnutelnosti").font(.title).foregroundColor(.white)){
@@ -93,7 +95,11 @@ struct MainView: View {
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
                                 .frame(width: 75)
                             }
-                            Image("owl").resizable().scaledToFit().frame(width: geometry.size.width / 8)
+                            Image("owl")
+                                .resizable()
+                                .scaledToFit()
+//                                .offset(x: - (geometry.size.width / 9)
+                                .frame(width: geometry.size.width / 8)
 
                         }
                         Spacer()

@@ -88,11 +88,12 @@ class UdajovkyTests: XCTestCase {
     
     
     func testStaticOperations() {
+        let startTime = CFAbsoluteTimeGetCurrent()
         var generator = SeededGenerator(seed: UInt64(1234567))
         let tree = KDTree<Plot>(dimensions: 2)
         var helperList: [Plot] = []
         
-        for id in  1 ... 1000  {
+        for id in  1 ... 100000  {
             
             let plot = Plot(registerNumber: 1,
                             description: "something",
@@ -104,14 +105,15 @@ class UdajovkyTests: XCTestCase {
             tree.add(plot)
         }
         
-        for _ in 1 ... 1000 {
+        for _ in 1 ... 100000 {
         
             let number = Int.random(in: 0 ..< helperList.count, using: &generator)
             let element = helperList[number]
             helperList.remove(at: number)
             tree.delete(element)
         }
-        
+        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        XCTAssert(timeElapsed < 7)
         XCTAssert(tree.count == 0)
     }
     

@@ -13,19 +13,26 @@ enum PlotDimensions: Int {
 }
 
 final class Plot: KDNode {
-    func isBetween(lower: Plot, upper: Plot) -> Bool {
-        return (lower.gpsPossition.lattitude ... upper.gpsPossition.lattitude).contains(self.gpsPossition.lattitude) &&
-            (lower.gpsPossition.longitude ... upper.gpsPossition.longitude).contains(self.gpsPossition.longitude)
-    }
-    
-    let gpsPossition: GpsPossition
-    var id: Int
-    let registerNumber: Int
-    let description: String
+    var gpsPossition: GpsPossition
+    let id: Int
+    var registerNumber: Int
+    var description: String
     var realties: [Realty]
 
     var desc: String {
         return "GPS: \(gpsPossition)"
+    }
+    
+    var realtiesDescription: String {
+        var result = "["
+        for realty in realties {
+            result.append("\(realty.gpsPossition.lattitude), \(realty.gpsPossition.longitude) |")
+        }
+        if !realties.isEmpty {
+            result = String(result.dropLast(2))
+        }
+        result.append("]")
+        return result
     }
 
     init(registerNumber: Int, description: String, realties: [Realty], gpsPossition: GpsPossition, id: Int) {
@@ -46,6 +53,11 @@ final class Plot: KDNode {
 
     static func == (lhs: Plot, rhs: Plot) -> Bool {
         return lhs.gpsPossition == rhs.gpsPossition
+    }
+
+    func isBetween(lower: Plot, upper: Plot) -> Bool {
+        return (lower.gpsPossition.lattitude ... upper.gpsPossition.lattitude).contains(self.gpsPossition.lattitude) &&
+            (lower.gpsPossition.longitude ... upper.gpsPossition.longitude).contains(self.gpsPossition.longitude)
     }
 
     func equals(to other: Plot) -> Bool {

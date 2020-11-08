@@ -1,13 +1,13 @@
 
 import SwiftUI
-struct PlaceFormView: View {
+struct EditObjectView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel = PlaceFormViewModel()
+    @ObservedObject var viewModel: EditObjectViewModel
     @State var wrongAttempt: Bool = false
     
     var body: some View {
         VStack {
-            Text("Údaje o vkladanom objekte").font(.headline)
+            Text(viewModel.title).font(.headline)
             HStack {
                 EditTextView(placeHolder: "Identifikačné číslo ", dataHolder: $viewModel.numberHolder)
                     .textFieldStyle(PlainTextFieldStyle())
@@ -22,9 +22,14 @@ struct PlaceFormView: View {
                     EditTextView(placeHolder: "Zemepisná dĺžka", dataHolder: $viewModel.longitudeHolder)
                         .textFieldStyle(PlainTextFieldStyle())
                 }
-                Spacer().frame(width: 130)
+                Spacer()
+                Button("􀈑") {
+                    viewModel.deleteObject()
+                    self.presentationMode.wrappedValue.dismiss()
+
+                }
+                .buttonStyle(RoundedBackgroundStyle(color: Color.terciary))
             }
-            Toggle("Parcela", isOn: $viewModel.isParcel)
             
             HStack {
                 Button("Zrušiť") {
@@ -32,10 +37,11 @@ struct PlaceFormView: View {
                 }
                 .buttonStyle(RoundedBackgroundStyle(color: .terciary))
                 
-                Button("Pridať") {
+                Button("Potvrdiť") {
                     if viewModel.isFilled {
+                        viewModel.confirm()
                         self.presentationMode.wrappedValue.dismiss()
-                        viewModel.addPDAObject()
+//                        viewModel.addPDAObject()
                         
                     }
                 }

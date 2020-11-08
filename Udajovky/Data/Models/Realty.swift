@@ -15,15 +15,26 @@ class Realty: KDNode {
     }
     
    
-    let gpsPossition: GpsPossition
-    let registerNumber: Int
-    let description: String
-    var plots: [Plot]
+    var gpsPossition: GpsPossition
     var id: Int
+    var registerNumber: Int
+    var description: String
+    var plots: [Plot]
     var desc: String {
         return "GPS: \(gpsPossition)"
     }
     
+    var plotsDescription: String {
+        var result = "["
+        for plot in plots {
+            result.append("\(plot.gpsPossition.lattitude), \(plot.gpsPossition.longitude) |")
+        }
+        if !plots.isEmpty {
+            result = String(result.dropLast(2))
+        }
+        result.append("]")
+        return result
+    }
 
     init(registerNumber: Int, description: String, plots: [Plot], gpsPossition: GpsPossition, id: Int) {
         self.registerNumber = registerNumber

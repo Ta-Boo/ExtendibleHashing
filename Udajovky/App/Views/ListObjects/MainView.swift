@@ -1,6 +1,6 @@
 import SwiftUI
 enum PresentableView: Identifiable {
-    case placeForm, none
+    case placeForm, detail, none
     
     var id: Int {
         hashValue
@@ -14,8 +14,6 @@ struct Listable: Identifiable {
 
 struct MainView: View {
     @Environment(\.presentationMode) var presentationMode
-    
-    //    @State viewModel
     @ObservedObject var viewModel = MainviewModel()
     @State var wrongAttempt: Bool = false
 
@@ -31,11 +29,13 @@ struct MainView: View {
                                     Text("\(item.registerNumber)")
                                     Text(item.description)
                                     Text("[\(item.gpsPossition.lattitude),\(item.gpsPossition.longitude)]")
-                                    Text("Nehnutelnosti: \(item.realties.count)")
+                                    Text("Nehnutelnosti: \(item.realtiesDescription)")
+                                }.onTapGesture{
+                                    viewModel.setUpEditViewModel(item: item)
+                                    viewModel.activeSheet = .detail
                                 }
-                            }.onDelete(perform: { indexSet in
-                                print(index)
-                            })
+                                
+                            }
                         }
                         Spacer().frame(height: 30)
                         Section(header: Text("Nehnutelnosti").font(.title).foregroundColor(.white)){
@@ -46,10 +46,12 @@ struct MainView: View {
                                     Text("[\(item.gpsPossition.lattitude),\(item.gpsPossition.longitude)]")
                                     Text("Parcely: \(item.plots.count)")
 
+                                }.onTapGesture{
+                                    viewModel.setUpEditViewModel(item: item)
+                                    viewModel.activeSheet = .detail
                                 }
-                            }.onDelete(perform: { indexSet in
-                                
-                            })
+                
+                            }
                         }
                         
                     }
@@ -88,9 +90,7 @@ struct MainView: View {
                             HStack{
                                 Spacer()
                                 Button("􀊫") {
-                                    if viewModel.isFilled {
-                                        viewModel.findObjects()
-                                    }
+                                    viewModel.findObjects()
                                 }
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
                                 .frame(width: 75)
@@ -103,17 +103,14 @@ struct MainView: View {
                                 .scaledToFit()
 //                                .offset(x: - (geometry.size.width / 9)
                                 .frame(width: geometry.size.width / 8)
-
                         }
                         Spacer()
                         Button("Pridať objekt") {
                             viewModel.activeSheet = .placeForm
                         }
                         .buttonStyle(RoundedBackgroundStyle(color: .accent))
-
                     }
                     .frame(width: geometry.size.width / 3)
-                    
                     Spacer()
                 }
             }
@@ -127,6 +124,9 @@ struct MainView: View {
                 EmptyView()
             case .placeForm:
                 PlaceFormView()
+            case .detail:
+                 
+                EditObjectView(viewModel: viewModel.editObjectViewModel)
             }
         }
         

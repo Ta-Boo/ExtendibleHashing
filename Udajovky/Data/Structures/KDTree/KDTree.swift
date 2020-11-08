@@ -66,6 +66,15 @@ class KDTree<T: KDNode> {
     public func findElements(lowerBound: T, upperBound: T) -> [T] {
         return findPoints(lowerBound: lowerBound, upperBound: upperBound).map{ $0.value }
     }
+    
+    public func edit(oldValue: T, newValue: T) {
+        if oldValue == newValue { // == should be implemented in KDNode by matching all dimensions
+            findPoint(oldValue)?.value = newValue
+        } else {
+            delete(oldValue)
+            add(newValue)
+        }
+    }
 
     public func delete(_ element: T) {
         if root == nil {
@@ -130,6 +139,18 @@ class KDTree<T: KDNode> {
         
     }
     
+    private func refactoredFindPoint(_ element: T) -> KDPoint<T> {
+        let result = findPoints(lowerBound: element, upperBound: element)
+        if result.isEmpty  {
+            fatalError("🚫 There is no such an element in Tree 🚫")
+        }
+        if result.count > 1  {
+            fatalError("🚫 Multiple elements match criteria 🚫")
+        }
+        
+        return result.first!
+    }
+    
     private func findPoints(lowerBound: T, upperBound: T? = nil) -> [KDPoint<T>] {
         guard let root = root else {
             return []
@@ -163,8 +184,6 @@ class KDTree<T: KDNode> {
             }
         }
         return result
-        
-        
     }
     
     private func subTreepoints(of point: KDPoint<T>) -> [KDPoint<T>] {

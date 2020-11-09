@@ -1,4 +1,5 @@
 import Foundation
+import Cocoa
 
 struct GPSRange {
     let upper: GpsPossition
@@ -30,7 +31,7 @@ class PDAState {
     //MARK: UPDATE
     func updatePlot(original: Plot, updated: Plot) {
         let fakeRealty = Realty(gpsPossition: GpsPossition(lattitude: updated.gpsPossition.lattitude, longitude: updated.gpsPossition.longitude))
-        let connectedRealties = realties.findElements(lowerBound: fakeRealty, upperBound: fakeRealty) // here should be rectangle IMO
+        let connectedRealties = realties.findElements(lowerBound: fakeRealty, upperBound: fakeRealty) 
         updated.realties = connectedRealties
         plots.edit(oldValue: original, newValue: updated)
         
@@ -49,7 +50,7 @@ class PDAState {
     
     func updateRealty(original: Realty, updated: Realty) {
         let fakePlot = Plot(gpsPossition: GpsPossition(lattitude: updated.gpsPossition.lattitude, longitude: updated.gpsPossition.longitude))
-        let connectedPlots = plots.findElements(lowerBound: fakePlot, upperBound: fakePlot) // here should be rectangle IMO
+        let connectedPlots = plots.findElements(lowerBound: fakePlot, upperBound: fakePlot)
         updated.plots = connectedPlots
         realties.edit(oldValue: original, newValue: updated)
         
@@ -125,32 +126,51 @@ class PDAState {
     
     //MARK: HELPERS
     func generate () {
-        let range = 1 ... 75_000
+        let range = 0 ... 40
         let maxRange = range.max()!
         for y in range {
             let plot = Plot(registerNumber: y,
                             description: "String.random(length: 12)",
                             realties: [],
-                            gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 10),
-                                                       longitude: Double.random(in: 0 ... 10)),
+                            gpsPossition: GpsPossition(lattitude: Double.random(in: 1 ... 1),
+                                                       longitude: Double.random(in: 1 ... 1)),
                             id: y)
             
             addPlot(plot)
         }
         for y in range {
-            let realty = Realty(registerNumber: y + maxRange,
+            let realty = Realty(registerNumber: y + maxRange + 1,
                             description: "String.random(length: 12)",
                             plots: [],
-                            gpsPossition: GpsPossition(lattitude: Double.random(in: 0 ... 10),
-                                                       longitude: Double.random(in: 0 ... 10)),
-                            id: y + maxRange)
+                            gpsPossition: GpsPossition(lattitude: Double.random(in: 1 ... 1),
+                                                       longitude: Double.random(in: 1 ... 1)),
+                            id: y + maxRange + 1)
 
             addRealty(realty)
         }
     }
     
     func save() {
-        //TODO: save
+        let str = "Super long string here"
+        let filename = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("output.txt")
+        print(filename)
+        if let filepath = Bundle.main.path(forResource: "saved", ofType: "txt") {
+            do {
+                let contents = try String(contentsOfFile: filepath)
+                print(contents)
+            } catch {
+                // contents could not be loaded
+            }
+        } else {
+            // example.txt not found!
+        }
+
+
+        do {
+            try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
+        } catch {
+            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        }
     }
     
     func load() {

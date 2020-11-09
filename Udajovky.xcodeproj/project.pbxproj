@@ -29,6 +29,7 @@
 		B3457FDC254B7B8D00E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
 		B3457FE1254B7C5300E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
 		B366FBB62549B658002244F2 /* PDAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B366FBB52549B658002244F2 /* PDAState.swift */; };
+		B37F57C8255941790093A682 /* saved.txt in Resources */ = {isa = PBXBuildFile; fileRef = B37F57C7255941790093A682 /* saved.txt */; };
 		B3A17A252536246700AB87F2 /* Realty.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A242536246700AB87F2 /* Realty.swift */; };
 		B3A17A28253624D400AB87F2 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A27253624D400AB87F2 /* Plot.swift */; };
 		B3A17A2B2536252B00AB87F2 /* GpsPossition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A17A2A2536252B00AB87F2 /* GpsPossition.swift */; };
@@ -72,6 +73,7 @@
 		B33FB0B12544A37B00B3AB7E /* SeededGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededGenerator.swift; sourceTree = "<group>"; };
 		B3457FDB254B7B8D00E9420F /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		B366FBB52549B658002244F2 /* PDAState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDAState.swift; sourceTree = "<group>"; };
+		B37F57C7255941790093A682 /* saved.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = saved.txt; sourceTree = "<group>"; };
 		B3A17A242536246700AB87F2 /* Realty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realty.swift; sourceTree = "<group>"; };
 		B3A17A27253624D400AB87F2 /* Plot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
 		B3A17A2A2536252B00AB87F2 /* GpsPossition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpsPossition.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 		B3A17A212536243A00AB87F2 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				B37F57C7255941790093A682 /* saved.txt */,
 				B3A17A232536244E00AB87F2 /* Models */,
 				B3A17A222536244700AB87F2 /* Structures */,
 			);
@@ -366,6 +369,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3D026DB25273672009E63C3 /* Main.storyboard in Resources */,
+				B37F57C8255941790093A682 /* saved.txt in Resources */,
 				B3D026D825273672009E63C3 /* Preview Assets.xcassets in Resources */,
 				B3D026D525273672009E63C3 /* Assets.xcassets in Resources */,
 			);

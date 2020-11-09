@@ -53,9 +53,7 @@ class MainviewModel: ObservableObject {
             let lowerBound = GpsPossition(lattitude: 0 - Double.greatestFiniteMagnitude, longitude: 0 - Double.greatestFiniteMagnitude)
             let upperBound = GpsPossition(lattitude: Double.greatestFiniteMagnitude, longitude: Double.greatestFiniteMagnitude)
             foundPlots = PDAState.shared.getPlots(matching: GPSRange(upper: upperBound, lower: lowerBound))
-            print(foundPlots.count)
             foundRealties = PDAState.shared.getRealties(matching: GPSRange(upper: upperBound, lower: lowerBound))
-            print(foundRealties.count)
         }
     }
     
@@ -69,6 +67,14 @@ class MainviewModel: ObservableObject {
         activeSheet = .detail
         self.plotToBeEdited = item
         self.realtyToBeEdited = nil
+    }
+    
+    func save() {
+        PDAState.shared.save()
+    }
+    
+    func load() {
+        PDAState.shared.load()
     }
     
 }

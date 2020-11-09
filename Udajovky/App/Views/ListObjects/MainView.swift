@@ -26,11 +26,10 @@ struct MainView: View {
                 HStack {
                     List(){
                         Section(header: Text("Parcely").font(.title).foregroundColor(.white)){
-                            var grey = false
                             ForEach(viewModel.foundPlots) { item in
                                 VStack {
                                     HStack {
-                                        Text("\(item.registerNumber)")
+                                        Text("\(item.registerNumber) - \(item.id)")
                                         Spacer()
                                         Text(item.description)
                                         Spacer()
@@ -52,7 +51,7 @@ struct MainView: View {
                             ForEach(viewModel.foundRealties) { item in
                                 VStack {
                                     HStack {
-                                        Text("\(item.registerNumber)")
+                                        Text("\(item.registerNumber) - \(item.id)")
                                         Spacer()
                                         Text(item.description)
                                         Spacer()
@@ -111,14 +110,29 @@ struct MainView: View {
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
                                 .frame(width: 75)
                             }
-                            Button("Generate") {
-                                viewModel.generate()
-                            }
+                            
+
+                            
                             Image("owl")
                                 .resizable()
                                 .scaledToFit()
-//                                .offset(x: - (geometry.size.width / 9)
                                 .frame(width: geometry.size.width / 8)
+                            Button("Generate") {
+                                viewModel.generate()
+                            }
+                            .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.secondary))
+                            HStack {
+                                Button("Save") {
+                                    viewModel.save()
+                                }
+                                .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.secondary))
+
+                                Button("Load") {
+                                    viewModel.load()
+                                }
+                                .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.secondary))
+                            }
+                            .padding(.top, 8)
                         }
                         Spacer()
                         Button("Pridať objekt") {

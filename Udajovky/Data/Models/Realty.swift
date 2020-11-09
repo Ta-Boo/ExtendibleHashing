@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Realty: KDNode {
+final class Realty: KDNode {
     
     private enum RealtyDimensions: Int {
         case latitude = 1
@@ -16,7 +16,7 @@ class Realty: KDNode {
     
    
     var gpsPossition: GpsPossition
-    var id: Int
+    let id: Int
     var registerNumber: Int
     var description: String
     var plots: [Plot]
@@ -91,4 +91,29 @@ class Realty: KDNode {
     static func == (lhs: Realty, rhs: Realty) -> Bool {
         return lhs.gpsPossition == rhs.gpsPossition
     }
+}
+
+extension Realty: Serializable {
+    func serialize() -> String {
+        var result = ""
+        result.append("\(gpsPossition.lattitude);") //0
+        result.append("\(gpsPossition.longitude);") //1
+        result.append("\(id);") //2
+        result.append("\(registerNumber);") //3
+        result.append("\(description)") //4
+        
+        return result
+
+    }
+    
+    static func deserialize(from input: String) -> Realty{
+        let attributes = input.split(separator: ";")
+        return Realty(registerNumber: Int(attributes[3])!,
+                      description: String(attributes[4]),
+                      plots: [],
+                      gpsPossition: GpsPossition(lattitude: Double(attributes[0])!, longitude: Double(attributes[1])!),
+                      id: Int(attributes[2])!)
+    }
+    
+    
 }

@@ -123,10 +123,15 @@ extension KDPoint {
         }
     }
 }
+protocol Serializable {
+    func serialize() -> String
+    static func deserialize(from input: String) -> Self
+}
 
 protocol KDNode: Identifiable, KDComparable {
     var id: Int { get }
     var desc: String { get }
+
 
     func equals(to other: Self) -> Bool
 }

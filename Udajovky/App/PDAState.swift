@@ -126,7 +126,7 @@ class PDAState {
     
     //MARK: HELPERS
     func generate () {
-        let range = 0 ... 40
+        let range = 0 ..< 20
         let maxRange = range.max()!
         for y in range {
             let plot = Plot(registerNumber: y,
@@ -151,29 +151,48 @@ class PDAState {
     }
     
     func save() {
-        let str = "Super long string here"
-        let filename = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("output.txt")
-        print(filename)
-        if let filepath = Bundle.main.path(forResource: "saved", ofType: "txt") {
-            do {
-                let contents = try String(contentsOfFile: filepath)
-                print(contents)
-            } catch {
-                // contents could not be loaded
-            }
-        } else {
-            // example.txt not found!
+        var plotsResult = ""
+        var realtiesResult = ""
+
+        for plot in plots.values {
+            plotsResult.append("\(plot.serialize())|")
         }
-
-
+        plotsResult = String(plotsResult.dropLast())
+        
+        for realty in realties.values {
+            realtiesResult.append("\(realty.serialize())|")
+        }
+        realtiesResult = String(realtiesResult.dropLast())
+        
+        let plotsFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("PDAStatePlots.txt")
         do {
-            try str.write(to: filename, atomically: true, encoding: String.Encoding.utf8)
-        } catch {
-            // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+            try! plotsResult.write(to: plotsFile, atomically: true, encoding: String.Encoding.utf8)
+        }
+        
+        let realtiesFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("PDAStateRealties.txt")
+        do {
+            try! realtiesResult.write(to: realtiesFile, atomically: true, encoding: String.Encoding.utf8)
         }
     }
     
     func load() {
+        let plotsFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("PDAStatePlots.txt")
+        let realtiesFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("PDAStateRealties.txt")
+
+        let plots = try! String(contentsOf: plotsFile, encoding: .utf8)
+        let realties = try! String(contentsOf: realtiesFile, encoding: .utf8)
+        
+        let plotStrings = plots.split(separator: "|")
+        for plotString in plotStrings {
+            addPlot(Plot.deserialize(from: String(plotString)))
+        }
+        
+        let realtyStrings = realties.split(separator: "|")
+        for realtyString in realtyStrings {
+            addRealty(Realty.deserialize(from: String(realtyString)))
+        }
+        
+
         //TODO: load
     }
     

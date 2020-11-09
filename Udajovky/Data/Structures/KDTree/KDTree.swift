@@ -25,6 +25,22 @@ class KDTree<T: KDNode> {
         return counter
 
     }
+    
+    public var values: [T] {
+        var result: [T] = []
+        guard let root = root else {
+            return []
+        }
+
+        var toBeAdded: [KDPoint<T>] = [root]
+        while !toBeAdded.isEmpty {
+            let actualPoint = toBeAdded.pop(at: 0)
+            toBeAdded += [actualPoint.leftSon, actualPoint.rightSon].compactMap { $0 }
+            result.append(actualPoint.value)
+        }
+        return result
+    }
+    
     public  var root: KDPoint<T>? //FIXME: Public only for tests ❗️❗️❗️
 
      public init(dimensions: Int) {

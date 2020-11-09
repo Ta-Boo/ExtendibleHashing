@@ -12,6 +12,8 @@ struct Listable: Identifiable {
     let text: String
 }
 
+
+
 struct MainView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel = MainviewModel()
@@ -24,33 +26,47 @@ struct MainView: View {
                 HStack {
                     List(){
                         Section(header: Text("Parcely").font(.title).foregroundColor(.white)){
+                            var grey = false
                             ForEach(viewModel.foundPlots) { item in
-                                HStack {
-                                    Text("\(item.registerNumber)")
-                                    Text(item.description)
-                                    Text("[\(item.gpsPossition.lattitude),\(item.gpsPossition.longitude)]")
-                                    Text("Nehnutelnosti: \(item.realtiesDescription)")
-                                }.onTapGesture{
-                                    viewModel.setUpEditViewModel(item: item)
-                                    viewModel.activeSheet = .detail
+                                VStack {
+                                    HStack {
+                                        Text("\(item.registerNumber)")
+                                        Spacer()
+                                        Text(item.description)
+                                        Spacer()
+                                        Text("[\(item.gpsPossition.lattitude),\(item.gpsPossition.longitude)]")
+                                        Spacer()
+                                        Text("Nehnutelnosti: \(item.realtiesDescription)")
+                                        Spacer()
+                                    }
                                 }
-                                
+                                .onTapGesture{
+                                    viewModel.setUpEditViewModel(item: item)
+                                }
+                                Rectangle()
+                                    .frame(width: geometry.size.width / 3 * 1.9, height: 1)
                             }
                         }
                         Spacer().frame(height: 30)
                         Section(header: Text("Nehnutelnosti").font(.title).foregroundColor(.white)){
                             ForEach(viewModel.foundRealties) { item in
-                                HStack {
-                                    Text("\(item.registerNumber)")
-                                    Text(item.description)
-                                    Text("[\(item.gpsPossition.lattitude),\(item.gpsPossition.longitude)]")
-                                    Text("Parcely: \(item.plots.count)")
-
-                                }.onTapGesture{
-                                    viewModel.setUpEditViewModel(item: item)
-                                    viewModel.activeSheet = .detail
+                                VStack {
+                                    HStack {
+                                        Text("\(item.registerNumber)")
+                                        Spacer()
+                                        Text(item.description)
+                                        Spacer()
+                                        Text("[\(item.gpsPossition.lattitude),\(item.gpsPossition.longitude)]")
+                                        Spacer()
+                                        Text("Nehnutelnosti: \(item.plotsDescription)")
+                                        Spacer()
+                                    }
                                 }
-                
+                                .onTapGesture{
+                                    viewModel.setUpEditViewModel(item: item)
+                                }
+                                Rectangle()
+                                    .frame(width: geometry.size.width / 3 * 1.9, height: 1)
                             }
                         }
                         

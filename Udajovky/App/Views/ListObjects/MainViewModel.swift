@@ -60,11 +60,13 @@ class MainviewModel: ObservableObject {
     }
     
     func setUpEditViewModel(item: Realty) {
+        activeSheet = .detail
         self.realtyToBeEdited = item
         self.plotToBeEdited = nil
     }
     
     func setUpEditViewModel(item: Plot) {
+        activeSheet = .detail
         self.plotToBeEdited = item
         self.realtyToBeEdited = nil
     }

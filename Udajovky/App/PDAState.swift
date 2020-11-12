@@ -8,8 +8,7 @@ struct GPSRange {
 
 class PDAState {
     static let shared = PDAState()
-    var plotID = 0
-    var realtyID = 0
+    private var objectsID = 0
     var plots: KDTree<Plot> = KDTree(dimensions: 2)
     var realties: KDTree<Realty> = KDTree(dimensions: 2)
         
@@ -18,14 +17,14 @@ class PDAState {
         let upperBound = Plot(gpsPossition: range.upper)
         let lowerBound = Plot(gpsPossition: range.lower)
         let result = plots.findElements(lowerBound: lowerBound, upperBound: upperBound)
-        return result
+        return Array(result.prefix(30))
     }
     
     func getRealties(matching range: GPSRange) -> [Realty] {
         let upperBound = Realty(gpsPossition: range.upper)
         let lowerBound = Realty(gpsPossition: range.lower)
-
-        return realties.findElements(lowerBound: lowerBound, upperBound: upperBound)
+        let result = realties.findElements(lowerBound: lowerBound, upperBound: upperBound)
+        return Array(result.prefix(30))
     }
     
     //MARK: UPDATE
@@ -65,8 +64,6 @@ class PDAState {
         for plot in connectedPlotsUpdated {
             plot.realties = realties.findElements(lowerBound: updated, upperBound: updated)
         }
-        
-
     }
     
     //MARK: DELETE
@@ -78,7 +75,6 @@ class PDAState {
         for realty in connectedRealties {
             realty.plots = realty.plots.filter{ !$0.equals(to: plot) }
         }
-        //TODO: remove connected realties
     }
     
     func deleteRealty(realty: Realty) {
@@ -101,11 +97,11 @@ class PDAState {
                                description: plot.description,
                                realties: connectedRealties,
                                gpsPossition: plot.gpsPossition,
-                               id: plotID)
+                               id: objectsID)
         for realty in connectedRealties {
             realty.plots.append(updatedPlot)
         }
-        plotID += 1
+        objectsID += 1
         plots.add(updatedPlot)
     }
     
@@ -116,11 +112,11 @@ class PDAState {
                                description: realty.description,
                                plots: connectedPlots,
                                gpsPossition: realty.gpsPossition,
-                               id: plotID)
+                               id: objectsID)
         for plot in connectedPlots {
             plot.realties.append(updatedRealty)
         }
-        plotID += 1 //FIXME: ❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️
+        objectsID += 1 //FIXME: ❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️
         realties.add(updatedRealty)
     }
     
@@ -191,9 +187,6 @@ class PDAState {
         for realtyString in realtyStrings {
             addRealty(Realty.deserialize(from: String(realtyString)))
         }
-        
-
-        //TODO: load
     }
     
 

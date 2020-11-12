@@ -35,36 +35,6 @@ class KDPoint<T: KDNode> {
             return rightSon != nil
         }
     }
-
-    func deleteSon(at direction: KDDirection) {
-        switch direction {
-        case .left:
-            leftSon = nil
-        case .right:
-            rightSon = nil
-        }
-    }
-
-    func replaceSon(at direction: KDDirection, with element: KDPoint<T>?) {
-        switch direction {
-        case .left:
-            leftSon = element
-        case .right:
-            rightSon = element
-        }
-    }
-    
-    func replace(son: KDPoint<T>, with replacement: KDPoint<T> ) {
-        if leftSon == nil {
-            rightSon!.value = replacement.value
-        } else {
-            if  leftSon === son {
-                leftSon!.value = replacement.value
-            } else {
-                rightSon!.value = replacement.value
-            }
-        }
-    }
     
     func delete(son: KDPoint<T>) {
         if leftSon == nil {
@@ -79,30 +49,6 @@ class KDPoint<T: KDNode> {
             }
         }
     }
-    
-    
-
-    func replaceParentOfSon(at direction: KDDirection, with element: KDPoint<T>?) {
-        switch direction {
-        case .left:
-            leftSon?.parrent = element
-        case .right:
-            rightSon?.parrent = element
-        }
-    }
-    
-    func removeReferenceInParent() -> Bool {
-        guard let parrent = parrent else {
-            return false // it is root point
-        }
-        if parrent.leftSon === self {
-            parrent.leftSon = nil
-            return true
-        } else {
-            parrent.rightSon = nil
-            return true
-        }
-    }
 }
 
 extension KDPoint {
@@ -113,16 +59,8 @@ extension KDPoint {
     var hasRightSon: Bool {
         return rightSon != nil
     }
-
-    func hasSon(_ direction: KDDirection) -> Bool {
-        switch direction {
-        case .left:
-            return hasLeftSon
-        case .right:
-            return hasRightSon
-        }
-    }
 }
+
 protocol Serializable {
     func serialize() -> String
     static func deserialize(from input: String) -> Self
@@ -130,9 +68,6 @@ protocol Serializable {
 
 protocol KDNode: Identifiable, KDComparable {
     var id: Int { get }
-    var desc: String { get }
-
-
     func equals(to other: Self) -> Bool
 }
 
@@ -213,14 +148,4 @@ extension KDCompare {
         }
     }
 
-}
-
-struct DimensionedPoint<T: KDNode> {
-    let point: KDPoint<T>
-    let dimension: Int
-}
-
-struct PointWrapper<T: KDNode> {
-    let point: KDPoint<T>
-    let direction: KDDirection
 }

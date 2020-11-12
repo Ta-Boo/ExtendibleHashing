@@ -9,7 +9,7 @@ import Foundation
 
 final class Realty: KDNode {
     
-    private enum RealtyDimensions: Int {
+    private enum Dimensions: Int {
         case latitude = 1
         case longitude = 2
     }
@@ -20,9 +20,7 @@ final class Realty: KDNode {
     var registerNumber: Int
     var description: String
     var plots: [Plot]
-    var desc: String {
-        return "GPS: \(gpsPossition)"
-    }
+    
     
     var plotsDescription: String {
         var result = "["
@@ -64,13 +62,13 @@ final class Realty: KDNode {
     
     func compare(to other: Realty, dimension: Int) -> KDCompare {
         switch dimension {
-        case RealtyDimensions.latitude.rawValue:
+        case Dimensions.latitude.rawValue:
             if gpsPossition.lattitude == other.gpsPossition.lattitude {
                 return .equals
             } else {
                 return gpsPossition.lattitude < other.gpsPossition.lattitude ? .less : .more
             }
-        case RealtyDimensions.longitude.rawValue:
+        case Dimensions.longitude.rawValue:
             if gpsPossition.longitude == other.gpsPossition.longitude {
                 return .equals
             } else {

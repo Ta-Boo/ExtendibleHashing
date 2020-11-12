@@ -1,9 +1,5 @@
-//
-//  KDTree.swift
-//  Udajovky
-//
-//  Created by hladek on 26/10/2020.
-//
+//TODO: ▴ Node compare can be wrapped in Point<T>, which  will leads to less disturbing code ❗️
+//      ▴ ID -> RegisterNumber. wrap it inside as getter computed variable
 
 import Foundation
 
@@ -47,14 +43,7 @@ class KDTree<T: KDNode> {
         self.dimensions = dimensions
     }
 
-    //TODO: ▴ Node compare can be wrapped in Point<T>, which  will leads to less disturbing code ❗️
-    //      ▴ Refactor duplicity 🔎
-    //      ▴ Remove useless coments, everything is gitted 🔎
-    //      ▴ ID -> RegisterNumber. wrap it inside as getter computed variable
-    //      ▴ change accesibilities 🔎
-
     // MARK: 🔓 PUBLIC LAYER 🔓
-
     public func add(_ element: T) {
         guard let root = root else {
             self.root = KDPoint(value: element, dimension: 1)
@@ -155,18 +144,6 @@ class KDTree<T: KDNode> {
         
     }
     
-    private func refactoredFindPoint(_ element: T) -> KDPoint<T> {
-        let result = findPoints(lowerBound: element, upperBound: element)
-        if result.isEmpty  {
-            fatalError("🚫 There is no such an element in Tree 🚫")
-        }
-        if result.count > 1  {
-            fatalError("🚫 Multiple elements match criteria 🚫")
-        }
-        
-        return result.first!
-    }
-    
     private func findPoints(lowerBound: T, upperBound: T? = nil) -> [KDPoint<T>] {
         guard let root = root else {
             return []
@@ -178,7 +155,7 @@ class KDTree<T: KDNode> {
         guard let upperBound = upperBound else {
             let point = findPoint(lowerBound)
             result.safeAppend(point)
-            return result //TODO: why did i put this here ????
+            return result
         }
         
         var actualPoint: KDPoint<T>
@@ -264,7 +241,6 @@ class KDTree<T: KDNode> {
         }
         return actualPoint
     }
-
 
     private func addSon(_ new: T, to present: KDPoint<T>, at dimension: Int) {
         let direction = chooseDirection(for: new, presentNode: present, dimension: dimension)

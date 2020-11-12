@@ -158,11 +158,11 @@ final class KDTreePointImplementation: KDNode {
 extension Plot: Serializable {
     func serialize() -> String {
         var result = ""
-        result.append("\(gpsPossition.lattitude);") //0
-        result.append("\(gpsPossition.longitude);") //1
-        result.append("\(id);") //2
-        result.append("\(registerNumber);") //3
-        result.append("\(description)") //4
+        result.append("\(gpsPossition.lattitude);")
+        result.append("\(gpsPossition.longitude);")
+        result.append("\(id);")
+        result.append("\(registerNumber);")
+        result.append("\(description)")
         return result
 
     }

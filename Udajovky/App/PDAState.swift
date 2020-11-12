@@ -126,14 +126,14 @@ class PDAState {
     
     //MARK: HELPERS
     func generate () {
-        let range = 0 ..< 20
+        let range = 0 ..< 20_000
         let maxRange = range.max()!
         for y in range {
             let plot = Plot(registerNumber: y,
                             description: "String.random(length: 12)",
                             realties: [],
-                            gpsPossition: GpsPossition(lattitude: Double.random(in: 1 ... 1),
-                                                       longitude: Double.random(in: 1 ... 1)),
+                            gpsPossition: GpsPossition(lattitude: Double.random(in: -90 ... 90),
+                                                       longitude: Double.random(in: -90 ... 90)),
                             id: y)
             
             addPlot(plot)
@@ -142,8 +142,8 @@ class PDAState {
             let realty = Realty(registerNumber: y + maxRange + 1,
                             description: "String.random(length: 12)",
                             plots: [],
-                            gpsPossition: GpsPossition(lattitude: Double.random(in: 1 ... 1),
-                                                       longitude: Double.random(in: 1 ... 1)),
+                            gpsPossition: GpsPossition(lattitude: Double.random(in: -90 ... 90),
+                                                       longitude: Double.random(in: -90 ... 90)),
                             id: y + maxRange + 1)
 
             addRealty(realty)

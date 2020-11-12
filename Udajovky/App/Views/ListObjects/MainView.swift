@@ -120,17 +120,17 @@ struct MainView: View {
                             Button("Generate") {
                                 viewModel.generate()
                             }
-                            .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.secondary))
+                            .buttonStyle(RoundedBackgroundStyle(color:Color.secondary))
                             HStack {
                                 Button("Save") {
                                     viewModel.save()
                                 }
-                                .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.secondary))
+                                .buttonStyle(RoundedBackgroundStyle(color: Color.secondary))
 
                                 Button("Load") {
                                     viewModel.load()
                                 }
-                                .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.secondary))
+                                .buttonStyle(RoundedBackgroundStyle(color: Color.secondary))
                             }
                             .padding(.top, 8)
                         }

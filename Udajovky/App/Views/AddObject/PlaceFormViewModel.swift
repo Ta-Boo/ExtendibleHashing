@@ -13,6 +13,8 @@ class PlaceFormViewModel: ObservableObject {
     @Published var latitudeHolder: String = ""
     @Published var longitudeHolder: String = ""
     @Published var isParcel = true
+    @Published var lattIsPositive = true
+    @Published var longIsPositive = true
 
     var isFilled: Bool {
         return !numberHolder.isEmpty &&
@@ -22,18 +24,22 @@ class PlaceFormViewModel: ObservableObject {
     }
     
     func addPDAObject() {
+        let latMultiplier: Double = lattIsPositive ? 1 : -1
+        let longMultiplier: Double = longIsPositive ? 1 : -1
         if isParcel {
             PDAState.shared.addPlot(Plot(registerNumber: Int(numberHolder)!,
                                          description: descriptionHolder,
                                          realties: [],
-                                         gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)!, longitude: Double(longitudeHolder)!),
+                                         gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)! * latMultiplier,
+                                                                    longitude: Double(longitudeHolder)! * longMultiplier),
                                          id: 0))
             
         } else {
             PDAState.shared.addRealty(Realty(registerNumber: Int(numberHolder)!,
                                            description: descriptionHolder,
                                            plots: [],
-                                           gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)!, longitude: Double(longitudeHolder)!),
+                                           gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)! * latMultiplier,
+                                                                      longitude: Double(longitudeHolder)! * longMultiplier),
                                            id: 0))
         }
     }

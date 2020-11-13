@@ -17,72 +17,69 @@ class PDAState {
         let upperBound = Plot(gpsPossition: range.upper)
         let lowerBound = Plot(gpsPossition: range.lower)
         let result = plots.findElements(lowerBound: lowerBound, upperBound: upperBound)
-        return Array(result.prefix(30))
+        return Array(result.prefix(230))
     }
     
     func getRealties(matching range: GPSRange) -> [Realty] {
         let upperBound = Realty(gpsPossition: range.upper)
         let lowerBound = Realty(gpsPossition: range.lower)
         let result = realties.findElements(lowerBound: lowerBound, upperBound: upperBound)
-        return Array(result.prefix(30))
+        return Array(result.prefix(230))
     }
     
     //MARK: UPDATE
     func updatePlot(original: Plot, updated: Plot) {
-        let fakeRealty = Realty(gpsPossition: GpsPossition(lattitude: updated.gpsPossition.lattitude, longitude: updated.gpsPossition.longitude))
-        let connectedRealties = realties.findElements(lowerBound: fakeRealty, upperBound: fakeRealty) 
-        updated.realties = connectedRealties
-        plots.edit(oldValue: original, newValue: updated)
-        
-        let fakeRealtyOriginal = Realty(gpsPossition: GpsPossition(lattitude: original.gpsPossition.lattitude, longitude: original.gpsPossition.longitude))
-        let connectedRealtiesOriginal = realties.findElements(lowerBound: fakeRealtyOriginal, upperBound: fakeRealtyOriginal)
-        for realty in connectedRealtiesOriginal {
-            realty.plots = plots.findElements(lowerBound: original, upperBound: original)
+        if original.gpsPossition == updated.gpsPossition {
+            plots.edit(oldValue: original, newValue: updated)
+            return
         }
 
-        let fakeRealtytUpdated = Realty(gpsPossition: GpsPossition(lattitude: updated.gpsPossition.lattitude, longitude: updated.gpsPossition.longitude))
-        let connectedRealtiesUpdated = realties.findElements(lowerBound: fakeRealtytUpdated, upperBound: fakeRealtytUpdated)
-        for realty in connectedRealtiesUpdated {
-            realty.plots = plots.findElements(lowerBound: updated, upperBound: updated)
+        for realty in original.realties {
+            realty.plots = realty.plots.filter{ !$0.equals(to: original) }
+        }
+
+        let fakeRealty = Realty(gpsPossition: GpsPossition(lattitude: updated.gpsPossition.lattitude, longitude: updated.gpsPossition.longitude))
+        let connectedRealties = realties.findElements(lowerBound: fakeRealty, upperBound: fakeRealty)
+        updated.realties = connectedRealties
+        plots.edit(oldValue: original, newValue: updated)
+
+        for realty in updated.realties {
+            realty.plots.append(updated)
         }
     }
     
     func updateRealty(original: Realty, updated: Realty) {
+        
+        if original.gpsPossition == updated.gpsPossition {
+            realties.edit(oldValue: original, newValue: updated)
+            return
+        }
+
+        for plot in original.plots {
+            plot.realties = plot.realties.filter{ !$0.equals(to: original) }
+        }
+
         let fakePlot = Plot(gpsPossition: GpsPossition(lattitude: updated.gpsPossition.lattitude, longitude: updated.gpsPossition.longitude))
         let connectedPlots = plots.findElements(lowerBound: fakePlot, upperBound: fakePlot)
         updated.plots = connectedPlots
         realties.edit(oldValue: original, newValue: updated)
-        
-        let fakePlotOriginal = Plot(gpsPossition: GpsPossition(lattitude: original.gpsPossition.lattitude, longitude: original.gpsPossition.longitude))
-        let connectedPlotsOriginal = plots.findElements(lowerBound: fakePlotOriginal, upperBound: fakePlotOriginal)
-        for plot in connectedPlotsOriginal {
-            plot.realties = realties.findElements(lowerBound: original, upperBound: original)
-        }
-        
-        let fakePlotUpdated = Plot(gpsPossition: GpsPossition(lattitude: updated.gpsPossition.lattitude, longitude: updated.gpsPossition.longitude))
-        let connectedPlotsUpdated = plots.findElements(lowerBound: fakePlotUpdated, upperBound: fakePlotUpdated)
-        for plot in connectedPlotsUpdated {
-            plot.realties = realties.findElements(lowerBound: updated, upperBound: updated)
+
+        for plot in updated.plots {
+            plot.realties.append(updated)
         }
     }
     
     //MARK: DELETE
     func deletePlot(plot: Plot) {
         plots.delete(plot)
-        
-        let fakeRealty = Realty(gpsPossition: GpsPossition(lattitude: plot.gpsPossition.lattitude, longitude: plot.gpsPossition.longitude))
-        let connectedRealties = realties.findElements(lowerBound: fakeRealty, upperBound: fakeRealty)
-        for realty in connectedRealties {
+        for realty in plot.realties {
             realty.plots = realty.plots.filter{ !$0.equals(to: plot) }
         }
     }
     
     func deleteRealty(realty: Realty) {
         realties.delete(realty)
-        
-        let fakePlot = Plot(gpsPossition: GpsPossition(lattitude: realty.gpsPossition.lattitude, longitude: realty.gpsPossition.longitude))
-        let connectedPlots = plots.findElements(lowerBound: fakePlot, upperBound: fakePlot)
-        for plot in connectedPlots {
+        for plot in realty.plots {
             plot.realties = plot.realties.filter{ !$0.equals(to: realty) }
         }
     }
@@ -126,21 +123,21 @@ class PDAState {
         let maxRange = range.max()!
         for y in range {
             let plot = Plot(registerNumber: y,
-                            description: "String.random(length: 12)",
+                            description: "Generovana",
                             realties: [],
-                            gpsPossition: GpsPossition(lattitude: Double.random(in: -90 ... 90),
-                                                       longitude: Double.random(in: -90 ... 90)),
+                            gpsPossition: GpsPossition(lattitude: Double(Int.random(in: 1 ... 100)),
+                                                       longitude: Double(Int.random(in: 1 ... 100))),
                             id: y)
             
             addPlot(plot)
         }
-        for y in range {
+        for y in 1...5_000 {
             let realty = Realty(registerNumber: y + maxRange + 1,
-                            description: "String.random(length: 12)",
+                            description: "Generovana",
                             plots: [],
-                            gpsPossition: GpsPossition(lattitude: Double.random(in: -90 ... 90),
-                                                       longitude: Double.random(in: -90 ... 90)),
-                            id: y + maxRange + 1)
+                            gpsPossition: GpsPossition(lattitude: Double(Int.random(in: 1 ... 100)),
+                                                       longitude: Double(Int.random(in: 1 ... 100))),
+                            id: y + 5_000 + 1)
 
             addRealty(realty)
         }

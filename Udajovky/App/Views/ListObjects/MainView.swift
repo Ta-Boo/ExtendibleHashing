@@ -84,10 +84,25 @@ struct MainView: View {
                                 Text("GPS bod A")
                                 Spacer()
                             }
-                            EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolderA)
-                                .textFieldStyle(PlainTextFieldStyle())
-                            EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.longitudeHolderA)
-                                .textFieldStyle(PlainTextFieldStyle())
+//                            EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolderA)
+//                                .textFieldStyle(PlainTextFieldStyle())
+//                            EditTextView(placeHolder: "Zemepisná dlzka", dataHolder: $viewModel.longitudeHolderA)
+//                                .textFieldStyle(PlainTextFieldStyle())
+                            HStack {
+                                EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolderA)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                Spacer().frame(width: 10)
+                                Toggle("vychodna", isOn: $viewModel.lattIsPositiveA)
+
+                            }
+                            HStack {
+                                EditTextView(placeHolder: "Zemepisná dĺžka", dataHolder: $viewModel.longitudeHolderA)
+                                    .textFieldStyle(PlainTextFieldStyle())
+                                Spacer().frame(width: 10)
+                                Toggle("severna", isOn: $viewModel.longIsPositiveA)
+
+                            }
+
                             Spacer().frame(height: 32)
                             Toggle("Bodové vyhľadávanie", isOn: $viewModel.pointSearch)
 
@@ -98,8 +113,21 @@ struct MainView: View {
                                         Text("GPS bod B")
                                         Spacer()
                                     }
-                                    EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolderB)
-                                    EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.longitudeHolderB)
+//                                    EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolderB)
+                                    HStack {
+                                        EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolderB)
+                                            .textFieldStyle(PlainTextFieldStyle())
+                                        Spacer().frame(width: 10)
+                                        Toggle("vychodna", isOn: $viewModel.lattIsPositiveB)
+
+                                    }
+                                    HStack {
+                                        EditTextView(placeHolder: "Zemepisná dĺžka", dataHolder: $viewModel.longitudeHolderB)
+                                            .textFieldStyle(PlainTextFieldStyle())
+                                        Spacer().frame(width: 10)
+                                        Toggle("severna", isOn: $viewModel.longIsPositiveB)
+
+                                    }
                                 }
                             }
                             HStack{

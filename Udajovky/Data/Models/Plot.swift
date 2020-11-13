@@ -24,7 +24,7 @@ final class Plot: KDNode {
     }
     
     var realtiesDescription: String {
-        var result = "["
+        var result = "\(realties.count) ["
         for realty in realties {
             result.append("\(realty.gpsPossition.lattitude), \(realty.gpsPossition.longitude) |")
         }

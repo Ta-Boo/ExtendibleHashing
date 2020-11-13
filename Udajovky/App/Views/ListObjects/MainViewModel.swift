@@ -15,6 +15,12 @@ class MainviewModel: ObservableObject {
     @Published var foundPlots: [Plot] = []
     @Published var foundRealties: [Realty] = []
     
+    
+    @Published var lattIsPositiveA = true
+    @Published var longIsPositiveA = true
+    @Published var lattIsPositiveB = true
+    @Published var longIsPositiveB = true
+    
     var plotToBeEdited: Plot?
     var realtyToBeEdited: Realty?
     
@@ -44,9 +50,15 @@ class MainviewModel: ObservableObject {
     }
     
     func findObjects() {
+        let latMultiplierA: Double = lattIsPositiveA ? 1 : -1
+        let longMultiplierA: Double = longIsPositiveA ? 1 : -1
+        let latMultiplierB: Double = lattIsPositiveB ? 1 : -1
+        let longMultiplierB: Double = longIsPositiveB ? 1 : -1
         if isFilled {
-            let lowerBound = GpsPossition(lattitude: Double(latitudeHolderA)!, longitude: Double(longitudeHolderA)!)
-            let upperBound = GpsPossition(lattitude: Double(latitudeHolderB) ?? Double(latitudeHolderA)!, longitude: Double(longitudeHolderB) ?? Double(longitudeHolderA)!)
+            let lowerBound = GpsPossition(lattitude: Double(latitudeHolderA)! * latMultiplierA , longitude: Double(longitudeHolderA)! * longMultiplierA)
+            let upperBound = GpsPossition(lattitude: Double(latitudeHolderB)! * latMultiplierB , longitude: Double(longitudeHolderB)! * longMultiplierB)
+//            let lowerBound = GpsPossition(lattitude: Double(latitudeHolderA)!, longitude: Double(longitudeHolderA)!)
+//            let upperBound = GpsPossition(lattitude: Double(latitudeHolderB) ?? Double(latitudeHolderA)!, longitude: Double(longitudeHolderB) ?? Double(longitudeHolderA)!)
             foundPlots = PDAState.shared.getPlots(matching: GPSRange(upper: upperBound, lower: lowerBound))
             foundRealties = PDAState.shared.getRealties(matching: GPSRange(upper: upperBound, lower: lowerBound))
         } else {

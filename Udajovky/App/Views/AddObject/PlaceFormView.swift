@@ -17,10 +17,20 @@ struct PlaceFormView: View {
                 .textFieldStyle(PlainTextFieldStyle())
             HStack {
                 VStack {
-                    EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolder)
-                        .textFieldStyle(PlainTextFieldStyle())
-                    EditTextView(placeHolder: "Zemepisná dĺžka", dataHolder: $viewModel.longitudeHolder)
-                        .textFieldStyle(PlainTextFieldStyle())
+                    HStack {
+                        EditTextView(placeHolder: "Zemepisná širka", dataHolder: $viewModel.latitudeHolder)
+                            .textFieldStyle(PlainTextFieldStyle())
+                        Spacer().frame(width: 10)
+                        Toggle("Vychodna", isOn: $viewModel.lattIsPositive)
+
+                    }
+                    HStack {
+                        EditTextView(placeHolder: "Zemepisná dĺžka", dataHolder: $viewModel.longitudeHolder)
+                            .textFieldStyle(PlainTextFieldStyle())
+                        Spacer().frame(width: 10)
+                        Toggle("severna", isOn: $viewModel.longIsPositive)
+
+                    }
                 }
                 Spacer().frame(width: 130)
             }

@@ -17,6 +17,9 @@ class EditObjectViewModel: ObservableObject {
     @Published var latitudeHolder: String = ""
     @Published var longitudeHolder: String = ""
     
+    @Published var lattIsPositive = true
+    @Published var longIsPositive = true
+    
     var isFilled: Bool {
         return !numberHolder.isEmpty &&
                 !descriptionHolder.isEmpty &&
@@ -32,6 +35,8 @@ class EditObjectViewModel: ObservableObject {
             descriptionHolder = "\(realty.description)"
             latitudeHolder = "\(realty.gpsPossition.lattitude)"
             longitudeHolder = "\(realty.gpsPossition.longitude)"
+            lattIsPositive = realty.gpsPossition.lattitude > 0
+            longIsPositive = realty.gpsPossition.longitude > 0
         }
         if let plot = plot {
             self.originalPlot = plot
@@ -39,6 +44,8 @@ class EditObjectViewModel: ObservableObject {
             descriptionHolder = "\(plot.description)"
             latitudeHolder = "\(plot.gpsPossition.lattitude)"
             longitudeHolder = "\(plot.gpsPossition.longitude)"
+            lattIsPositive = plot.gpsPossition.lattitude > 0
+            longIsPositive = plot.gpsPossition.longitude > 0
         }
         self.title = title
     }
@@ -53,11 +60,14 @@ class EditObjectViewModel: ObservableObject {
     }
     
     func confirm() {
+        let latMultiplier: Double = lattIsPositive ? 1 : -1
+        let longMultiplier: Double = longIsPositive ? 1 : -1
         if let originalRealty = originalRealty {
             let editedRealty = Realty(registerNumber: Int(numberHolder)!,
                                        description: descriptionHolder,
                                        plots: originalRealty.plots,
-                                       gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)!, longitude: Double(longitudeHolder)!),
+                                       gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)! * latMultiplier,
+                                                                  longitude: Double(longitudeHolder)! * longMultiplier),
                                        id: originalRealty.id)
             PDAState.shared.updateRealty(original: originalRealty, updated: editedRealty)
             
@@ -66,7 +76,8 @@ class EditObjectViewModel: ObservableObject {
             let editedPlot = Plot(registerNumber: Int(numberHolder)!,
                                        description: descriptionHolder,
                                        realties: originalPlot.realties,
-                                       gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)!, longitude: Double(longitudeHolder)!),
+                                       gpsPossition: GpsPossition(lattitude: Double(latitudeHolder)! * latMultiplier,
+                                                                  longitude: Double(longitudeHolder)! * longMultiplier),
                                        id: originalPlot.id)
             PDAState.shared.updatePlot(original: originalPlot, updated: editedPlot)
         }

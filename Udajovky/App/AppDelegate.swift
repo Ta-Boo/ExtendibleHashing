@@ -51,6 +51,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ]
     
     func playGround() -> Bool{
+//        testSave()
+//        return true
+        print(1.toByteArray())
+        print(sizeof(Int.self))
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 4)
         for property in properties {
             extensibleHashing.add(property)
@@ -60,6 +64,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        extensibleHashing.testBlockSave()
 //        extensibleHashing.testBlockLoad()
         return true
+    }
+    
+    func testSave() {
+//        let array : [UInt8] = [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 55, 58, 32, 97, 104, 111, 106, 44, 32, 106, 97, 32, 115, 111, 109, 32, 112, 114, 111, 112, 101, 114, 116, 121, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 208, 34, 219, 249, 62, 44, 64, 163, 35, 185, 252, 135, 138, 100, 64]
+//        let savedBlock = Block<Property>.instantiate(4).fromByteArray(array: array)
+//        let varray = 1234.toByteArray()
+//        print(Int.fromByteArray([1,0,0,0,0,0,0,0]))
     }
 }
 

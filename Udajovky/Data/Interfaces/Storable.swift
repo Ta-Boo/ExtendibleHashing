@@ -9,6 +9,7 @@ import Foundation
 
 protocol Storable {
     var byteSize: Int { get }
+    var desc: String { get }
     
     func toByteArray() -> [UInt8]
     func fromByteArray(array: [UInt8]) -> Self

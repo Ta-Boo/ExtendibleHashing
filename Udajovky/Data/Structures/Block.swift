@@ -34,7 +34,19 @@ final class Block<T: Storable> {
     func add(_ element: T) {
         records[validCount] = element
         validCount += 1
-    }    
+    }
+    
+    func save(with filehandle: FileHandle, at address: UInt64) {
+        do {
+            try filehandle.seek(toOffset: address)
+            try filehandle.write(contentsOf: Data(toByteArray()))
+//            filehandle.write
+            
+        } catch {
+            fatalError("Failed to save block of data")
+        }
+        
+    }
 }
 
 extension Block: Blockable {
@@ -68,7 +80,8 @@ extension Block: Blockable {
         for _ in 1...blockFactor {
             actualEnd = actualStart + T.instantiate().byteSize
             let actualArray = Array(array[actualStart..<actualEnd])
-            records.append(T.instantiate().fromByteArray(array: actualArray))
+            let value = T.instantiate().fromByteArray(array: actualArray)
+            records.append(value)
             actualStart = actualEnd
         }
         return Block(blockFactor: blockFactor, records: records, validCount: validCount, depth: depth)

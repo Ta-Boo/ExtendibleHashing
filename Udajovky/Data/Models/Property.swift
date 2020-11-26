@@ -55,7 +55,7 @@ extension Property: Hashable {
 
 extension Property: Storable {
     var byteSize: Int {
-        return 2*8 + 20*2 + 2*8 // + maxLength ?
+        return 2*8 + 20*2 + 2*8
     }
     
     static func instantiate() -> Property {

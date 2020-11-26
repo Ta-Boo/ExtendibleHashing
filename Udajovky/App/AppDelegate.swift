@@ -37,30 +37,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 
     }
+    var properties = [
+        Property(registerNumber: 1, id: 1, description: "1: ahoj, ja som property", position: GPS(lat: 43.123, long: 164.3291)),
+        Property(registerNumber: 2, id: 2, description: "2: ahoj, ja som property", position: GPS(lat: 43.123, long: 364.3291)),
+        Property(registerNumber: 3, id: 3, description: "3: ahoj, ja som property", position: GPS(lat: 13.123, long: 634.3291)),
+        Property(registerNumber: 4, id: 4, description: "4: ahoj, ja som property", position: GPS(lat: 43.123, long: 624.3291)),
+        Property(registerNumber: 5, id: 5, description: "5: ahoj, ja som property", position: GPS(lat: 53.123, long: 614.3291)),
+        Property(registerNumber: 6, id: 6, description: "6: ahoj, ja som property", position: GPS(lat: 23.123, long: 641.3291)),
+        Property(registerNumber: 7, id: 7, description: "7: ahoj, ja som property", position: GPS(lat: 14.123, long: 164.3291)),
+        Property(registerNumber: 8, id: 8, description: "8: ahoj, ja som property", position: GPS(lat: 15.123, long: 564.3291)),
+        Property(registerNumber: 9, id: 9, description: "9: ahoj, ja som property", position: GPS(lat: 11.123, long: 664.3291)),
+        Property(registerNumber: 0, id: 0, description: "0: ahoj, ja som property", position: GPS(lat: 93.123, long: 864.3291))
+    ]
     
     func playGround() -> Bool{
-//        print("Int = ",MemoryLayout<Int>.size)
-//        print("Double = ",MemoryLayout<Double>.size)
-        print("Bool = ",MemoryLayout<BitSet>.size)
         
-//        var bits = BitSet(size: 8)
-//        bits[2] = true
-//        bits[4] = true
-//        bits[6] = true
-        let bits = 3.bitSet
-        for bit in 0..<32 {
-            print(bit,bits[bit])
-        }
-        
+        print(250.bitSet.toDecimal(depth: 8))
         let property = Property(registerNumber: 123,
                                 id: 3214,
                                 description: "ahoj, ja som property",
                                 position: GPS(lat: 13.123, long: 64.3291))
         
-        let extensibleHashing = ExtensibleHashing(fileName: "first", blockFactor: 4)
-        extensibleHashing.testSave(bytes: property.toByteArray())
-        let result = extensibleHashing.testLoad()
-        print(result.desc)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 4)
+        for property in properties {
+            extensibleHashing.add(property)
+        }
+//        extensibleHashing.testSave(bytes: property.toByteArray())
+//        let result = extensibleHashing.testLoad()
+//        extensibleHashing.testBlockSave()
+//        extensibleHashing.testBlockLoad()
         return true
     }
 }

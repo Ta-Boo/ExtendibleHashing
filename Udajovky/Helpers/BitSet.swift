@@ -1,8 +1,6 @@
 import Foundation
 
-//typealias BitSet = [Bool]
-//
-//
+
 extension Int {
     var bitSet: BitSet {
         get {
@@ -24,6 +22,17 @@ public struct BitSet {
     private let N = 8
     public typealias Byte = UInt8
     fileprivate(set) public var bytes: [Byte]
+    
+    var desc: String {
+        get {
+            var result = ""
+            for i in 0..<size {
+                result.append(isSet(i) ? "1" : "0")
+            }
+            return result
+        }
+    }
+    
     
     public init(size: Int) {
         precondition(size > 0)
@@ -61,7 +70,12 @@ public struct BitSet {
       }
 
     func toDecimal(depth: Int) -> Int {
-        return 10
+        var result = 0
+        for index in 0..<depth {
+            let addition = Int(pow(2, Double(index))) * (isSet(size - index - 1) ? 1 : 0)
+            result += addition
+        }
+        return result
     }
 
 }

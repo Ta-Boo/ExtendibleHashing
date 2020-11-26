@@ -58,6 +58,10 @@ extension Property: Storable {
         return 2*8 + 20*2 + 2*8 // + maxLength ?
     }
     
+    static func instantiate() -> Property {
+        return Property()
+    }
+    
     func toByteArray() -> [UInt8] {
         var result: [UInt8] = []
         result.append(contentsOf: registerNumber.toByteArray())
@@ -68,7 +72,7 @@ extension Property: Storable {
         return result
     }
     
-    static func fromByteArray(array: [UInt8]) -> Property {
+    func fromByteArray(array: [UInt8]) -> Property {
         let registerNumber = Int.fromByteArray(Array(array[0..<8]))
         let id = Int.fromByteArray(Array(array[8..<16]))
         let description = String.fromByteArray(Array(array[16..<56]))

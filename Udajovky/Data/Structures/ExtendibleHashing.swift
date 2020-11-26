@@ -7,54 +7,192 @@
 
 import Foundation
 
-class ExtensibleHashing {
+final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
+    private var fileName: String
+    var blockFactor: Int
+    var addressary: [Int] = []
+    var depth = 1
+    var blockCount = 2
     
-    private let fileName: String
-    let blockFactor: Int
-    var adressary: [Int] = []
-    let depth = 1 // 0 ??
-    
-    private var filePath: String {
-        get {
-            return FileManager.path(to: "\(fileName).txt")
-        }
-    }
-    
-    
+    private let configPostfix = "-config"
+
+    //MARK: Public interface 🔓🔓🔓
+   
+    //Initial constructor
     init(fileName: String, blockFactor: Int) {
         self.fileName = fileName
         self.blockFactor = blockFactor
         
-        if !FileManager.default.fileExists(atPath: filePath) {
-            FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
+        if !FileManager.default.fileExists(atPath: pathToFile()) {
+            FileManager.default.createFile(atPath: pathToFile(), contents: nil, attributes: nil)
+            FileManager.default.createFile(atPath: pathToFile("\(fileName)\(configPostfix)"), contents: nil, attributes: nil)
+            let fileHandle = FileHandle(forWritingAtPath: pathToFile())!
+            for i in 0...1 {
+                addressary.append(0)
+                addBlock(at: i)
+            }
+            fileHandle.closeFile()
+        } else {
+            load()
         }
     }
     
-    
-    
-    func loadBlocks() throws -> [Data] {
-        let blocks = [Data]()
-        let fileHandle = FileHandle(forReadingAtPath: filePath)!
-        let data = fileHandle.readData(ofLength: Property().byteSize)
-        fileHandle.seekToEndOfFile()
-        print(data)
-        fileHandle.closeFile()
-        return blocks
+    // Loader Constructor
+    internal init(fileName: String, blockFactor: Int, addressary: [Int] = [], blockCount: Int, depth: Int) {
+        self.fileName = fileName
+        self.blockFactor = blockFactor
+        self.addressary = addressary
+        self.blockCount = blockCount
+        self.depth = depth
     }
     
+    func add(_ element: T) {
+        let fileHandle = FileHandle(forUpdatingAtPath: pathToFile())!
+        try! fileHandle.seek(toOffset: UInt64(Block<Property>.instantiate().byteSize * 20))
+        var inProgress = true
+        
+        while inProgress {
+            let hash = element.hash.toDecimal(depth: depth)
+            let address = UInt64(addressary[hash])
+            print("primaryHsh: \(element.hash.desc)/hash: \(hash), addres: \(address) ")
+            fileHandle.seek(toFileOffset: address)
+            let bytes = [UInt8](fileHandle.readData(ofLength: Block<T>.instantiate().byteSize))
+            let block = Block<T>.instantiate().fromByteArray(array: bytes)
+            if block.isFull {
+                if depth == block.depth {
+                    var newAdressary: [Int] = []
+                    for address in addressary {
+                        newAdressary.append(address)
+                        newAdressary.append(address)
+                    }
+                    self.addressary = newAdressary
+                }
+                //TODO: split block - add new block
+                
+            } else {
+                block.add(element)
+                fileHandle.seek(toFileOffset: UInt64(address))
+                fileHandle.write(Data(block.toByteArray()))
+                fileHandle.closeFile()
+                save()
+                
+                inProgress = false
+            }
+        }
+        
+    }
+    
+    private func pathToFile(_ name: String? = nil) -> String {
+        return FileManager.path(to: "\(name ?? fileName).txt")
+    }
+    
+    private func addBlock(at index: Int) {
+        let address = blockCount*Block<T>.instantiate().byteSize
+        let fileHandle = FileHandle(forWritingAtPath: pathToFile())!
+        fileHandle.seek(toFileOffset: UInt64(address))
+        fileHandle.write(Data(Block<T>.instantiate().toByteArray()))
+        fileHandle.closeFile()
+        addressary[index] = address
+    }
+    
+    private func save() {
+        let fileHandle = FileHandle(forWritingAtPath: pathToFile("\(fileName)\(configPostfix)"))!
+        fileHandle.write(Data(toByteArray()))
+        fileHandle.closeFile()
+    }
+    
+    private func load() {
+        let fileHandle = FileHandle(forReadingAtPath: pathToFile("\(fileName)\(configPostfix)"))!
+        let data = fileHandle.readData(ofLength: self.byteSize)
+        fileHandle.closeFile()
+        let bytes = [UInt8](data)
+        let loaded = fromByteArray(array: bytes)
+        copy(other: loaded)
+    }
+    
+    private func copy(other: ExtensibleHashing) {
+        self.fileName = other.fileName
+        self.blockFactor = other.blockFactor
+        self.addressary = other.addressary
+        self.blockCount = other.blockCount
+        self.depth = other.depth
+    }
+    
+    
+   //MARK: Testing  🧪🧪🧪
+    
     func testSave(bytes: [UInt8]) {
-        let fileHandle = FileHandle(forWritingAtPath: filePath)!
+        let fileHandle = FileHandle(forWritingAtPath: pathToFile())!
         fileHandle.seekToEndOfFile()
         fileHandle.write(Data(bytes))
         fileHandle.closeFile()
     }
     
     func testLoad() -> Property {
-        let fileHandle = FileHandle(forReadingAtPath: filePath)!
+        let fileHandle = FileHandle(forReadingAtPath: pathToFile())!
         try! fileHandle.seek(toOffset: UInt64(Property().byteSize))
         let data = fileHandle.readData(ofLength: Property().byteSize)
         let bytes = [UInt8](data)
-        return Property.fromByteArray(array: bytes)
+        return Property.instantiate().fromByteArray(array: bytes)
     }
+    
+    func testBlockSave() {
+        let block = Block<Property>(blockFactor: 5)
+        let fileHandle = FileHandle(forWritingAtPath: pathToFile())!
+        fileHandle.seekToEndOfFile()
+        fileHandle.write(Data(block.toByteArray()))
+        fileHandle.closeFile()
+    }
+    
+    func testBlockLoad() {
+        let fileHandle = FileHandle(forReadingAtPath: pathToFile())!
+        try! fileHandle.seek(toOffset: UInt64(Block<Property>.instantiate().byteSize * 20))
+        let data = fileHandle.readData(ofLength: Block<Property>.instantiate().byteSize)
+        let bytes = [UInt8](data)
+        let result = Block<Property>.instantiate().fromByteArray(array: bytes)
+    }
+    
+}
+
+extension ExtensibleHashing: Storable {
+    var byteSize: Int {
+        return 20*2 + 3*8 + 8*addressary.count
+    }
+    
+    func toByteArray() -> [UInt8] {
+        var result: [UInt8] = []
+        result.append(contentsOf: depth.toByteArray())
+        result.append(contentsOf: blockFactor.toByteArray())
+        result.append(contentsOf: blockCount.toByteArray())
+        result.append(contentsOf: fileName.toByteArray(length: 20))
+        for adress in addressary {
+            result.append(contentsOf: adress.toByteArray())
+        }
+        return result
+    }
+    
+    func fromByteArray(array: [UInt8]) -> ExtensibleHashing {
+        let depth = Int.fromByteArray(Array(array[0..<8]))
+        let blockFactor = Int.fromByteArray(Array(array[8..<16]))
+        let blockCount = Int.fromByteArray(Array(array[16..<24]))
+        let fileName = String.fromByteArray(Array(array[24..<64]))
+        var addressary: [Int] = []
+        var actualStart = 64
+        var actualEnd: Int
+        for _ in 0..<blockCount {
+            actualEnd = actualStart + 8
+            let actualBytes = Array(array[actualStart..<actualEnd])
+            addressary.append(Int.fromByteArray(actualBytes))
+            actualStart = actualEnd
+        }
+        let extensibleHashing = ExtensibleHashing(fileName: fileName, blockFactor: blockFactor, addressary: addressary, blockCount: blockCount, depth: depth)
+        
+        return extensibleHashing
+    }
+    
+    static func instantiate() -> ExtensibleHashing {
+        return ExtensibleHashing(fileName: "", blockFactor: 0) // Dummy method 
+    }
+    
     
 }

@@ -11,6 +11,6 @@ protocol Storable {
     var byteSize: Int { get }
     
     func toByteArray() -> [UInt8]
-    static func fromByteArray(array: [UInt8]) -> Self
+    func fromByteArray(array: [UInt8]) -> Self
     static func instantiate() -> Self
 }

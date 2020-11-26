@@ -19,8 +19,6 @@ final class Block<T: Storable> {
         }
     }
     
-    
-    
     internal init(blockFactor: Int, records: [T] = [], validCount: Int = 0, depth: Int = 0) {
         self.blockFactor = blockFactor
         self.records = records
@@ -36,11 +34,10 @@ final class Block<T: Storable> {
     func add(_ element: T) {
         records[validCount] = element
         validCount += 1
-    }
-    
+    }    
 }
 
-extension Block: Storable {
+extension Block: Blockable {
     
     var byteSize: Int {
         get {
@@ -48,8 +45,8 @@ extension Block: Storable {
         }
     }
     
-    static func instantiate() -> Block {
-        return Block(blockFactor: 5)
+    static func instantiate(_ blockFactor: Int) -> Block {
+        return Block(blockFactor: blockFactor)
     }
     
     func toByteArray() -> [UInt8] {
@@ -79,3 +76,4 @@ extension Block: Storable {
     
     
 }
+

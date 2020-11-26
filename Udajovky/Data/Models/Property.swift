@@ -43,7 +43,7 @@ final class Property {
 
 extension Property: Hashable {
     var hash: BitSet {
-        return BitSet(size: 1)
+        return id.bitSet
     }
     
     func equals(to other: Property) -> Bool {

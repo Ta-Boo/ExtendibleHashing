@@ -45,19 +45,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Property(registerNumber: 5, id: 5, description: "5: ahoj, ja som property", position: GPS(lat: 53.123, long: 614.3291)),
         Property(registerNumber: 6, id: 6, description: "6: ahoj, ja som property", position: GPS(lat: 23.123, long: 641.3291)),
         Property(registerNumber: 7, id: 7, description: "7: ahoj, ja som property", position: GPS(lat: 14.123, long: 164.3291)),
-        Property(registerNumber: 8, id: 8, description: "8: ahoj, ja som property", position: GPS(lat: 15.123, long: 564.3291)),
-        Property(registerNumber: 9, id: 9, description: "9: ahoj, ja som property", position: GPS(lat: 11.123, long: 664.3291)),
-        Property(registerNumber: 0, id: 0, description: "0: ahoj, ja som property", position: GPS(lat: 93.123, long: 864.3291))
+//        Property(registerNumber: 8, id: 8, description: "8: ahoj, ja som property", position: GPS(lat: 15.123, long: 564.3291)),
+//        Property(registerNumber: 9, id: 9, description: "9: ahoj, ja som property", position: GPS(lat: 11.123, long: 664.3291)),
+//        Property(registerNumber: 0, id: 0, description: "0: ahoj, ja som property", position: GPS(lat: 93.123, long: 864.3291))
     ]
     
     func playGround() -> Bool{
-        
-        print(250.bitSet.toDecimal(depth: 8))
-        let property = Property(registerNumber: 123,
-                                id: 3214,
-                                description: "ahoj, ja som property",
-                                position: GPS(lat: 13.123, long: 64.3291))
-        
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 4)
         for property in properties {
             extensibleHashing.add(property)

@@ -19,7 +19,7 @@ final class Block<T: Storable> {
         }
     }
     
-    internal init(blockFactor: Int, records: [T] = [], validCount: Int = 0, depth: Int = 0) {
+    internal init(blockFactor: Int, records: [T] = [], validCount: Int = 0, depth: Int = 1) {
         self.blockFactor = blockFactor
         self.records = records
         self.validCount = validCount
@@ -84,7 +84,11 @@ extension Block: Blockable {
             records.append(value)
             actualStart = actualEnd
         }
-        return Block(blockFactor: blockFactor, records: records, validCount: validCount, depth: depth)
+        var result = Block(blockFactor: blockFactor, records: records, validCount: validCount, depth: depth)
+        for i in 0..<validCount {
+            result.records[i] = records[i]
+        }
+        return result
     }
     
     

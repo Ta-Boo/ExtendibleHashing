@@ -13,6 +13,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     var addressary: [Int] = []
     var depth = 1
     var blockCount = 0
+    let logger = true
     
     var filePath: String {
         get {
@@ -58,8 +59,11 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     func add(_ element: T) {
         let fileHandle = FileHandle(forUpdatingAtPath: filePath)!
         var inProgress = true
-        print("Inserting:",element.hash.toDecimal(depth: 16), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth), "      depth:", depth)
-//        print("---------------------------------------------------------------------------------------------")
+        if logger {
+            print("Inserting:",element.hash.toDecimal(depth: 8), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth), "      depth:", depth)
+            print("------------------------------------------------------------------------------------------------------------------------------------------------")
+
+        }
         
         while inProgress {
             let hash = element.hash.toDecimal(depth: depth)
@@ -72,23 +76,33 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                 if depth < block.depth {
                     fatalError("")
                 }
-                if depth == block.depth {
+                if depth <= block.depth {
                     var newAdressary: [Int] = []
                     for address in addressary {
                         newAdressary.append(address)
                         newAdressary.append(address)
                     }
                     self.addressary = newAdressary
-                    print(addressary)
+                    if logger {
+                        print(addressary)
+                        print("------------------------------------------------------------------------------------------------------------------------------------------------")
+                    }
+//                    print(addressary)
                 }
-                print("splitting:", element.hash.toDecimal(depth: 16))
-                split(block, address: address) //?????
+                if logger {
+                    print("splitting ",address,"because of :", element.hash.toDecimal(depth: 8), "❌")
+                    print("------------------------------------------------------------------------------------------------------------------------------------------------")
+                }
+                split(block, address: address) 
                 
             } else {
                 block.add(element)
                 block.save(with: fileHandle, at: address)
                 save()
-                
+                if logger {
+                    print("inserted:",element.hash.toDecimal(depth: 8), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth), "at", address, "✅")
+                    print("------------------------------------------------------------------------------------------------------------------------------------------------")
+                }
                 inProgress = false
             }
         }
@@ -103,10 +117,16 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     
     private func split(_ block: Block<T>, address: Int){
         let fileHandle = FileHandle(forUpdatingAtPath: filePath)!
+        
         block.depth += 1
         depth += 1
+        
+        if logger {
+            print("depth updated:",depth, "🔥")
+            print("------------------------------------------------------------------------------------------------------------------------------------------------")
+        }
         let newAddress = addBlock(block.depth)
-        readress(from: address,to: newAddress)
+        reAdress(from: address,to: newAddress)
         let newBlock = getBlock(by: newAddress)
         var swaps = 0
 
@@ -114,14 +134,17 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         
         for index in 0..<block.validCount {
             let record = block.records[index]
+            let val = record.hash.toDecimal(depth: depth)
             if record.hash.toDecimal(depth: depth) == blockIndex {
                 if !newBlock.isFull {
-                    print("Moving from blockIndex:",addressary.firstIndex { $0 == address }!, "address:",address)
-                    print("Moving to blockIndex:",blockIndex, "address:",newAddress," Record = hash:",record.hash.desc, "value:",  record.hash.toDecimal(depth: depth))
-                    print("______________________________________________________________________________________________________________________________")
+                    if logger {
+                        print("Moving from blockIndex:",addressary.firstIndex { $0 == address }!, "address:",address)
+                        print("to blockIndex:",blockIndex, "address:",newAddress," Record(\(record.hash.toDecimal(depth: 8)) = hash:",record.hash.desc, "value:",  record.hash.toDecimal(depth: depth), "🚡")
+                        print("------------------------------------------------------------------------------------------------------------------------------------------------")
+                    }
                     swaps += 1
                     newBlock.add(record)
-                    newBlock.validCount += 1
+                    block.records[index] = block.records[block.validCount-1]
                     block.validCount -= 1
                 }
             }
@@ -164,12 +187,16 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         return block
     }
     
-    private func readress(from old: Int, to new: Int) {
+    private func reAdress(from old: Int, to new: Int) {
         let from = addressary.firstIndex { $0 == old }!
         let count = addressary.filter{ $0 == old }.count
         let range = (from + count/2)..<(from + count)
         for i in range {
             addressary[i] = new
+        }
+        if logger {
+            print("readressed:",addressary)
+            print("________________________________________________________________________")
         }
     }
 
@@ -198,37 +225,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     
     
    //MARK: Testing  🧪🧪🧪
-    
-    func testSave(bytes: [UInt8]) {
-        let fileHandle = FileHandle(forWritingAtPath: filePath)!
-        fileHandle.seekToEndOfFile()
-        fileHandle.write(Data(bytes))
-        fileHandle.closeFile()
-    }
-    
-    func testLoad() -> Property {
-        let fileHandle = FileHandle(forReadingAtPath: filePath)!
-        try! fileHandle.seek(toOffset: UInt64(Property().byteSize))
-        let data = fileHandle.readData(ofLength: Property().byteSize)
-        let bytes = [UInt8](data)
-        return Property.instantiate().fromByteArray(array: bytes)
-    }
-    
-    func testBlockSave() {
-        let block = Block<Property>(blockFactor: 5)
-        let fileHandle = FileHandle(forWritingAtPath: filePath)!
-        fileHandle.seekToEndOfFile()
-        fileHandle.write(Data(block.toByteArray()))
-        fileHandle.closeFile()
-    }
-    
-    func testBlockLoad() {
-        let fileHandle = FileHandle(forReadingAtPath: filePath)!
-        try! fileHandle.seek(toOffset: UInt64(Block<Property>.instantiate(blockFactor).byteSize * 20))
-        let data = fileHandle.readData(ofLength: Block<Property>.instantiate(blockFactor).byteSize)
-        let bytes = [UInt8](data)
-        let result = Block<Property>.instantiate(blockFactor).fromByteArray(array: bytes)
-    }
     
 }
 

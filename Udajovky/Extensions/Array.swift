@@ -20,4 +20,12 @@ extension Array {
         self.remove(at: index)
         return result
     }
+    
+    public mutating func shiftLeft(from index: Int) {
+        for i in (index)..<(count - 1) {
+            self[i] = self[i + 1]
+        }
+    }
+    
+    
 }

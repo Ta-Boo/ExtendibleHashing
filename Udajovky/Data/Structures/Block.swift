@@ -36,9 +36,9 @@ final class Block<T: Storable> {
         validCount += 1
     }
     
-    func save(with filehandle: FileHandle, at address: UInt64) {
+    func save(with filehandle: FileHandle, at address: Int) {
         do {
-            try filehandle.seek(toOffset: address)
+            try filehandle.seek(toOffset: UInt64(address))
             try filehandle.write(contentsOf: Data(toByteArray()))
 //            filehandle.write
             

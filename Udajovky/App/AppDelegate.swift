@@ -51,6 +51,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     ]
     
     func playGround() -> Bool{
+//        print(186.bitSet.desc)
+//        print(186.bitSet.toDecimal(depth: 2))
+//        return true
         testInsert()
         return true
         
@@ -61,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         for i in 0..<properties.count {
-            print(extensibleHashing.find(properties[i])!.desc)
+            print(extensibleHashing.find(properties[i])?.desc)
         }
         
         

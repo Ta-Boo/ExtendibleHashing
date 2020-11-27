@@ -5,7 +5,7 @@ extension Int {
     var bitSet: BitSet {
         get {
             let str = String(self, radix: 2)
-            let size = 8
+            let size = 16
             var  result = BitSet(size: size)
             for (index, char) in str.reversed().enumerated() {
                 if char == "1" {
@@ -72,8 +72,8 @@ public struct BitSet {
 
     func toDecimal(depth: Int) -> Int {
         var result = 0
-        for index in 0..<depth {
-            let addition = Int(pow(2, Double(index))) * (isSet(depth - 1 - index) ? 1 : 0)
+        for index in 0 ..< depth {
+            let addition = Int(pow(2, Double(index))) * (isSet(size - 1 - index) ? 1 : 0)
             result += addition
         }
         return result

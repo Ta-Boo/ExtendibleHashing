@@ -24,11 +24,14 @@ final class Property {
     var desc: String {
         get {
             return """
-                    Register number: \(registerNumber)
-                    id: \(id)
-                    description: \(description)
-                    lat: \(position.lat)
-                    long: \(position.long)
+
+                    \t\t\t Register number: \(registerNumber)
+                    \t\t\t id: \(id)
+                    \t\t\t description: \(description)
+                    \t\t\t lat: \(position.lat)
+                    \t\t\t long: \(position.long)
+                    \t\t\t hash: \(hash.desc)
+
                     """
         }
     }
@@ -44,6 +47,11 @@ final class Property {
 extension Property: Hashable {
     var hash: BitSet {
         return id.bitSet
+    }
+    var name: String {
+        get {
+            return description
+        }
     }
     
     func equals(to other: Property) -> Bool {

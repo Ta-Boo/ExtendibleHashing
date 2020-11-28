@@ -61,6 +61,23 @@ extension Block: Blockable {
         return Block(blockFactor: blockFactor)
     }
     
+    private func recordsToString() -> String {
+        var result = ""
+        for record in records {
+            result.append(record.desc)
+        }
+        return result
+    }
+    
+    func toString() -> String {
+        return """
+            \t\t BlockFactor:    \(blockFactor)
+            \t\t depth:          \(depth)
+            \t\t validCount:     \(validCount)
+            \t\t records:        \(recordsToString())
+            """
+    }
+    
     func toByteArray() -> [UInt8] {
         var result: [UInt8] = []
         result.append(contentsOf: validCount.toByteArray())

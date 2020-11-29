@@ -26,24 +26,24 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         let filePath = FileManager.path(to: "\(fileName).hsh")
         let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
         
-//        try? FileManager.default.removeItem(atPath: filePath)
-//        try? FileManager.default.removeItem(atPath: configFilePath)
+        try? FileManager.default.removeItem(atPath: filePath)
+        try? FileManager.default.removeItem(atPath: configFilePath)
+        
         if !FileManager.default.fileExists(atPath: filePath) {
             FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
             FileManager.default.createFile(atPath: configFilePath, contents: nil, attributes: nil)
+            
             self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
             self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
-
-            addressary = [0,0]
-            for i in 0...1 {
-                addressary[i] = addBlock()
-            }
+            
+            addressary.append(addBlock())
+            addressary.append(addBlock())
         } else {
             self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
             self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
             load()
+            //        printState()
         }
-//        printState()
     }
     
     // Loader Constructor
@@ -57,7 +57,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
         let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
         self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
-
+        
     }
     
     func add(_ element: T) {
@@ -101,7 +101,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             }
         }
         save()
-//        printState()
+        //        printState()
         
     }
     
@@ -113,7 +113,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     
     private func split(_ block: Block<T>, address: Int){
         block.depth += 1
-       
+        
         let newAddress = addBlock(block.depth)
         reAdress(from: address,to: newAddress)
         
@@ -142,10 +142,10 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         print(dataFile.offsetInFile)
         let address = try! dataFile.seekToEnd()
         print(dataFile.offsetInFile)
-
+        
         let block = Block<T>(blockFactor: blockFactor, depth: depth)
         dataFile.write(Data(block.toByteArray()))
-//        dataFile.closeFile()
+        //        dataFile.closeFile()
         blockCount += 1
         return Int(address) //WARNING: Be careful about cutting ❗️
     }
@@ -185,7 +185,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         }
         configFile.seek(toFileOffset: 0)
         configFile.write(Data(toByteArray()))
-//        configFile.closeFile()
+        //        configFile.closeFile()
     }
     
     private func load() {
@@ -193,7 +193,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         let bytes = [UInt8](data)
         let loaded = fromByteArray(array: bytes)
         copy(other: loaded)
-//        configFile.closeFile()
+        //        configFile.closeFile()
     }
     
     private func copy(other: ExtensibleHashing) {

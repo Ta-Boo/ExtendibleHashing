@@ -30,7 +30,7 @@ class UdajovkyTests: XCTestCase {
         
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5)
         for property in properties {
-//            extensibleHashing.add(property)
+            extensibleHashing.add(property)
         }
         
         for i in 0..<properties.count {

@@ -26,8 +26,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         let filePath = FileManager.path(to: "\(fileName).hsh")
         let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
         
-        try? FileManager.default.removeItem(atPath: filePath)
-        try? FileManager.default.removeItem(atPath: configFilePath)
+//        try? FileManager.default.removeItem(atPath: filePath)
+//        try? FileManager.default.removeItem(atPath: configFilePath)
         if !FileManager.default.fileExists(atPath: filePath) {
             FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
             FileManager.default.createFile(atPath: configFilePath, contents: nil, attributes: nil)
@@ -43,6 +43,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
             load()
         }
+//        printState()
     }
     
     // Loader Constructor
@@ -93,14 +94,14 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             } else {
                 block.add(element)
                 block.save(with: dataFile, at: address)
-                save()
                 if logger {
                     print("✅✅✅✅✅inserted: \(element.name) - ",element.hash.toDecimal(depth: 8), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth), "at", address, "✅✅✅✅✅")
                 }
                 inProgress = false
             }
         }
-        printState()
+        save()
+//        printState()
         
     }
     
@@ -179,6 +180,10 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     private func save() {
+        if blockCount == 5 {
+            printState()
+        }
+        configFile.seek(toFileOffset: 0)
         configFile.write(Data(toByteArray()))
 //        configFile.closeFile()
     }

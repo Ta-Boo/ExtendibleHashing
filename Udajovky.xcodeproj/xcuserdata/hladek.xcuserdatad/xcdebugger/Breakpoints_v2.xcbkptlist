@@ -62,8 +62,8 @@
             filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "getBlock(by:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -87,38 +87,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D7880E2A-92D1-4B4A-A0DA-C0FFBD937B73"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "add(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "621BAE82-DC0C-4856-AD93-E57DA7E36F25"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "add(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "1D3E2EC2-EE2D-41FE-98CE-36D2911EC2B7"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -126,8 +94,8 @@
             filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "split(_:address:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -142,8 +110,8 @@
             filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
             landmarkName = "split(_:address:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -158,25 +126,9 @@
             filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "printState()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2DA31C1A-51B2-4CA7-B45A-13B655DC8F4D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "add(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -194,6 +146,54 @@
             endingLineNumber = "131"
             landmarkName = "split(_:address:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "79513EC1-C9E7-4669-B35F-A69E0D1B4004"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Udajovky/Data/Structures/ExtendibleHashing.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "init(fileName:blockFactor:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "79513EC1-C9E7-4669-B35F-A69E0D1B4004 - ec9baad39a06e01b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Udajovky.ExtensibleHashing.init(fileName: Swift.String, blockFactor: Swift.Int) -&gt; Udajovky.ExtensibleHashing&lt;A&gt;"
+                  moduleName = "Udajovky"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky2-2/Udajovky/Data/Structures/ExtendibleHashing.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "44"
+                  endingLineNumber = "44"
+                  offsetFromSymbolStart = "7248">
+               </Location>
+               <Location
+                  uuid = "79513EC1-C9E7-4669-B35F-A69E0D1B4004 - a3a91dbc75c2af33"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UdajovkyTests.ExtensibleHashing.init(fileName: Swift.String, blockFactor: Swift.Int) -&gt; UdajovkyTests.ExtensibleHashing&lt;A&gt;"
+                  moduleName = "UdajovkyTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hladek/School/Udajovky2-2/Udajovky/Data/Structures/ExtendibleHashing.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "44"
+                  endingLineNumber = "44"
+                  offsetFromSymbolStart = "7248">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -13,19 +13,9 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     var addressary: [Int] = []
     var depth = 1
     var blockCount = 0
-    let logger = false
-    
-    var filePath: String {
-        get {
-            return FileManager.path(to: "\(fileName).hsh")
-        }
-    }
-    
-    var configFilePath: String {
-        get {
-            return FileManager.path(to: "\(fileName)-config.hsh")
-        }
-    }
+    let configFile: FileHandle
+    let dataFile: FileHandle
+    let logger = true
     
     //MARK: Public interface 🔓🔓🔓
     
@@ -33,16 +23,24 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     init(fileName: String, blockFactor: Int) {
         self.fileName = fileName
         self.blockFactor = blockFactor
+        let filePath = FileManager.path(to: "\(fileName).hsh")
+        let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
+        
+        try? FileManager.default.removeItem(atPath: filePath)
+        try? FileManager.default.removeItem(atPath: configFilePath)
         if !FileManager.default.fileExists(atPath: filePath) {
-            try! FileManager.default.removeItem(atPath: filePath)
-            try! FileManager.default.removeItem(atPath: configFilePath)
             FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
             FileManager.default.createFile(atPath: configFilePath, contents: nil, attributes: nil)
+            self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
+            self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
+
             addressary = [0,0]
             for i in 0...1 {
                 addressary[i] = addBlock()
             }
         } else {
+            self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
+            self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
             load()
         }
     }
@@ -54,10 +52,14 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         self.addressary = addressary
         self.blockCount = blockCount
         self.depth = depth
+        let filePath = FileManager.path(to: "\(fileName).hsh")
+        self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
+        let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
+        self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
+
     }
     
     func add(_ element: T) {
-        let fileHandle = FileHandle(forUpdatingAtPath: filePath)!
         var inProgress = true
         if logger {
             print("💉💉💉Inserting: \(element.name) - ",element.hash.toDecimal(depth: 8), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth),"💉💉💉")
@@ -66,9 +68,9 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         while inProgress {
             let hash = element.hash.toDecimal(depth: depth)
             let address = addressary[hash]
-            fileHandle.seek(toFileOffset: UInt64(address))
+            dataFile.seek(toFileOffset: UInt64(address))
             
-            let bytes = [UInt8](fileHandle.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
+            let bytes = [UInt8](dataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
             let block = Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
             if block.isFull {
                 if depth == block.depth {
@@ -90,7 +92,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                 
             } else {
                 block.add(element)
-                block.save(with: fileHandle, at: address)
+                block.save(with: dataFile, at: address)
                 save()
                 if logger {
                     print("✅✅✅✅✅inserted: \(element.name) - ",element.hash.toDecimal(depth: 8), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth), "at", address, "✅✅✅✅✅")
@@ -109,7 +111,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     private func split(_ block: Block<T>, address: Int){
-        let fileHandle = FileHandle(forUpdatingAtPath: filePath)!
         block.depth += 1
        
         let newAddress = addBlock(block.depth)
@@ -120,7 +121,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         
         for index in 0..<block.validCount {
             let record = block.records[index]
-            let hash = record.hash.desc
             if record.hash.isSet(block.depth - 1) {
                 if newBlock.isFull { fatalError() }
                 if logger {
@@ -133,35 +133,35 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                 block.validCount -= 1
             }
         }
-        newBlock.save(with: fileHandle, at: newAddress)
-        block.save(with: fileHandle, at: address)
+        newBlock.save(with: dataFile, at: newAddress)
+        block.save(with: dataFile, at: address)
     }
     
     private func addBlock(_ depth: Int = 1) -> Int {
-        let fileHandle = FileHandle(forWritingAtPath: filePath)!
-        let result = fileHandle.seekToEndOfFile()
+        print(dataFile.offsetInFile)
+        let address = try! dataFile.seekToEnd()
+        print(dataFile.offsetInFile)
+
         let block = Block<T>(blockFactor: blockFactor, depth: depth)
-        fileHandle.write(Data(block.toByteArray()))
-        fileHandle.closeFile()
+        dataFile.write(Data(block.toByteArray()))
+//        dataFile.closeFile()
         blockCount += 1
-        return Int(result) //WARNING: Be careful about cutting ❗️
+        return Int(address) //WARNING: Be careful about cutting ❗️
     }
     
     private func getBlock(by element: T) -> Block<T> {
-        let fileHandle = FileHandle(forUpdatingAtPath: filePath)!
         let hash = element.hash.toDecimal(depth: depth)
         let address = UInt64(addressary[hash])
-        fileHandle.seek(toFileOffset: address)
+        dataFile.seek(toFileOffset: address)
         
-        let bytes = [UInt8](fileHandle.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
+        let bytes = [UInt8](dataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
         let block = Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
         return block
     }
     
     private func getBlock(by address: Int) -> Block<T> {
-        let fileHandle = FileHandle(forUpdatingAtPath: filePath)!
-        fileHandle.seek(toFileOffset: UInt64(address))
-        let bytes = [UInt8](fileHandle.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
+        try! dataFile.seek(toOffset: UInt64(address))
+        let bytes = [UInt8](dataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
         let block = Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
         return block
     }
@@ -179,18 +179,16 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     private func save() {
-        let fileHandle = FileHandle(forWritingAtPath: configFilePath)!
-        fileHandle.write(Data(toByteArray()))
-        fileHandle.closeFile()
+        configFile.write(Data(toByteArray()))
+//        configFile.closeFile()
     }
     
     private func load() {
-        let fileHandle = FileHandle(forReadingAtPath: configFilePath)!
-        let data = fileHandle.readDataToEndOfFile()
+        let data = configFile.readDataToEndOfFile()
         let bytes = [UInt8](data)
         let loaded = fromByteArray(array: bytes)
         copy(other: loaded)
-        fileHandle.closeFile()
+//        configFile.closeFile()
     }
     
     private func copy(other: ExtensibleHashing) {
@@ -203,7 +201,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     
     func printState() {
         if !logger { return }
-        let fileHandle = FileHandle(forUpdatingAtPath: filePath)!
         var result = """
                     *******************************************************************************************************************
                     FileDepth: \(depth)
@@ -213,8 +210,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                     ----------------------
                     """
         for i in 0..<blockCount {
-            try! fileHandle.seek(toOffset: UInt64(Block<T>.instantiate(blockFactor).byteSize * i))
-            let bytes = [UInt8](fileHandle.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
+            try! dataFile.seek(toOffset: UInt64(Block<T>.instantiate(blockFactor).byteSize * i))
+            let bytes = [UInt8](dataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
             let block =  Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
             result.append("\n\t Block(\(UInt64(Block<T>.instantiate(blockFactor).byteSize * i))):\n")
             result.append(block.toString())

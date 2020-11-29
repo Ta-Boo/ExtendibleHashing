@@ -66,4 +66,26 @@ class UdajovkyTests: XCTestCase {
         }
     }
     
+    func testSeek() {
+        let filePath = FileManager.path(to: "ahoj.hsh")
+        if !FileManager.default.fileExists(atPath: filePath) {
+            FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
+        } else {
+            try! FileManager.default.removeItem(atPath: filePath)
+            FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
+        }
+        let dataFile = FileHandle(forUpdatingAtPath: filePath)!
+        dataFile.write(Data(8.toByteArray()))
+        dataFile.write(Data(9.toByteArray()))
+        dataFile.write(Data(10.toByteArray()))
+        try! dataFile.seek(toOffset: 8)
+        try! dataFile.seek(toOffset: 8)
+        try! dataFile.seek(toOffset: 8)
+        dataFile.seek(toFileOffset: 8)
+        try! dataFile.seekToEnd()
+        try! dataFile.seekToEnd()
+        print("9 = ",Int.fromByteArray([UInt8](dataFile.readData(ofLength: 8))))
+
+    }
+    
 }

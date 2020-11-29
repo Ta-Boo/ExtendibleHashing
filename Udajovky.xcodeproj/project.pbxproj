@@ -38,6 +38,7 @@
 		B3D026D525273672009E63C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D026D425273672009E63C3 /* Assets.xcassets */; };
 		B3D026D825273672009E63C3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D026D725273672009E63C3 /* Preview Assets.xcassets */; };
 		B3D026DB25273672009E63C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3D026D925273672009E63C3 /* Main.storyboard */; };
+		B3D8DB4425740203000DAC3E /* BitSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31635BB256C71B400C4342F /* BitSet.swift */; };
 		B3FA6DB72551EBD000EAE655 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32119872551E9BF0079B449 /* Array.swift */; };
 		B3FA6DBB255324B000EAE655 /* EditableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FA6DBA255324B000EAE655 /* EditableTextView.swift */; };
 /* End PBXBuildFile section */
@@ -361,6 +362,7 @@
 				B32D4A54256DBBB0004C7F0C /* Hashable.swift in Sources */,
 				B3FA6DB72551EBD000EAE655 /* Array.swift in Sources */,
 				B32D4A3F256D831E004C7F0C /* ExtendibleHashing.swift in Sources */,
+				B3D8DB4425740203000DAC3E /* BitSet.swift in Sources */,
 				B3263ABC25475E1000AE558F /* SeededGenerator.swift in Sources */,
 				B3457FE1254B7C5300E9420F /* String.swift in Sources */,
 				B32D4A4E256DB91F004C7F0C /* ByteArray.swift in Sources */,
@@ -508,7 +510,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 10.15.7;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -563,7 +565,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 10.15.7;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;

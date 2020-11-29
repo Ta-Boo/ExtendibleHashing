@@ -33,9 +33,9 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     init(fileName: String, blockFactor: Int) {
         self.fileName = fileName
         self.blockFactor = blockFactor
-        try! FileManager.default.removeItem(atPath: filePath)
-        try! FileManager.default.removeItem(atPath: configFilePath)
         if !FileManager.default.fileExists(atPath: filePath) {
+            try! FileManager.default.removeItem(atPath: filePath)
+            try! FileManager.default.removeItem(atPath: configFilePath)
             FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil)
             FileManager.default.createFile(atPath: configFilePath, contents: nil, attributes: nil)
             addressary = [0,0]

@@ -7,6 +7,7 @@
 
 import XCTest
 
+
 class UdajovkyTests: XCTestCase {
     
     func testStaticOperations() {
@@ -28,22 +29,23 @@ class UdajovkyTests: XCTestCase {
             Property(registerNumber: 9, id: 60, description: "Brezno", position: GPS(lat: 11.123, long: 664.3291)),
         ]
         
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5)
-        for property in properties {
-            extensibleHashing.add(property)
-        }
-        
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5, delete: false)
+//        for property in properties {
+//            extensibleHashing.add(property)
+//        }
+//        extensibleHashing.save()
+        extensibleHashing.printState(headerOnly: true)
         for i in 0..<properties.count {
-            print(extensibleHashing.find(properties[i])!.desc)
+            _ = (extensibleHashing.find(properties[i])!)
         }
     }
     
 
     func testInsertAndFind() {
-        var generator = SeededGenerator(seed: UInt64(1))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 2)
+        var generator = SeededGenerator(seed: UInt64(123))
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 3)
         
-        let repetitions = 1...500
+        let repetitions = 1...1000
         var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
         
@@ -51,16 +53,70 @@ class UdajovkyTests: XCTestCase {
         for i in repetitions {
             if i % 100 == 0 {print("\(i)/1000")}
             let registerNumber = randoms.popLast()!
-//            print(registerNumber)
             let property = Property(registerNumber: registerNumber, id: registerNumber, description: "asdadasdad", position: GPS(lat: 1, long: 1))
             insertedProperties.append(property)
             extensibleHashing.add(property)
         }
+        extensibleHashing.save()
         
         for property in insertedProperties {
             let found = extensibleHashing.find(property)!
             XCTAssert(found.equals(to: property))
         }
+    }
+    
+    func testLoadnSave() {
+        testSave()
+        testLoad()
+    }
+    
+    func testSave() {
+        var generator = SeededGenerator(seed: UInt64(123))
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "debug", blockFactor: 5)
+        
+        let repetitions = 1...1000
+        var randoms = Array(0...65535)
+        randoms.shuffle(using: &generator)
+        
+        var insertedProperties: [Property] = []
+        for i in repetitions {
+            let registerNumber = randoms.popLast()!
+            if i % 100 == 0 {print("\(registerNumber)/1000")}
+            let property = Property(registerNumber: registerNumber, id: registerNumber, description: "debug info", position: GPS(lat: 1, long: 1))
+            insertedProperties.append(property)
+            extensibleHashing.add(property)
+        }
+        extensibleHashing.printState(headerOnly: true)
+        extensibleHashing.save()
+        for property in insertedProperties {
+            let found = extensibleHashing.find(property)!.desc
+            print(extensibleHashing.find(property))
+//            XCTAssert(found.equals(to: property))
+        }
+    }
+    
+    func testLoad() {
+        var generator = SeededGenerator(seed: UInt64(123))
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "debug", blockFactor: 5, delete: false)
+        
+        let repetitions = 1...1000
+        var randoms = Array(0...65535)
+        randoms.shuffle(using: &generator)
+
+        var insertedProperties: [Property] = []
+        for i in repetitions {
+            let registerNumber = randoms.popLast()!
+            if i % 100 == 0 {print("\(registerNumber)/1000")}
+            let property = Property(registerNumber: 0, id: registerNumber, description: "", position: GPS(lat: 1, long: 1))
+            insertedProperties.append(property)
+        }
+        extensibleHashing.printState(headerOnly: true)
+        for property in insertedProperties {
+            let found = extensibleHashing.find(property)!.desc
+            print(extensibleHashing.find(property))
+//            XCTAssert(found.equals(to: property))
+        }
+        
     }
     
     func testSeek() {

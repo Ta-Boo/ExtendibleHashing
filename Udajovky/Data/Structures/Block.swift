@@ -101,7 +101,7 @@ extension Block: Blockable {
             records.append(value)
             actualStart = actualEnd
         }
-        var result = Block(blockFactor: blockFactor, records: records, validCount: validCount, depth: depth)
+        let result = Block(blockFactor: blockFactor, records: records, validCount: validCount, depth: depth)
         for i in 0..<validCount {
             result.records[i] = records[i]
         }

@@ -33,6 +33,7 @@
 		B33FB0B22544A37B00B3AB7E /* SeededGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB0B12544A37B00B3AB7E /* SeededGenerator.swift */; };
 		B3457FDC254B7B8D00E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
 		B3457FE1254B7C5300E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
+		B35D4F4225757E7300497649 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3773C552575795500B3D187 /* BlockInfo.swift */; };
 		B3773C562575795500B3D187 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3773C552575795500B3D187 /* BlockInfo.swift */; };
 		B3B65B87253325F9000C9442 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B65B86253325F9000C9442 /* Color.swift */; };
 		B3D026D125273672009E63C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D026D025273672009E63C3 /* AppDelegate.swift */; };
@@ -365,6 +366,7 @@
 				B32D4A54256DBBB0004C7F0C /* Hashable.swift in Sources */,
 				B3FA6DB72551EBD000EAE655 /* Array.swift in Sources */,
 				B32D4A3F256D831E004C7F0C /* ExtendibleHashing.swift in Sources */,
+				B35D4F4225757E7300497649 /* BlockInfo.swift in Sources */,
 				B3D8DB4425740203000DAC3E /* BitSet.swift in Sources */,
 				B3263ABC25475E1000AE558F /* SeededGenerator.swift in Sources */,
 				B3457FE1254B7C5300E9420F /* String.swift in Sources */,

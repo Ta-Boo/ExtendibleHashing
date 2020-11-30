@@ -43,7 +43,7 @@ class UdajovkyTests: XCTestCase {
         var generator = SeededGenerator(seed: UInt64(1))
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 2)
         
-        let repetitions = 1...1000
+        let repetitions = 1...500
         var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
         

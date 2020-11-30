@@ -43,18 +43,15 @@ class UdajovkyTests: XCTestCase {
         var generator = SeededGenerator(seed: UInt64(1))
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 2)
         
-        var uniques : [Int] = []
-        let range = 1...1000
-        for i in range {
-            uniques.append(i)
-        }
-        
-        uniques.shuffle(using: &generator)
+        let repetitions = 1...1000
+        var randoms = Array(0...65535)
+        randoms.shuffle(using: &generator)
         
         var insertedProperties: [Property] = []
-        for i in range {
+        for i in repetitions {
             if i % 100 == 0 {print("\(i)/1000")}
-            let registerNumber = uniques.popLast()!
+            let registerNumber = randoms.popLast()!
+//            print(registerNumber)
             let property = Property(registerNumber: registerNumber, id: registerNumber, description: "asdadasdad", position: GPS(lat: 1, long: 1))
             insertedProperties.append(property)
             extensibleHashing.add(property)

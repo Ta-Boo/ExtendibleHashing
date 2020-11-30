@@ -7,6 +7,12 @@
 
 import Foundation
 
+func debug(_ logger: Bool, _ text: String) {
+    if logger {
+       print(text)
+    }
+}
+
 final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     private var fileName: String
     var blockFactor: Int
@@ -42,7 +48,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
             self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
             load()
-            //        printState()
         }
     }
     
@@ -62,48 +67,43 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     
     func add(_ element: T) {
         var inProgress = true
-        if logger {
-            print("💉💉💉Inserting: \(element.name) - ",element.hash.toDecimal(depth: 8), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth),"💉💉💉")
-        }
+        debug(logger, "💉💉💉Inserting: \(element.name) - \(element.hash.toDecimal(depth: 8)) hash: \(element.hash.desc) key: \(element.hash.toDecimal(depth: depth)) 💉💉💉")
+
         
         while inProgress {
             let hash = element.hash.toDecimal(depth: depth)
-            let address = addressary[hash]
-            dataFile.seek(toFileOffset: UInt64(address))
+            let blockInfo = addressary[hash]
+            dataFile.seek(toFileOffset: UInt64(blockInfo))
             
             let bytes = [UInt8](dataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
             let block = Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
             if block.isFull {
                 if depth == block.depth {
-                    var newAdressary: [Int] = []
-                    for address in addressary {
-                        newAdressary.append(address)
-                        newAdressary.append(address)
-                    }
-                    self.addressary = newAdressary
+                    expandAddressary()
                     depth += 1
-                    if logger {
-                        print("🔥🔥🔥 depth updated:", depth, "🔥🔥🔥")
-                    }
+                    debug(logger, "🔥🔥🔥 depth updated: \(depth)  🔥🔥🔥")
                 }
-                if logger {
-                    print("❌❌❌❌splitting ",address,"because of : \(element.name) - ", element.hash.toDecimal(depth: 8), "❌❌❌❌")
-                }
-                split(block, address: address) 
+                debug(logger, "❌❌❌ splitting \(blockInfo) because of : \(element.name) - \(element.hash.toDecimal(depth: 8)) ❌❌❌")
+                split(block, address: blockInfo)
                 
             } else {
                 block.add(element)
-                block.save(with: dataFile, at: address)
-                if logger {
-                    print("✅✅✅✅✅inserted: \(element.name) - ",element.hash.toDecimal(depth: 8), "hash:", element.hash.desc, "   partialHash:", element.hash.toDecimal(depth: depth), "at", address, "✅✅✅✅✅")
-                }
+                block.save(with: dataFile, at: blockInfo)
+                debug(logger, "✅✅✅ inserted: \(element.name) - \(element.hash.toDecimal(depth: 8))  hash:  \(element.hash.desc)   partialHash:  \(element.hash.toDecimal(depth: depth)) at  \(blockInfo) ✅✅✅")
                 inProgress = false
             }
         }
         save()
-        //        printState()
-        
     }
+    
+    private func expandAddressary() {
+            var newAdressary: [Int] = []
+            for blockInfo in addressary {
+                newAdressary.append(blockInfo)
+                newAdressary.append(blockInfo)
+            }
+            self.addressary = newAdressary
+        }
     
     func find(_ element: T) -> T? {
         let block = getBlock(by: element)
@@ -124,11 +124,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             let record = block.records[index]
             if record.hash.isSet(block.depth - 1) {
                 if newBlock.isFull { fatalError() }
-                if logger {
-                    print(" 🚡🚡🚡 Moving Record \(record.name) - \(record.hash.toDecimal(depth: 8)) = hash:", record.hash.desc, "value:",  record.hash.toDecimal(depth: depth),
-                          "from blockIndex:", addressary.firstIndex { $0 == address }!, "at address:",address,
-                          "to blockIndex:", blockIndex, "address:" ,newAddress, "🚡🚡🚡")
-                }
+                debug(logger, "🚡🚡🚡 Moving Record \(record.name) - \(record.hash.toDecimal(depth: 8)) = hash:  \(record.hash.desc) value: \(record.hash.toDecimal(depth: depth)) from blockIndex:  \(addressary.firstIndex { $0 == address }!)  at address: \(address) to blockIndex:  \(blockIndex) address: \(newAddress) 🚡🚡🚡")
+
                 newBlock.add(record)
                 block.records[index] = block.records[block.validCount-1]
                 block.validCount -= 1
@@ -172,15 +169,10 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         for i in range {
             addressary[i] = new
         }
-        if logger {
-            print("📭📭📭reAdressed:",addressary,"📭📭📭")
-        }
+        debug(logger, "📭📭📭 Changed addresses: \(addressary.map{ $0 }) 📭📭📭")
     }
     
     private func save() {
-        if blockCount == 5 {
-            printState()
-        }
         configFile.seek(toFileOffset: 0)
         configFile.write(Data(toByteArray()))
         //        configFile.closeFile()
@@ -205,12 +197,12 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     func printState() {
         if !logger { return }
         var result = """
-                    *******************************************************************************************************************
+                    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                     FileDepth: \(depth)
                     blockFactor: \(blockFactor)
                     addressary: \(addressary)
                     blockCount: \(blockCount)
-                    ----------------------
+                    - - - - - - - - - - - - - - - - - - - - - - -
                     """
         for i in 0..<blockCount {
             try! dataFile.seek(toOffset: UInt64(Block<T>.instantiate(blockFactor).byteSize * i))
@@ -219,7 +211,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             result.append("\n\t Block(\(UInt64(Block<T>.instantiate(blockFactor).byteSize * i))):\n")
             result.append(block.toString())
         }
-        result.append("\n*******************************************************************************************************************")
+        result.append("\n")
+        result.append("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         print(result)
     }
     

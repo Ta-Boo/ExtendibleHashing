@@ -44,7 +44,7 @@ class UdajovkyTests: XCTestCase {
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 2)
         
         var uniques : [Int] = []
-        let range = 1...120
+        let range = 1...1000
         for i in range {
             uniques.append(i)
         }

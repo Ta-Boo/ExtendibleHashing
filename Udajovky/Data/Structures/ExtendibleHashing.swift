@@ -15,7 +15,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     var blockCount = 0
     let configFile: FileHandle
     let dataFile: FileHandle
-    let logger = true
+    let logger = false
     
     //MARK: Public interface 🔓🔓🔓
     
@@ -139,9 +139,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     private func addBlock(_ depth: Int = 1) -> Int {
-        print(dataFile.offsetInFile)
         let address = try! dataFile.seekToEnd()
-        print(dataFile.offsetInFile)
         
         let block = Block<T>(blockFactor: blockFactor, depth: depth)
         dataFile.write(Data(block.toByteArray()))

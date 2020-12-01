@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class Block<T: Storable> {
+final class Block<T> where T: Storable, T: Hashable {
     
     let blockFactor: Int
     var depth: Int
@@ -34,6 +34,14 @@ final class Block<T: Storable> {
     func add(_ element: T) {
         records[validCount] = element
         validCount += 1
+    }
+    
+    func delete(_ element: T) {
+        let index = records.firstIndex(where: { $0.equals(to: element)})!
+        records[index] = records[validCount - 1]
+        records[validCount - 1] = T.instantiate()
+        validCount -= 1
+        
     }
     
     func save(with filehandle: FileHandle, at address: Int) {

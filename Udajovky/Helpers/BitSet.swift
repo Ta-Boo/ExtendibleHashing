@@ -5,6 +5,7 @@ extension Int {
     var bitSet: BitSet {
         get {
             let str = String(self, radix: 2)
+//            let size = 8
             let size = 16
             var  result = BitSet(size: size)
 //            for (index, char) in str.enumerated() {

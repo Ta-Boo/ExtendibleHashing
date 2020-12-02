@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension Array {
     public mutating func safeAppend(_ newElement: Element?) {
         if let element = newElement {
@@ -28,18 +27,34 @@ extension Array {
     }
     
     
+    
+    
 }
 
-extension Array where Element:Equatable {
-    func removeDuplicates() -> [Element] {
-        var result = [Element]()
+extension Array where Element: BlockInfo {
+    var uniqueReferences : [Element] {
+        get {
+            var result = [Element]()
 
-        for value in self {
-            if result.contains(value) == false {
-                result.append(value)
+            for value in self {
+                if !result.contains(where: {$0 === value }) {
+                    result.append(value)
+                }
+            }
+            return result
+        }
+    }
+    
+    
+    internal mutating func replaceReferences(toBeReplaced: Int, with: Int) {
+        var indexes: [Int] = []
+        for i in 0..<count {
+            if self[i] === self[toBeReplaced] {
+                indexes.append(i)
             }
         }
-
-        return result
+        for i in indexes {
+            self[i] = self[with]
+        }
     }
 }

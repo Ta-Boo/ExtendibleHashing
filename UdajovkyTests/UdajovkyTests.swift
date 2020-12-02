@@ -10,7 +10,7 @@ import XCTest
 
 class UdajovkyTests: XCTestCase {
     let staticProperties = [
-        Property(registerNumber: 0, id: 0, description: "Žilina", position: GPS(lat: 43.123, long: 164.3291)),
+        Property(registerNumber: 0, id: 1, description: "Žilina", position: GPS(lat: 43.123, long: 164.3291)),
         Property(registerNumber: 1, id: 100, description: "Košice", position: GPS(lat: 43.123, long: 364.3291)),
         Property(registerNumber: 2, id: 149, description: "Martin", position: GPS(lat: 13.123, long: 634.3291)),
         Property(registerNumber: 3, id: 187, description: "Levice", position: GPS(lat: 43.123, long: 624.3291)),
@@ -20,13 +20,19 @@ class UdajovkyTests: XCTestCase {
         Property(registerNumber: 7, id: 108, description: "Nitra", position: GPS(lat: 15.123, long: 564.3291)),
         Property(registerNumber: 8, id: 0, description: "Poprad", position: GPS(lat: 11.123, long: 664.3291)),
         Property(registerNumber: 9, id: 100, description: "Lučenec", position: GPS(lat: 11.123, long: 664.3291)),
-        Property(registerNumber: 9, id: 233, description: "Zvolen", position: GPS(lat: 11.123, long: 664.3291)),
-        Property(registerNumber: 9, id: 240, description: "Prešov", position: GPS(lat: 11.123, long: 664.3291)),
-        Property(registerNumber: 9, id: 183, description: "Púchov", position: GPS(lat: 11.123, long: 664.3291)),
-        Property(registerNumber: 9, id: 15, description: "Ilava", position: GPS(lat: 11.123, long: 664.3291)),
-        Property(registerNumber: 9, id: 60, description: "Brezno", position: GPS(lat: 11.123, long: 664.3291)),
+        Property(registerNumber: 10, id: 233, description: "Zvolen", position: GPS(lat: 11.123, long: 664.3291)),
+        Property(registerNumber: 11, id: 240, description: "Prešov", position: GPS(lat: 11.123, long: 664.3291)),
+        Property(registerNumber: 12, id: 183, description: "Púchov", position: GPS(lat: 11.123, long: 664.3291)),
+        Property(registerNumber: 13, id: 15, description: "Ilava", position: GPS(lat: 11.123, long: 664.3291)),
+        Property(registerNumber: 14, id: 60, description: "Brezno", position: GPS(lat: 11.123, long: 664.3291)),
     ]
     
+    func testMemory() {
+        var ahoj = BlockInfo()
+        ahoj = BlockInfo()
+        ahoj = BlockInfo()
+        
+    }
     func testStaticInsertAndFind() {
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5, delete: true)
         for property in staticProperties {
@@ -40,21 +46,38 @@ class UdajovkyTests: XCTestCase {
     }
     
     func testStaticDelete() {
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "delete_test", blockFactor: 5, delete: true)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "delete_test", blockFactor: 5, delete: true, logger: false)
         
         for property in staticProperties {
             extensibleHashing.add(property)
+            extensibleHashing.printState(headerOnly: false)
         }
         extensibleHashing.save()
-        var shouldFind = staticProperties
-        for property in staticProperties {
-            extensibleHashing.delete(property)
-            shouldFind = shouldFind.filter{ !$0.equals(to:property) }
-            for foundable in shouldFind {
-                _ = extensibleHashing.find(foundable)!
-            }
+//        extensibleHashing.shrinkAddressary()
+//        extensibleHashing.printState(headerOnly: false)
+        extensibleHashing.printState(headerOnly: false)
+
+        var foundables = staticProperties
+        for i in [8,9,10,11,3] {
+            let name = staticProperties[i].description
+            print("deleting: \(name)")
+            extensibleHashing.delete(staticProperties[i])
+            extensibleHashing.printState(headerOnly: false)
+//            foundables.pop(at: i)
+//            for foundable in foundables {
+//                _ = extensibleHashing.find(foundable)!
+//            }
         }
-        extensibleHashing.printState()
+       
+//        var shouldFind = staticProperties
+//        for property in staticProperties {
+//            extensibleHashing.delete(property)
+//            shouldFind = shouldFind.filter{ !$0.equals(to:property) }
+//            for foundable in shouldFind {
+//                _ = extensibleHashing.find(foundable)!
+//            }
+//        }
+//        extensibleHashing.printState()
     }
     
     func testRandomDelete() {
@@ -90,6 +113,11 @@ class UdajovkyTests: XCTestCase {
     }
     
     func testRandomOperations() {
+        var array: [Int] = []
+        var sorted = Array(array.sorted().reversed())
+        let index = sorted.index(where: { $0 < 4 }) ?? 0
+            sorted.insert(4, at: index)
+        print(sorted)
         var generator = SeededGenerator(seed: UInt64(2))
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5)
         
@@ -98,7 +126,7 @@ class UdajovkyTests: XCTestCase {
         var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
         
-        for i in 1...8000 {
+        for i in 1...1000 {
             let probability = Double.random(in: 0...1, using: &generator)
             print(i, probability)
             let registerNumber = randoms.popLast()!
@@ -114,9 +142,6 @@ class UdajovkyTests: XCTestCase {
                 _ = extensibleHashing.find(actualProperties.randomElement(using: &generator)!)!
             }
         }
-        
-        
-        
         
     }
     
@@ -138,6 +163,7 @@ class UdajovkyTests: XCTestCase {
             extensibleHashing.add(property)
         }
         extensibleHashing.save()
+        extensibleHashing.printState()
         
         for (i, property) in insertedProperties.enumerated() {
             if i % 100 == 0 {print("tested: \(i)/2_000")}
@@ -158,8 +184,8 @@ class UdajovkyTests: XCTestCase {
         var generator = SeededGenerator(seed: UInt64(123))
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "debug", blockFactor: 5)
         
-        let repetitions = 1...1000
-        var randoms = Array(0...65535)
+        let repetitions = 1...50
+        var randoms = Array(0...255)
         randoms.shuffle(using: &generator)
         
         var insertedProperties: [Property] = []
@@ -176,6 +202,7 @@ class UdajovkyTests: XCTestCase {
             let found = extensibleHashing.find(property)!
             XCTAssert(found.equals(to: property))
         }
+        extensibleHashing.printState(headerOnly: false)
     }
     
     func wrappedTestLoad() {

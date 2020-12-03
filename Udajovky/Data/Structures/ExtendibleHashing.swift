@@ -22,6 +22,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     var blockCount = 0
     let configFile: FileHandle
     let dataFile: FileHandle
+    let overflowDataFile: FileHandle
     let logger: Bool
     
     //MARK: Public interface 🔓🔓🔓
@@ -33,10 +34,12 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         self.blockFactor = blockFactor
         let filePath = FileManager.path(to: "\(fileName).hsh")
         let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
+        let overflowFilePath = FileManager.path(to: "\(fileName)-overflow.hsh")
         
         if delete {
             try? FileManager.default.removeItem(atPath: filePath)
             try? FileManager.default.removeItem(atPath: configFilePath)
+            try? FileManager.default.removeItem(atPath: overflowFilePath)
         }
         
         if !FileManager.default.fileExists(atPath: filePath) {
@@ -45,12 +48,14 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             
             self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
             self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
+            self.overflowDataFile = FileHandle(forUpdatingAtPath: overflowFilePath)!
             
             addressary.append(BlockInfo(address: addBlock(), neigbourAddress: -1, recordsCount: 0, depth: 1))
             addressary.append(BlockInfo(address: addBlock(), neigbourAddress: -1, recordsCount: 0, depth: 1))
         } else {
             self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
             self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
+            self.overflowDataFile = FileHandle(forUpdatingAtPath: overflowFilePath)!
             load()
         }
     }
@@ -66,13 +71,15 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
         let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
         self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
+        let overflowFilePath = FileManager.path(to: "\(fileName)-overflow.hsh")
+        self.overflowDataFile = FileHandle(forUpdatingAtPath: overflowFilePath)!
         self.logger = false
         self.freeAddresses = freeAddresses
     }
     
     public func add(_ element: T) {
         var inProgress = true
-        debug(logger, "💉💉💉Inserting: \(element.name) - \(element.hash.toDecimal(depth: 8)) hash: \(element.hash.desc) key: \(element.hash.toDecimal(depth: depth)) 💉💉💉")
+        debug(logger, "💉💉💉Inserting: \(element.name) - \(element.hash.toRealDecimal()) hash: \(element.hash.desc) key: \(element.hash.toDecimal(depth: depth)) 💉💉💉")
         
         
         while inProgress {
@@ -85,13 +92,13 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                     depth += 1
                     debug(logger, "🔥🔥🔥 depth updated: \(depth)  🔥🔥🔥")
                 }
-                debug(logger, "❌❌❌ splitting \(blockInfo.address) because of : \(element.name) - \(element.hash.toDecimal(depth: 8)) ❌❌❌")
+                debug(logger, "❌❌❌ splitting \(blockInfo.address) because of : \(element.name) - \(element.hash.toRealDecimal()) ❌❌❌")
                 split(block, at: blockInfo.address)
                 
             } else {
                 addToBlock(element: element, block: block, at: blockInfo.address)
                 block.save(with: dataFile, at: blockInfo.address)
-                debug(logger, "💉✅💉 inserted: \(element.name) - \(element.hash.toDecimal(depth: 8))  hash:  \(element.hash.desc)   partialHash:  \(element.hash.toDecimal(depth: depth)) at  \(blockInfo) 💉✅💉")
+                debug(logger, "💉✅💉 inserted: \(element.name) - \(element.hash.toRealDecimal())  hash:  \(element.hash.desc)   partialHash:  \(element.hash.toDecimal(depth: depth)) at  \(blockInfo) 💉✅💉")
                 inProgress = false
             }
         }
@@ -104,42 +111,39 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     public func delete(_ element: T) {
-        debug(logger, "🗑🗑🗑 deleting \(element.desc) 🗑🗑🗑")
         let hash = element.hash.toDecimal(depth: depth)
         var blockInfo = addressary[hash]
         let block = getBlock(by: blockInfo.address)  //🗄🗄🗄🗄🗄🗄
+        debug(logger, "🗑🗑🗑 deleting \(element.desc) from block: \(blockInfo.address) \n🗑🗑🗑")
         if !block.records.contains(where: { $0.equals(to: element) }) {
             fatalError("You are trying to delete an element, which is not present in the file!")
         }
-        
+//        recalculateNeighbourhoods()
+
         if blockInfo.neigbourAddress == -1 {
             deleteFromBlock(element, block: block, at: blockInfo.address)
             block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄
+            recalculateNeighbourhoods()
             return
         }
-        let secondBlock = getBlock(by: blockInfo.neigbourAddress) //🗄🗄🗄🗄🗄🗄
         
         let neighbourBlockInfo = addressary.first(where: { $0.address == blockInfo.neigbourAddress })!
         deleteFromBlock(element, block: block, at: blockInfo.address)
         blockInfo = addressary[hash]
         var merged = false
-        if blockInfo.recordsCount + neighbourBlockInfo.recordsCount == blockFactor {
-            if blockInfo.neigbourAddress != neighbourBlockInfo.address {fatalError()}
-            if blockInfo.address != neighbourBlockInfo.neigbourAddress {fatalError()}
-            if blockInfo.address == neighbourBlockInfo.address {fatalError()}
+        if blockInfo.recordsCount + neighbourBlockInfo.recordsCount <= blockFactor {
+            let secondBlock = getBlock(by: blockInfo.neigbourAddress) //🗄🗄🗄🗄🗄🗄
             mergeBlocks(first: block,
                         firstAddress: blockInfo.address,
                         second: secondBlock,
                         secondAddress: blockInfo.neigbourAddress)//🗄🗄🗄🗄🗄🗄 once durring method call
             merged = true
+            recalculateNeighbourhoods()
         }
-//        if block.validCount == 0 || secondBlock.validCount == 0 {
-//            blockCount -= 1
-//        }
         if !merged {
             block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄 once durring method call
         }
-        //        secondBlock.save(with: dataFile, at: blockInfo.neigbourAddress) // save only for debugging
+        recalculateNeighbourhoods()
     }
     
     func mergeBlocks(first: Block<T>, firstAddress: Int, second: Block<T>, secondAddress: Int) {
@@ -148,6 +152,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         let secondaryBlock = firstAddress > secondAddress ? first : second
         let baseAddress = min(firstAddress, secondAddress)
         let secondaryAddress = max(firstAddress, secondAddress)
+        debug(logger, "🍡🍡🍡Merging block(\(secondaryAddress)) into block(\(baseAddress)🍡🍡🍡")
+
         
         let records = Array(secondaryBlock.records.prefix(secondaryBlock.validCount))
         
@@ -156,10 +162,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         
         
         for record in records {
-            //            addToBlock(element: record, block: baseBlock, at: baseAddress)
+            debug(logger, "🚡🚡🚡 Moving Record \(record.hash.toRealDecimal()), hash:  \(record.hash.desc) from block(\(secondaryAddress)) to block(\(baseAddress) 🚡🚡🚡")
             addToBlock(element: record, block: baseBlock, at: baseAddress)
-            //            baseBlock.add(record)
-            //            secondaryBlock.delete(record)
             deleteFromBlock(record, block: secondaryBlock, at: secondaryAddress)
         }
         let addressaryIndex = addressary.firstIndex(where: { $0.address == baseAddress})!
@@ -170,6 +174,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                                      with: addressary.firstIndex(where: { $0.address == baseAddress})!)
         baseBlock.depth -= 1
         baseBlock.save(with: dataFile, at: baseAddress)//🗄🗄🗄🗄🗄🗄
+        secondaryBlock.save(with: dataFile, at: secondaryAddress)//🗄🗄🗄🗄🗄🗄
         if !addressary.uniqueReferences.contains(where: { $0.depth == (baseBlock.depth + 1) }) {
             shrinkAddressary()
         }
@@ -177,9 +182,15 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     func shrinkAddressary() {
+        debug(logger, "📭📭📭 Shrinking addressary 📭📭📭")
+        var result = ""
+        for adress in addressary {
+            result.append(adress.desc)
+        }
+        debug(logger, result)
         //TODO: RECALCULATE NEIGHBOURS
         depth -= 1
-        printState()
+//        printState()
         var changes: [Int] = []
         var previuousAddress = -1
         for i in 0..<addressary.count {
@@ -201,8 +212,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                 addressary.remove(at: i)
             }
         }
-        recalculateNeighbourhoods()
-        printState()
         
     }
     
@@ -222,6 +231,22 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                 }
             }
         }
+//        printState()
+//        for (index, blockInfo) in addressary.enumerated() {
+//            if blockInfo.neigbourAddress != -1 {
+//                let neighbourIndex = index % 2 == 0 ? index+1 : index-1
+//                let neighbour = addressary[neighbourIndex]
+//                if blockInfo.recordsCount + neighbour.recordsCount == 0 {
+//                    mergeBlocks(first: getBlock(by: blockInfo.address),
+//                                firstAddress: blockInfo.address,
+//                                second: getBlock(by: neighbour.address),
+//                                secondAddress: neighbour.address)
+//                    printState()
+//
+//                    
+//                }
+//            }
+//        }
     }
     
     func addToBlock(element: T, block: Block<T>, at address: Int) {
@@ -256,10 +281,10 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         let newBlockIndex = addressary.firstIndex { $0.address == newAddress }!
         let oldBlockIndex = addressary.firstIndex { $0.address == oldAddress }!
         
-        let newRecords = block.records.filter{ $0.hash.isSet(block.depth - 1)}
+        let newRecords = block.records.filter{ $0.hash.isSetReversed(block.depth - 1)}
         
         for record in newRecords {
-            debug(logger, "🚡🚡🚡 Moving Record \(record.name) - \(record.hash.toDecimal(depth: 8)) = hash:  \(record.hash.desc) value: \(record.hash.toDecimal(depth: depth)) from blockIndex:  \(oldBlockIndex)  at address: \(oldAddress) to blockIndex:  \(newBlockIndex) address: \(newAddress) 🚡🚡🚡")
+            debug(logger, "🚡🚡🚡 Moving Record \(record.name) - \(record.hash.toRealDecimal()) = hash:  \(record.hash.desc) value: \(record.hash.toDecimal(depth: depth)) from blockIndex:  \(oldBlockIndex)  at address: \(oldAddress) to blockIndex:  \(newBlockIndex) address: \(newAddress) 🚡🚡🚡")
             addToBlock(element: record, block: newBlock, at: newAddress)
             deleteFromBlock(record, block: block, at: oldAddress)
         }

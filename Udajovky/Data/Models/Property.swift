@@ -58,6 +58,14 @@ extension Property: Hashable {
         return id == other.id
     }
     
+    func fullEquals(to other: Property) -> Bool {
+        return  registerNumber == other.registerNumber
+            && id == other.id
+            && description == other.description
+            && position.lat == other.position.lat
+            && position.long == other.position.long
+    }
+    
     
 }
 

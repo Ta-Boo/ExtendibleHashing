@@ -9,7 +9,7 @@ extension Int {
 //            let size = 16
             var  result = BitSet(size: size)
 //            for (index, char) in str.enumerated() {
-            for (index, char) in str.enumerated() {
+            for (index, char) in str.prefix(size).enumerated() {
                 if char == "1" {
                     result.set(index)
                 }

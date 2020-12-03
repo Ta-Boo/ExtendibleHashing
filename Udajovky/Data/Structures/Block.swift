@@ -6,13 +6,22 @@
 //
 
 import Foundation
+class AddressedBlock<T> where T: Hashable, T: Storable  {
+    let address: Int
+    let block: Block<T>
+
+    internal init(address: Int, block: Block<T>) {
+        self.address = address
+        self.block = block
+    }
+}
 
 final class Block<T> where T: Storable, T: Hashable {
-    
     let blockFactor: Int
     var depth: Int
     var records: [T]
     var validCount: Int
+    
     var isFull: Bool {
         get {
             return  validCount == blockFactor
@@ -48,8 +57,6 @@ final class Block<T> where T: Storable, T: Hashable {
         do {
             try filehandle.seek(toOffset: UInt64(address))
             try filehandle.write(contentsOf: Data(toByteArray()))
-//            filehandle.write
-            
         } catch {
             fatalError("Failed to save block of data")
         }

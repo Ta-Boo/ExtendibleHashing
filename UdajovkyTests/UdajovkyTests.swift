@@ -67,6 +67,8 @@ class UdajovkyTests: XCTestCase {
 //        }
     }
     func testBitset() {
+        var array: [Int] = []
+        print(array[0])
         let bitset = 320.bitSet
         print(bitset.isSet(2))
         print(bitset.isSetReversed(1))
@@ -175,12 +177,11 @@ class UdajovkyTests: XCTestCase {
         
     }
     
-
     func testInsertAndFind() {
         var generator = SeededGenerator(seed: UInt64(123))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 10)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 8, logger: false)
         
-        let repetitions = 1...2_000
+        let repetitions = 1...10_000
         var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
         
@@ -188,15 +189,17 @@ class UdajovkyTests: XCTestCase {
         for i in repetitions {
             if i % 100 == 0 {print("Inserted: \(i)/2_000")}
             let registerNumber = randoms.popLast()!
+//            print(i, registerNumber)
             let property = Property(registerNumber: registerNumber, id: registerNumber, description: "asdadasdad", position: GPS(lat: 1, long: 1))
             insertedProperties.append(property)
             extensibleHashing.add(property)
+            let ahoj = "asd"
         }
         extensibleHashing.save()
         extensibleHashing.printState()
         
         for (i, property) in insertedProperties.enumerated() {
-            if i % 100 == 0 {print("tested: \(i)/2_000")}
+            if i % 1 == 0 {print("tested: \(i)/2_000")}
 
             let found = extensibleHashing.find(property)!
             XCTAssert(found.equals(to: property))

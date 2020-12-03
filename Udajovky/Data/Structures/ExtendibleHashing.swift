@@ -143,11 +143,43 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         }
     }
     
-    func addBlockToOverFlow() -> AddressedBlock<T> {
+    private func addBlockToOverFlow() -> AddressedBlock<T> {
         let address = Int(overflowDataFile.seekToEndOfFile()) //WARNING: Be careful about cutting ❗️
         overflowingAddressary.append(BlockInfo(address: address, neigbourAddress: -1, recordsCount: 0, depth: 0, nextBlockAddress: -1))
         let block = Block<T>(blockFactor: blockFactor, depth: 0)
         return AddressedBlock(address: address, block: block)
+    }
+    
+    private func expandAddressary() {
+        var newAdressary: [BlockInfo] = []
+        for blockInfo in addressary {
+            newAdressary.append(blockInfo)
+            newAdressary.append(blockInfo)
+        }
+        self.addressary = newAdressary
+    }
+    
+    private func split(_ block: Block<T>, at oldAddress: Int){
+        block.depth += 1
+        addressary.first(where: {$0.address == oldAddress})!.depth += 1
+        
+        let newAddress = addBlock(block.depth)
+        reAdress(from: oldAddress, to: newAddress, depth: block.depth)
+        
+        let newBlock = getBlock(by: newAddress, from: dataFile)
+        let newBlockIndex = addressary.firstIndex { $0.address == newAddress }!
+        let oldBlockIndex = addressary.firstIndex { $0.address == oldAddress }!
+        
+        let newRecords = block.records.filter{ $0.hash.isSetReversed(block.depth - 1)}
+        
+        for record in newRecords {
+            debug(logger, "🚡🚡🚡 Moving Record \(record.name) - \(record.hash.toRealDecimal()) = hash:  \(record.hash.desc) value: \(record.hash.toDecimal(depth: depth)) from blockIndex:  \(oldBlockIndex)  at address: \(oldAddress) to blockIndex:  \(newBlockIndex) address: \(newAddress) 🚡🚡🚡")
+            addToBlock(element: record, block: newBlock, at: newAddress)
+            deleteFromBlock(record, block: block, at: oldAddress)
+        }
+        
+        newBlock.save(with: dataFile, at: newAddress)
+        block.save(with: dataFile, at: oldAddress)
     }
     
     //MARK: FIND
@@ -177,6 +209,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         }
         return result
     }
+    
     //MARK: DELETE
     public func delete(_ element: T) {
         let hash = element.hash.toDecimal(depth: depth)
@@ -186,7 +219,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         if !block.records.contains(where: { $0.equals(to: element) }) {
             fatalError("You are trying to delete an element, which is not present in the file!")
         }
-//        recalculateNeighbourhoods()
 
         if blockInfo.neigbourAddress == -1 {
             deleteFromBlock(element, block: block, at: blockInfo.address)
@@ -300,6 +332,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         }
     }
     
+    
+    //MARK: OVERFLOW HELPERS
     func addToOverFlowingBlock(element: T, block: Block<T>, at address: Int) {
         block.add(element)
         overflowingAddressary.first(where: { $0.address == address })!.recordsCount += 1
@@ -319,42 +353,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         block.delete(element)
         addressary[addressary.firstIndex(where: { $0.address == address })!].recordsCount -= 1
     }
-    
-    
-    private func expandAddressary() {
-        var newAdressary: [BlockInfo] = []
-        for blockInfo in addressary {
-            newAdressary.append(blockInfo)
-            newAdressary.append(blockInfo)
-        }
-        self.addressary = newAdressary
-    }
-    
-    
-    private func split(_ block: Block<T>, at oldAddress: Int){
-        block.depth += 1
-        addressary.first(where: {$0.address == oldAddress})!.depth += 1
         
-        let newAddress = addBlock(block.depth)
-        reAdress(from: oldAddress, to: newAddress, depth: block.depth)
-        
-        let newBlock = getBlock(by: newAddress, from: dataFile)
-        let newBlockIndex = addressary.firstIndex { $0.address == newAddress }!
-        let oldBlockIndex = addressary.firstIndex { $0.address == oldAddress }!
-        
-        let newRecords = block.records.filter{ $0.hash.isSetReversed(block.depth - 1)}
-        
-        for record in newRecords {
-            debug(logger, "🚡🚡🚡 Moving Record \(record.name) - \(record.hash.toRealDecimal()) = hash:  \(record.hash.desc) value: \(record.hash.toDecimal(depth: depth)) from blockIndex:  \(oldBlockIndex)  at address: \(oldAddress) to blockIndex:  \(newBlockIndex) address: \(newAddress) 🚡🚡🚡")
-            addToBlock(element: record, block: newBlock, at: newAddress)
-            deleteFromBlock(record, block: block, at: oldAddress)
-        }
-        
-        newBlock.save(with: dataFile, at: newAddress)
-        block.save(with: dataFile, at: oldAddress)
-    }
-    
-    
+    //MARK: HELPERS
     private func addBlock(_ depth: Int = 1) -> Int {
         let address = freeAddresses.popLast() ?? Int(try! dataFile.seekToEnd()) //WARNING: Be careful about cutting ❗️
         //        let address = Int(try! dataFile.seekToEnd())
@@ -426,6 +426,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         self.depth = other.depth
     }
     
+    //MARK: DEBUGGING  🐞
     func printState(headerOnly: Bool = false) {
         let debugFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("\(fileName)-DEBUG.hsh")
         
@@ -450,7 +451,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
             return
         }
         for i in 0..<blockCount {
-            let offset = Block<T>.instantiate(blockFactor).byteSize * i
             dataFile.seek(toFileOffset: UInt64(Block<T>.instantiate(blockFactor).byteSize * i))
             let bytes = [UInt8](dataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
             let block =  Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
@@ -466,7 +466,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         }
         
         for i in 0..<overflowingAddressary.count {
-            let offset = Block<T>.instantiate(blockFactor).byteSize * i
             overflowDataFile.seek(toFileOffset: UInt64(Block<T>.instantiate(blockFactor).byteSize * i))
             let bytes = [UInt8](overflowDataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
             let block =  Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
@@ -475,16 +474,11 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         }
         result.append(overflowingHeader)
         
-        
-        
         try! result.write(to: debugFilePath, atomically: true, encoding: .utf8)
     }
     
-    
-    //MARK: Testing  🧪🧪🧪
-    
 }
-
+    //MARK: STORING
 extension ExtensibleHashing: Storable {
     var desc: String {
         "asd"
@@ -542,6 +536,4 @@ extension ExtensibleHashing: Storable {
     static func instantiate() -> ExtensibleHashing {
         return ExtensibleHashing(fileName: "", blockFactor: 0) // Dummy method 
     }
-    
-    
 }

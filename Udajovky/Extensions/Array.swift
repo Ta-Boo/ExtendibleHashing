@@ -31,6 +31,22 @@ extension Array {
     
 }
 
+extension Array where Element : Comparable {
+    func insertionIndex(of value: Element) -> Index {
+        var slice : SubSequence = self[...]
+
+        while !slice.isEmpty {
+            let middle = slice.index(slice.startIndex, offsetBy: slice.count / 2)
+            if value > slice[middle] {
+                slice = slice[..<middle]
+            } else {
+                slice = slice[index(after: middle)...]
+            }
+        }
+        return slice.startIndex
+    }
+}
+
 extension Array where Element: BlockInfo {
     var uniqueReferences : [Element] {
         get {

@@ -11,7 +11,7 @@ import XCTest
 class UdajovkyTests: XCTestCase {
     let staticProperties = [
         Property(registerNumber: 0, id: 1, description: "Žilina", position: GPS(lat: 43.123, long: 164.3291)),
-        Property(registerNumber: 1, id: 100, description: "Košice", position: GPS(lat: 43.123, long: 364.3291)),
+        Property(registerNumber: 1, id: 101, description: "Košice", position: GPS(lat: 43.123, long: 364.3291)),
         Property(registerNumber: 2, id: 149, description: "Martin", position: GPS(lat: 13.123, long: 634.3291)),
         Property(registerNumber: 3, id: 187, description: "Levice", position: GPS(lat: 43.123, long: 624.3291)),
         Property(registerNumber: 4, id: 165, description: "Trnava", position: GPS(lat: 53.123, long: 614.3291)),
@@ -26,13 +26,7 @@ class UdajovkyTests: XCTestCase {
         Property(registerNumber: 13, id: 15, description: "Ilava", position: GPS(lat: 11.123, long: 664.3291)),
         Property(registerNumber: 14, id: 60, description: "Brezno", position: GPS(lat: 11.123, long: 664.3291)),
     ]
-    
-    func testMemory() {
-        var ahoj = BlockInfo()
-        ahoj = BlockInfo()
-        ahoj = BlockInfo()
-        
-    }
+
     func testStaticInsertAndFind() {
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5, delete: true)
         for property in staticProperties {
@@ -46,78 +40,63 @@ class UdajovkyTests: XCTestCase {
     }
     
     func testStaticDelete() {
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "delete_test", blockFactor: 5, delete: true, logger: false)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "delete_test", blockFactor: 5, delete: true, logger: true)
         
         for property in staticProperties {
             extensibleHashing.add(property)
             extensibleHashing.printState(headerOnly: false)
         }
         extensibleHashing.save()
-//        extensibleHashing.shrinkAddressary()
-//        extensibleHashing.printState(headerOnly: false)
         extensibleHashing.printState(headerOnly: false)
 
         var foundables = staticProperties
-        for i in [8,9,10,11,3] {
+        for i in 0...14 {
             let name = staticProperties[i].description
-            print("deleting: \(name)")
+            print("Deleting: \(name)")
             extensibleHashing.delete(staticProperties[i])
             extensibleHashing.printState(headerOnly: false)
-//            foundables.pop(at: i)
-//            for foundable in foundables {
-//                _ = extensibleHashing.find(foundable)!
-//            }
         }
-       
-//        var shouldFind = staticProperties
-//        for property in staticProperties {
-//            extensibleHashing.delete(property)
-//            shouldFind = shouldFind.filter{ !$0.equals(to:property) }
-//            for foundable in shouldFind {
-//                _ = extensibleHashing.find(foundable)!
-//            }
+        
+//        for i in [8,9] {
+//            let name = staticProperties[i].description
+//            print("Inserting: \(name)")
+//            extensibleHashing.add(staticProperties[i])
+//            extensibleHashing.printState(headerOnly: false)
 //        }
-//        extensibleHashing.printState()
     }
     
     func testRandomDelete() {
         var generator = SeededGenerator(seed: UInt64(1))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5)
-        let repetitions = 1...1700
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5, delete: true, logger: false)
+        let repetitions = 1...240
         let maxRep = repetitions.max()!
-        var randoms = Array(0...65535)
+        var randoms = Array(0...250)
+//        var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
 
         var insertedProperties: [Property] = []
-        for i in repetitions {
+        for index in repetitions {
+            if index % 100 == 0 {print("I: \(index)/\(maxRep)")}
 
             let registerNumber = randoms.popLast()!
-            let property = Property(registerNumber: registerNumber, id: registerNumber, description: "asdadasdad", position: GPS(lat: 1, long: 1))
+            let property = Property(registerNumber: registerNumber,
+                                    id: registerNumber,
+                                    description: "asdadasdad",
+                                    position: GPS(lat: 1, long: 1))
             insertedProperties.append(property)
             extensibleHashing.add(property)
         }
-        
-        var shouldFind = insertedProperties
-        for (index, property) in insertedProperties.enumerated() {
-            if index % 10 == 0 {print("\(index)/\(maxRep)")}
+        extensibleHashing.printState()
 
+        for (index, property) in insertedProperties.enumerated() {
+            if index % 100 == 0 {print("D: \(index)/\(maxRep)")}
             extensibleHashing.delete(property)
-            shouldFind = shouldFind.filter{ $0 !== property }
-            if index % 21 == 0 {
-                for foundable in shouldFind {
-                    _ = extensibleHashing.find(foundable)!
-                }
-            }
         }
-        
+//        extensibleHashing.blockCount = 18
+        extensibleHashing.printState()
     }
     
     func testRandomOperations() {
-        var array: [Int] = []
-        var sorted = Array(array.sorted().reversed())
-        let index = sorted.index(where: { $0 < 4 }) ?? 0
-            sorted.insert(4, at: index)
-        print(sorted)
         var generator = SeededGenerator(seed: UInt64(2))
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5)
         
@@ -126,15 +105,15 @@ class UdajovkyTests: XCTestCase {
         var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
         
-        for i in 1...1000 {
+        for i in 1...3000 {
             let probability = Double.random(in: 0...1, using: &generator)
             print(i, probability)
             let registerNumber = randoms.popLast()!
             let property = Property(registerNumber: registerNumber, id: registerNumber, description: "asdadasdad", position: GPS(lat: 1, long: 1))
-            if (0..<0.65).contains(probability) || actualProperties.isEmpty {
+            if (0..<0.45).contains(probability) || actualProperties.isEmpty {
                 actualProperties.append(property)
                 extensibleHashing.add(property)
-            } else if (0.65 ..< 0.95).contains(probability) {
+            } else if (0.45 ..< 0.90).contains(probability) {
                 actualProperties.shuffle(using: &generator)
                 let toBeRemoved = actualProperties.popLast()!
                 extensibleHashing.delete(toBeRemoved)

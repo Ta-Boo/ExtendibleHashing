@@ -58,18 +58,10 @@ class UdajovkyTests: XCTestCase {
             extensibleHashing.delete(staticProperties[i])
             extensibleHashing.printState(headerOnly: false)
         }
-        
-//        for i in [8,9] {
-//            let name = staticProperties[i].description
-//            print("Inserting: \(name)")
-//            extensibleHashing.add(staticProperties[i])
-//            extensibleHashing.printState(headerOnly: false)
-//        }
     }
     func testBitset() {
-        var array: [Int] = []
-        print(array[0])
-        let bitset = 320.bitSet
+        let bitset = 65530.bitSet
+        print(bitset.desc)
         print(bitset.isSet(2))
         print(bitset.isSetReversed(1))
         print(bitset.toDecimal(depth: 2))
@@ -77,7 +69,7 @@ class UdajovkyTests: XCTestCase {
     }
     
     func testRandomDelete() {
-        for i in 0...3000 {
+        for i in 3000...3000 {
             var generator = SeededGenerator(seed: UInt64(1))
             let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 3, delete: true, logger: true)
             let repetitions = 12...39
@@ -113,11 +105,11 @@ class UdajovkyTests: XCTestCase {
     
     func testDelete() {
             var generator = SeededGenerator(seed: UInt64(1))
-            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 3, delete: true, logger: false)
-        let repetitions = 0...1000
+            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 2, delete: true, logger: false)
+            let repetitions = 0...100
             let maxRep = repetitions.max()!
             var randoms = Array(0...maxRep)
-    //        var randoms = Array(0...65535)
+//            var randoms = Array(0...65535)
             randoms.shuffle(using: &generator)
 
             var insertedProperties: [Property] = []
@@ -132,7 +124,7 @@ class UdajovkyTests: XCTestCase {
                 insertedProperties.append(property)
                 extensibleHashing.add(property)
             }
-            extensibleHashing.printState()
+        extensibleHashing.printState()
 
             for (index, property) in insertedProperties.enumerated() {
                 if index % 100 == 0 {print("D: \(index)/\(maxRep)")}
@@ -179,28 +171,26 @@ class UdajovkyTests: XCTestCase {
     
     func testInsertAndFind() {
         var generator = SeededGenerator(seed: UInt64(123))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 8, logger: false)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5, logger: false)
         
-        let repetitions = 1...10_000
-        var randoms = Array(0...65535)
+        let repetitions = 1...5_000
+        let max = repetitions.upperBound
+        var randoms = Array(0...max)
         randoms.shuffle(using: &generator)
         
         var insertedProperties: [Property] = []
         for i in repetitions {
             if i % 100 == 0 {print("Inserted: \(i)/2_000")}
             let registerNumber = randoms.popLast()!
-//            print(i, registerNumber)
             let property = Property(registerNumber: registerNumber, id: registerNumber, description: "asdadasdad", position: GPS(lat: 1, long: 1))
             insertedProperties.append(property)
             extensibleHashing.add(property)
-            let ahoj = "asd"
         }
         extensibleHashing.save()
         extensibleHashing.printState()
         
-        for (i, property) in insertedProperties.enumerated() {
-            if i % 1 == 0 {print("tested: \(i)/2_000")}
-
+        for (i, property) in insertedProperties.reversed().enumerated() {
+            if i % 100 == 0 {print("tested: \(i)/2_000")}
             let found = extensibleHashing.find(property)!
             XCTAssert(found.equals(to: property))
         }

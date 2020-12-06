@@ -60,6 +60,13 @@ class UdajovkyTests: XCTestCase {
         }
     }
     func testBitset() {
+        let array = [BlockInfo(),BlockInfo()]
+        print(array[0].address)
+        let blockInfo = array[0]
+        array[0].address = 99990
+        print(blockInfo.address)
+        
+        
         let bitset = 65530.bitSet
         print(bitset.desc)
         print(bitset.isSet(2))
@@ -71,8 +78,9 @@ class UdajovkyTests: XCTestCase {
     func testRandomDelete() {
         for i in 3000...3000 {
             var generator = SeededGenerator(seed: UInt64(1))
-            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 3, delete: true, logger: true)
-            let repetitions = 12...39
+            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 2, delete: true, logger: true)
+//            let repetitions = 12...39
+            let repetitions = 0...30
             let maxRep = repetitions.max()!
             var randoms = Array(0...maxRep)
     //        var randoms = Array(0...65535)
@@ -93,7 +101,10 @@ class UdajovkyTests: XCTestCase {
             extensibleHashing.printState()
 
             for (index, property) in insertedProperties.enumerated() {
-                if index % 100 == 0 {print("D: \(index)/\(maxRep)")}
+                if index % 23 == 0 {
+                    print("D: \(index)/\(maxRep)")
+                    
+                }
                 extensibleHashing.delete(property)
                 extensibleHashing.printState()
 

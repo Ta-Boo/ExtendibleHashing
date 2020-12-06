@@ -173,42 +173,59 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
     //MARK: DELETE
     public func delete(_ element: T) {
         //TODO: shrinking file ❗️
+        printState()
         let hash = element.hash.toDecimal(depth: depth)
         var blockInfo = addressary[hash]
         var block = loadBlock(by: blockInfo.address, from: dataFile)  //🗄🗄🗄🗄🗄🗄
         debug(logger, "🗑🗑🗑 deleting \(element.desc) from block: \(blockInfo.address) \n🗑🗑🗑")
+       
+        //If no data found, seek for element in overflowing
         if !block.records.contains(where: { $0.equals(to: element) }) {
             if deleteFromOverflowing(element) {
                 fatalError("You are trying to delete an element, which is not present in the file!")
-                
             }
-            return
+            fatalError("Not found")
         }
         
+        //If there is no neighbour, simply remove record and save
         if blockInfo.neigbourAddress == -1 {
             deleteFromBlock(element, block: block, at: blockInfo.address)
             block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄
-            recalculateNeighbourhoods()
             return
         }
         
-        let neighbourBlockInfo = addressary.first(where: { $0.address == blockInfo.neigbourAddress })!
+        
+        var neighbourBlockInfo = addressary.first(where: { $0.address == blockInfo.neigbourAddress })!
         deleteFromBlock(element, block: block, at: blockInfo.address)
-        blockInfo = addressary[hash]
-        var merged = false
-        if blockInfo.recordsCount + neighbourBlockInfo.recordsCount <= blockFactor {
+        
+        //Save block and return if merging is not possible
+        if blockInfo.recordsCount + neighbourBlockInfo.recordsCount > blockFactor {
+            block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄 once durring method call
+            return
+        }
+        //Merging cycle
+        while blockInfo.recordsCount + neighbourBlockInfo.recordsCount <= blockFactor {
             let secondBlock = loadBlock(by: blockInfo.neigbourAddress, from: dataFile) //🗄🗄🗄🗄🗄🗄
-            mergeBlocks(first: block,
+            printState()
+
+            let addressedBlock = mergeBlocks(first: block,
                         firstAddress: blockInfo.address,
                         second: secondBlock,
                         secondAddress: blockInfo.neigbourAddress)//🗄🗄🗄🗄🗄🗄 once durring method call
-            merged = true
+            block = addressedBlock.block
+            printState()
             recalculateNeighbourhoods()
+            printState()
+
+            block.save(with: dataFile, at: addressedBlock.address) // maybe useless
+            blockInfo = addressary.first(where: { $0.address == addressedBlock.address})!
+            if blockInfo.neigbourAddress == -1 {
+                return
+            }
+            neighbourBlockInfo = addressary.first(where: { $0.address == blockInfo.neigbourAddress})!
         }
-        if !merged {
-            block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄 once durring method call
-        }
-        recalculateNeighbourhoods()
+//        block.save(with: dataFile, at: addressedBlock.address)
+
     }
     
     private func deleteFromOverflowing(_ element: T) -> Bool {
@@ -326,12 +343,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
     }
     
     private func shrinkAddressary() {
-        debug(logger, "📭📭📭 Shrinking addressary 📭📭📭")
-        var result = ""
-        for adress in addressary {
-            result.append(adress.desc)
-        }
-        debug(logger, result)
         //TODO: RECALCULATE NEIGHBOURS
         depth -= 1
         var changes: [Int] = []
@@ -355,14 +366,26 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
                 addressary.remove(at: i)
             }
         }
+        debug(logger, "📭📭📭 Shrinked addressary 📭📭📭")
+        var result = ""
+        for adress in addressary {
+            result.append(adress.desc)
+        }
+        debug(logger, result)
     }
     
-    private func mergeBlocks(first: Block<T>, firstAddress: Int, second: Block<T>, secondAddress: Int) {
+    private func mergeBlocks(first: Block<T>, firstAddress: Int, second: Block<T>, secondAddress: Int) -> AddressedBlock<T> {
         blockCount -= 1
         let baseBlock = firstAddress < secondAddress ? first : second
         let secondaryBlock = firstAddress > secondAddress ? first : second
         let baseAddress = min(firstAddress, secondAddress)
         let secondaryAddress = max(firstAddress, secondAddress)
+        
+//        let baseBlock = first
+//        let secondaryBlock = second
+//        let baseAddress = firstAddress
+//        let secondaryAddress = secondAddress
+        
         debug(logger, "🍡🍡🍡Merging block(\(secondaryAddress)) into block(\(baseAddress)🍡🍡🍡")
         
         
@@ -380,15 +403,16 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         let addressaryIndex = addressary.firstIndex(where: { $0.address == baseAddress})!
         addressary[addressaryIndex].neigbourAddress = -1
         addressary[addressaryIndex].depth -= 1
+        baseBlock.depth -= 1
         
         addressary.replaceReferences(toBeReplaced: addressary.firstIndex(where: { $0.address == secondaryAddress})!,
                                      with: addressary.firstIndex(where: { $0.address == baseAddress})!)
-        baseBlock.depth -= 1
         baseBlock.save(with: dataFile, at: baseAddress)//🗄🗄🗄🗄🗄🗄
         secondaryBlock.save(with: dataFile, at: secondaryAddress)//🗄🗄🗄🗄🗄🗄
         if !addressary.uniqueReferences.contains(where: { $0.depth == (baseBlock.depth + 1) }) {
             shrinkAddressary()
         }
+        return AddressedBlock(address: baseAddress, block: baseBlock)
     }
     
     private func recalculateNeighbourhoods() {

@@ -5,8 +5,8 @@ extension Int {
     var bitSet: BitSet {
         get {
             let str = String(self, radix: 2)
-            let size = 8
-//            let size = 16
+//            let size = 8
+            let size = 16
             var  result = BitSet(size: size)
 //            for (index, char) in str.enumerated() {
             for (index, char) in str.reversed().prefix(size).enumerated() {
@@ -83,7 +83,7 @@ public struct BitSet {
         var result = 0
         for index in 0 ..< depth {
 //            let addition = Int(pow(2, Double(index))) * (isSet(depth - index - 1) ? 1 : 0)
-            let addition = Int(pow(2, Double(index))) * (isSet(size - depth + index) ? 1 : 0)
+            let addition = Int(pow(2, Double(index))) * (isSet(depth - index - 1) ? 1 : 0)
             result += addition
         }
         return result
@@ -97,6 +97,18 @@ public struct BitSet {
             result += addition
         }
         return result
+    }
+    
+    func differInLast(depth: Int, other: BitSet) -> Bool {
+        for index in (0 ..< depth - 1){
+            if isSet(index) != other.isSet(index) {
+                return false
+            }
+        }
+        if isSet(depth - 1) != other.isSet(depth - 1) {
+            return true
+        }
+        return false
     }
     
 

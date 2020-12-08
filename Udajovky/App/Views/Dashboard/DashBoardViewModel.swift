@@ -36,7 +36,11 @@ class DashBoardViewModel: ObservableObject {
     
     func fetchAllData() {
         allData = PDAState.shared.allData
-        
+    }
+    
+    func delete() {
+        PDAState.shared.delete(Property(registerNumber: Int(idHolder)!, id: Int(idHolder)!, description: "", position: GPS(lat: 0, long: 0)))
+        fetchAllData()
     }
     
     func findObjects() {

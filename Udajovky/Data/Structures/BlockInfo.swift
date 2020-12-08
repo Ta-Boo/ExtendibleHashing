@@ -36,7 +36,7 @@ extension BlockInfo: Storable {
     
     var desc: String {
         return
-            " \n\t(address: \(address)  recordsCount: \(recordsCount) depth: \(depth)), next: \(nextBlockAddress)"
+            " \t[address: \(address)  recordsCount: \(recordsCount) depth: \(depth), next: \(nextBlockAddress)]\n"
     }
     
     func toByteArray() -> [UInt8] {

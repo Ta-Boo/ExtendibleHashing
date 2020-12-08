@@ -27,39 +27,47 @@ struct MainView: View {
                     VStack {
                         HStack {
                             Text("Blocks in main: \(viewModel.allData.mainBlocks.count)")
+                            Spacer()
                             Text("Blocks in owerflow: \(viewModel.allData.overflowBlocks.count)")
+                                .padding(.leading, 20)
                             Spacer()
                         }
                         Spacer()
-                        List() {
-                            Section(header: Text("Main").font(.title).foregroundColor(.white)) {
-                                HStack{
-                                    ForEach(viewModel.allData.mainAddressary.map({$0.address}), id: \.self) { address in
-                                        Text(String(address))
-                                    }
-                                }
-                                Text("Blocks:").font(.headline).foregroundColor(.white)
-                                ForEach(viewModel.allData.mainBlocks.map({ $0.toString() }), id: \.self) { address in
-                                    Text(String(address))
-                                }
-                            }
-                            Section(header: Text("Owerflow").font(.title).foregroundColor(.white)) {
-                                HStack{
-                                    ForEach(viewModel.allData.overflowAddressary.map({$0.address}), id: \.self) { address in
-                                        Text(String(address))
-                                    }
-                                }
+                        HStack {
+                            List() {
+                                Section(header: Text("Main").font(.title).foregroundColor(.white)) {
+//                                    HStack{
+                                        ForEach(viewModel.allData.mainAddressary.map({$0.desc}), id: \.self) { address in
+                                            Text(String(address)).lineLimit(nil)
+                                        }
+//                                    }
                                     Text("Blocks:").font(.headline).foregroundColor(.white)
-                                    ForEach(viewModel.allData.overflowBlocks.map({ $0.toString() }), id: \.self) { address in
+                                    ForEach(viewModel.allData.mainBlocks.map({ $0.toString() }), id: \.self) { address in
                                         Text(String(address))
                                     }
+                                }
                             }
-                            //                        ForEach()
+                            .listStyle(SidebarListStyle())
+                            .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.4), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom))
+                            .cornerRadius(16)
+
+                            List() {
+                                Section(header: Text("Owerflow").font(.title).foregroundColor(.white)) {
+                                        ForEach(viewModel.allData.overflowAddressary.map({$0.desc}), id: \.self) { address in
+                                            Text(String(address))
+                                        }
+                                        Text("Blocks:").font(.headline).foregroundColor(.white)
+                                        ForEach(viewModel.allData.overflowBlocks.map({ $0.toString() }), id: \.self) { address in
+                                            Text(String(address))
+                                        }
+                                }
+                                //                        ForEach()
+                            }
+                            .listStyle(SidebarListStyle())
+                            .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.4), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom))
+                            .cornerRadius(16)
                         }
-                        .listStyle(SidebarListStyle())
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.4), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom))
-                        .cornerRadius(16)
-                        .padding(.vertical, 40)
+//                        .padding(.vertical, 40)
                     }
                     .frame(width: geometry.size.width / 4 * 3, height: geometry.size.height)
                     
@@ -79,31 +87,30 @@ struct MainView: View {
                             }
                             
                             Spacer().frame(height: 32)
-                            //                            Toggle("Bodové vyhľadávanie", isOn: $viewModel.idHolder)
                             
                             
                             HStack{
                                 Spacer()
-                                Button("􀈑") {
-                                    //delete
+                                Button("􀈑 Delete") {
+                                    viewModel.delete()
                                 }
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
-                                .frame(width: 75)
-                                .padding(.horizontal, 0)
-                                Button("􀊫") {
+//                                .frame(width: 75)
+                                Button("􀊫 Find") {
                                     viewModel.findObjects()
                                 }
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
-                                .frame(width: 75)
-                                .padding(.horizontal, 0)
+//                                .frame(width: 75)
                             }
                             
                             Spacer()
-                            
-                            Image("owl")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width / 8)
+                            HStack {
+                                Spacer()
+                                Image("owl")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: geometry.size.width / 8)
+                            }
                             Button("Generate") {
                                 viewModel.generate()
                             }

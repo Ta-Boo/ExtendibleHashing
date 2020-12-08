@@ -13,7 +13,7 @@ struct GPS {
 }
 
 
-final class Property {
+final class Property: Identifiable {
     
     let registerNumber: Int
     let id: Int
@@ -36,7 +36,7 @@ final class Property {
         }
     }
     
-    init(registerNumber: Int = 0, id: Int = 0, description: String = "", position: GPS = GPS(lat: 0, long: 0)) {
+    init(registerNumber: Int = -1, id: Int = -1, description: String = "", position: GPS = GPS(lat: 0, long: 0)) {
         self.registerNumber = registerNumber
         self.id = id
         self.description = description

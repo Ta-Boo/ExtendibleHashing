@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		B30BAFE02554004A0055CCDF /* RoundedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30BAFDF2554004A0055CCDF /* RoundedButtonStyle.swift */; };
 		B30BAFE6255408BF0055CCDF /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30BAFE5255408BF0055CCDF /* List.swift */; };
-		B31635B8256C707300C4342F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31635B7256C707300C4342F /* MainView.swift */; };
+		B31635B8256C707300C4342F /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31635B7256C707300C4342F /* DashBoardView.swift */; };
 		B31635BC256C71B400C4342F /* BitSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31635BB256C71B400C4342F /* BitSet.swift */; };
 		B32119882551E9BF0079B449 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32119872551E9BF0079B449 /* Array.swift */; };
 		B3263A7C2545B55600AE558F /* CustomColorToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3263A7B2545B55600AE558F /* CustomColorToggleStyle.swift */; };
@@ -34,7 +34,12 @@
 		B3457FDC254B7B8D00E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
 		B3457FE1254B7C5300E9420F /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3457FDB254B7B8D00E9420F /* String.swift */; };
 		B35D4F4225757E7300497649 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3773C552575795500B3D187 /* BlockInfo.swift */; };
+		B3603880257FA07A00DFF93A /* PlaceFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B360387E257FA07A00DFF93A /* PlaceFormViewModel.swift */; };
+		B3603881257FA07A00DFF93A /* PlaceFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B360387F257FA07A00DFF93A /* PlaceFormView.swift */; };
 		B3773C562575795500B3D187 /* BlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3773C552575795500B3D187 /* BlockInfo.swift */; };
+		B3B40664257F0107003FEF05 /* PDAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B40663257F0107003FEF05 /* PDAState.swift */; };
+		B3B40667257F05CA003FEF05 /* PDAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B40663257F0107003FEF05 /* PDAState.swift */; };
+		B3B4066B257F07B4003FEF05 /* DashBoardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B4066A257F07B4003FEF05 /* DashBoardViewModel.swift */; };
 		B3B65B87253325F9000C9442 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B65B86253325F9000C9442 /* Color.swift */; };
 		B3D026D125273672009E63C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D026D025273672009E63C3 /* AppDelegate.swift */; };
 		B3D026D525273672009E63C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D026D425273672009E63C3 /* Assets.xcassets */; };
@@ -58,7 +63,7 @@
 /* Begin PBXFileReference section */
 		B30BAFDF2554004A0055CCDF /* RoundedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButtonStyle.swift; sourceTree = "<group>"; };
 		B30BAFE5255408BF0055CCDF /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
-		B31635B7256C707300C4342F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		B31635B7256C707300C4342F /* DashBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardView.swift; sourceTree = "<group>"; };
 		B31635BB256C71B400C4342F /* BitSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitSet.swift; sourceTree = "<group>"; };
 		B32119872551E9BF0079B449 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		B3263A7B2545B55600AE558F /* CustomColorToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColorToggleStyle.swift; sourceTree = "<group>"; };
@@ -75,7 +80,11 @@
 		B33FB0AC2544A33700B3AB7E /* NSTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextField.swift; sourceTree = "<group>"; };
 		B33FB0B12544A37B00B3AB7E /* SeededGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededGenerator.swift; sourceTree = "<group>"; };
 		B3457FDB254B7B8D00E9420F /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		B360387E257FA07A00DFF93A /* PlaceFormViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceFormViewModel.swift; sourceTree = "<group>"; };
+		B360387F257FA07A00DFF93A /* PlaceFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceFormView.swift; sourceTree = "<group>"; };
 		B3773C552575795500B3D187 /* BlockInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockInfo.swift; sourceTree = "<group>"; };
+		B3B40663257F0107003FEF05 /* PDAState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDAState.swift; sourceTree = "<group>"; };
+		B3B4066A257F07B4003FEF05 /* DashBoardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardViewModel.swift; sourceTree = "<group>"; };
 		B3B65B86253325F9000C9442 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		B3D026CD25273672009E63C3 /* Udajovky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Udajovky.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3D026D025273672009E63C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -126,7 +135,8 @@
 		B3263A7F2545BB1E00AE558F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B31635B7256C707300C4342F /* MainView.swift */,
+				B3603884257FA08100DFF93A /* Dashboard */,
+				B360387D257FA07A00DFF93A /* AddObject */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -166,6 +176,24 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		B360387D257FA07A00DFF93A /* AddObject */ = {
+			isa = PBXGroup;
+			children = (
+				B360387E257FA07A00DFF93A /* PlaceFormViewModel.swift */,
+				B360387F257FA07A00DFF93A /* PlaceFormView.swift */,
+			);
+			path = AddObject;
+			sourceTree = "<group>";
+		};
+		B3603884257FA08100DFF93A /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				B31635B7256C707300C4342F /* DashBoardView.swift */,
+				B3B4066A257F07B4003FEF05 /* DashBoardViewModel.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
 		B3A17A1B2536210400AB87F2 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +203,7 @@
 				B3D026D925273672009E63C3 /* Main.storyboard */,
 				B3D026DC25273672009E63C3 /* Info.plist */,
 				B3D026DD25273672009E63C3 /* Udajovky.entitlements */,
+				B3B40663257F0107003FEF05 /* PDAState.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -367,6 +396,7 @@
 				B3FA6DB72551EBD000EAE655 /* Array.swift in Sources */,
 				B32D4A3F256D831E004C7F0C /* ExtendibleHashing.swift in Sources */,
 				B35D4F4225757E7300497649 /* BlockInfo.swift in Sources */,
+				B3B40667257F05CA003FEF05 /* PDAState.swift in Sources */,
 				B3D8DB4425740203000DAC3E /* BitSet.swift in Sources */,
 				B3263ABC25475E1000AE558F /* SeededGenerator.swift in Sources */,
 				B3457FE1254B7C5300E9420F /* String.swift in Sources */,
@@ -382,6 +412,7 @@
 			files = (
 				B32D4A48256DA3CD004C7F0C /* Property.swift in Sources */,
 				B32D4A53256DBBB0004C7F0C /* Hashable.swift in Sources */,
+				B3603881257FA07A00DFF93A /* PlaceFormView.swift in Sources */,
 				B32D4A5F256EE88F004C7F0C /* Block.swift in Sources */,
 				B33FB0B22544A37B00B3AB7E /* SeededGenerator.swift in Sources */,
 				B3D026D125273672009E63C3 /* AppDelegate.swift in Sources */,
@@ -393,13 +424,16 @@
 				B32D4A5A256DBC27004C7F0C /* Storable.swift in Sources */,
 				B31635BC256C71B400C4342F /* BitSet.swift in Sources */,
 				B3B65B87253325F9000C9442 /* Color.swift in Sources */,
-				B31635B8256C707300C4342F /* MainView.swift in Sources */,
+				B31635B8256C707300C4342F /* DashBoardView.swift in Sources */,
+				B3B40664257F0107003FEF05 /* PDAState.swift in Sources */,
+				B3603880257FA07A00DFF93A /* PlaceFormViewModel.swift in Sources */,
 				B3FA6DBB255324B000EAE655 /* EditableTextView.swift in Sources */,
 				B3263A7C2545B55600AE558F /* CustomColorToggleStyle.swift in Sources */,
 				B32D4A4D256DB91F004C7F0C /* ByteArray.swift in Sources */,
 				B3773C562575795500B3D187 /* BlockInfo.swift in Sources */,
 				B32D4A3E256D831E004C7F0C /* ExtendibleHashing.swift in Sources */,
 				B30BAFE6255408BF0055CCDF /* List.swift in Sources */,
+				B3B4066B257F07B4003FEF05 /* DashBoardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

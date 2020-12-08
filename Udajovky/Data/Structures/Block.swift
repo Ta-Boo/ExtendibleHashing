@@ -14,9 +14,17 @@ class AddressedBlock<T> where T: Hashable, T: Storable  {
         self.address = address
         self.block = block
     }
+    
+    func toString() -> String{
+        return """
+               Block(\(address)):
+                \(block.toString())
+               """
+    }
 }
 
-final class Block<T> where T: Storable, T: Hashable {
+final class Block<T>: Identifiable where T: Storable, T: Hashable {
+    let id = UUID()
     let blockFactor: Int
     var depth: Int
     var records: [T]
@@ -43,6 +51,11 @@ final class Block<T> where T: Storable, T: Hashable {
     func add(_ element: T) {
         records[validCount] = element
         validCount += 1
+    }
+    func popLastRecord() -> T{
+        let result = records[validCount - 1]
+        validCount -= 1
+        return result
     }
     
     func delete(_ element: T) {
@@ -76,7 +89,7 @@ extension Block: Blockable {
         return Block(blockFactor: blockFactor)
     }
     
-    private func recordsToString() -> String {
+     func recordsToString() -> String {
         var result = ""
         for record in records {
             result.append(record.desc)

@@ -13,7 +13,7 @@ func debug(_ logger: Bool, _ text: String) {
     }
 }
 
-final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
+final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     private var fileName: String
     var blockFactor: Int
     var addressary: [BlockInfo] = []
@@ -25,7 +25,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
     let dataFile: FileHandle
     let overflowDataFile: FileHandle
     let logger: Bool
-    let maxSize = 16
+    let maxSize = 4
     
     
     //Initial constructor
@@ -90,7 +90,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
             let block = loadBlock(by: blockInfo.address, from: dataFile)
             if block.isFull {
                 if block.depth == maxSize {
-                    fatalError()
                     addToOverflowing(element, starting: block, at: blockInfo.address)
                     return
                 }
@@ -103,6 +102,9 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
                 split(block, at: blockInfo.address)
                 
             } else {
+                if block.records.contains(where: {$0.equals(to: element)}) {
+                    fatalError("Same elements are prohibited in this structure")
+                }
                 addToBlock(element: element, block: block, at: blockInfo.address)
                 block.save(with: dataFile, at: blockInfo.address)
                 debug(logger, "💉✅💉 inserted: \(element.name) - \(element.hash.toRealDecimal())  hash:  \(element.hash.desc)   partialHash:  \(element.hash.toDecimal(depth: depth)) at  \(blockInfo) 💉✅💉")
@@ -174,58 +176,63 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
     //MARK: DELETE
     public func delete(_ element: T) {
         //TODO: shrinking file ❗️
-//        printState()
         let hash = element.hash.toDecimal(depth: depth)
         var blockInfo = addressary[hash]
         var block = loadBlock(by: blockInfo.address, from: dataFile)  //🗄🗄🗄🗄🗄🗄
         debug(logger, "🗑🗑🗑 deleting \(element.desc) from block: \(blockInfo.address) \n🗑🗑🗑")
        
+        
         //If no data found, seek for element in overflowing
-        if !block.records.contains(where: { $0.equals(to: element) }) {
-//            if deleteFromOverflowing(element) {
-//                fatalError("You are trying to delete an element, which is not present in the file!")
-//            }
-            fatalError("Not found")
+        if block.records.contains(where: { $0.equals(to: element) }) {
+            if blockInfo.nextBlockAddress != -1 {
+                deleteFromBlock(element, block: block, at: blockInfo.address)
+                deleteFromLastOverflowing(block: AddressedBlock(address: blockInfo.address, block: block), startingInfo: blockInfo, file: dataFile)
+                trimOverflowingIfPossible()
+                return
+            }
+        } else {
+            _ = deleteFromOverflowing(element)
+            trimOverflowingIfPossible()
+            return
         }
         
         //If there is no neighbour, simply remove record and save
         if getNeighbor(of: blockInfo) == nil {
             deleteFromBlock(element, block: block, at: blockInfo.address)
             block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄
+            trimIfPossible()
             return
         }
 
 
-//        var neighbourBlockInfo = getNeighbor(of: blockInfo)!
         deleteFromBlock(element, block: block, at: blockInfo.address)
+        
+        // check overflowing file
+        
 
         //Save block and return if merging is not possible
         if blockInfo.recordsCount + getNeighbor(of: blockInfo)!.recordsCount > blockFactor {
             block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄 once durring method call
+            trimIfPossible()
             return
         }
         //Merging cycle
         while blockInfo.recordsCount + getNeighbor(of: blockInfo)!.recordsCount <= blockFactor {
             let secondBlock = loadBlock(by: getNeighbor(of: blockInfo)!.address, from: dataFile) //🗄🗄🗄🗄🗄🗄
-//            printState()
 
             let addressedBlock = mergeBlocks(first: block,
                         firstAddress: blockInfo.address,
                         second: secondBlock,
                         secondAddress: getNeighbor(of: blockInfo)!.address)//🗄🗄🗄🗄🗄🗄 once durring method call
             block = addressedBlock.block
-//            printState()
-//            recalculateNeighbourhoods()
-//            printState()
 
             block.save(with: dataFile, at: addressedBlock.address) // maybe useless
             blockInfo = addressary.first(where: { $0.address == addressedBlock.address})!
             guard let _ = getNeighbor(of: blockInfo) else  {
+                trimIfPossible()
                 return
             }
-//            neighbourBlockInfo = addressary.first(where: { $0.address == blockInfo.neigbourAddress})!
         }
-//        block.save(with: dataFile, at: addressedBlock.address)
 
     }
     
@@ -255,32 +262,41 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
                 }
                 actualBlockInfo = overflowingAddressary.first(where: { $0.address == actualBlockInfo.nextBlockAddress})!
             } else {
-                //delete from block an merge
                 deleteFromOverFlowingBlock(element: element!, block: block, at: actualBlockInfo.address)
-                mergeOverflowingBlocks(block: AddressedBlock(address: actualBlockInfo.address, block: block), startingInfo: blockInfo)
+                deleteFromLastOverflowing(block: AddressedBlock(address: actualBlockInfo.address, block: block), startingInfo: actualBlockInfo, file: overflowDataFile)
+                trimOverflowingIfPossible()
                 return true
             }
         }
     }
     
-    private func mergeOverflowingBlocks(block: AddressedBlock<T>, startingInfo: BlockInfo) {
-        fatalError("Element is in overflowing file")
-        var freeCount = 0
-        var actualInfo = startingInfo
-        let freeCountInMainFile = blockFactor - startingInfo.recordsCount
-        var blockCount = 1
-        while true {
-            freeCount += (blockFactor - actualInfo.recordsCount)
-            if actualInfo.nextBlockAddress == -1 {
-                break
+    private func deleteFromLastOverflowing(block: AddressedBlock<T>, startingInfo: BlockInfo, file: FileHandle) {
+        var lastBlockInfo = startingInfo
+        var startIsLast = true
+        while lastBlockInfo.nextBlockAddress != -1 {
+            lastBlockInfo = overflowingAddressary.first(where: {$0.address == lastBlockInfo.nextBlockAddress})!
+            startIsLast = false
+        }
+        if startIsLast {
+            block.block.save(with: file, at: block.address)
+            trimOverflowingIfPossible()
+            if lastBlockInfo.recordsCount == 0 {
+                removeNextBlock(from: lastBlockInfo)
             }
-            blockCount += 1
-            actualInfo = overflowingAddressary.first(where: { $0.address == actualInfo.nextBlockAddress})!
+            return
         }
-        if freeCount == freeCountInMainFile {
-            //
+        let lastBlock = loadBlock(by: lastBlockInfo.address, from: overflowDataFile)
+        let toBeSwapped = popLastFromBlock(block: AddressedBlock(address: lastBlockInfo.address, block: lastBlock))
+        if file === dataFile {
+            addToBlock(element: toBeSwapped, block: block.block, at: block.address)
+        } else {
+            addToOverFlowingBlock(element: toBeSwapped, block: block.block, at: block.address)
         }
-        // po celej trase zistim volne miesta. Ak cislo % blockfactor == 0  prehodim  od konca zacnem prehadzovat zaznamy na prve pozicie ulozim blok a zmensim subor
+        trimOverflowingIfPossible()
+        if lastBlockInfo.recordsCount == 0 {
+            removeNextBlock(from: lastBlockInfo)
+        }
+        block.block.save(with: file, at: block.address)
     }
 
     //MARK: OVERFLOW HELPERS
@@ -303,6 +319,16 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
     
     
     //MARK: HELPERS
+    private func removeNextBlock(from actualBlock: BlockInfo) {
+        var previous = overflowingAddressary.first(where: {$0.nextBlockAddress == actualBlock.address}) ??
+            addressary.first(where: {$0.nextBlockAddress == actualBlock.address})!
+//        if actualBlock.recordsCount == 0 {
+//            previous = addressary.first(where: {$0.nextBlockAddress == actualBlock.address})!
+//        }
+        previous.nextBlockAddress = -1
+    }
+    
+    
     private func addToBlock(element: T, block: Block<T>, at address: Int) {
         block.add(element)
         addressary[addressary.firstIndex(where: { $0.address == address })!].recordsCount += 1
@@ -316,6 +342,14 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
 //            block.depth -= 1
 //            blockInAddressary.depth -= 1
 //        }
+    }
+    
+    private func popLastFromBlock(block: AddressedBlock<T>) -> T {
+        let blockInfo = overflowingAddressary.first(where: { $0.address == block.address})
+        blockInfo?.recordsCount -= 1
+        let result =  block.block.popLastRecord()
+        block.block.save(with: overflowDataFile, at: block.address)
+        return result
     }
     
     private func addBlock(_ depth: Int = 1) -> Int {
@@ -338,14 +372,13 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
     private func split(_ block: Block<T>, at oldAddress: Int){
         block.depth += 1
         addressary.first(where: {$0.address == oldAddress})!.depth += 1
-        
+
         let newAddress = addBlock(block.depth)
         reAdress(from: oldAddress, to: newAddress, depth: block.depth)
-        
+
         let newBlock = loadBlock(by: newAddress, from: dataFile)
         let newBlockIndex = addressary.firstIndex { $0.address == newAddress }!
         let oldBlockIndex = addressary.firstIndex { $0.address == oldAddress }!
-        
         let newRecords = block.records.filter{ $0.hash.isSet(block.depth - 1)}
         
         for record in newRecords {
@@ -356,6 +389,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         
         newBlock.save(with: dataFile, at: newAddress)
         block.save(with: dataFile, at: oldAddress)
+
     }
     
     private func shrinkAddressary() {
@@ -420,9 +454,12 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
 //        addressary[addressaryIndex].neigbourAddress = -1
         addressary[addressaryIndex].depth -= 1
         baseBlock.depth -= 1
+        let baseNeighbor = addressary.first(where: {$0.address == baseAddress})!.nextBlockAddress
+        let secondaryNeighbor = addressary.first(where: {$0.address == secondaryAddress})!.nextBlockAddress
         
         addressary.replaceReferences(toBeReplaced: addressary.firstIndex(where: { $0.address == secondaryAddress})!,
                                      with: addressary.firstIndex(where: { $0.address == baseAddress})!)
+        addressary.first(where: {$0.address == baseAddress})?.nextBlockAddress = max(baseNeighbor, secondaryNeighbor)
         baseBlock.save(with: dataFile, at: baseAddress)//🗄🗄🗄🗄🗄🗄
         secondaryBlock.save(with: dataFile, at: secondaryAddress)//🗄🗄🗄🗄🗄🗄
         if !addressary.uniqueReferences.contains(where: { $0.depth == (baseBlock.depth + 1) }) {
@@ -506,10 +543,62 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable, T: Property {
         self.depth = other.depth
     }
     
+    private func trimOverflowingIfPossible() {
+        while true {
+            guard let max = overflowingAddressary.max(by: {$0.address < $1.address})  else {
+                return
+            }
+            if max.recordsCount == 0 {
+                overflowingAddressary.remove(at: overflowingAddressary.firstIndex(where: {$0.address == max.address})!)
+            } else {
+                return
+            }
+        }
+//        overflowDataFile.truncateFile(atOffset: UInt64(max.address))
+    }
+    
+    private func trimIfPossible() {
+        var lastBlockAddress = Int(dataFile.seekToEndOfFile()) - Block<T>.instantiate(blockFactor).byteSize
+        while true {
+            if freeAddresses.isEmpty {
+                return
+            }
+            if freeAddresses[0] != lastBlockAddress {
+                return
+            }
+            dataFile.truncateFile(atOffset: UInt64(freeAddresses[0]))
+            freeAddresses.remove(at: 0)
+            lastBlockAddress = Int(dataFile.seekToEndOfFile()) - Block<T>.instantiate(blockFactor).byteSize
+        }
+    }
+    
     //MARK: DEBUGGING  🐞
+    
+    var allData: AllData<T> {
+        get {
+            var overflowBlocks: [AddressedBlock<T>] = []
+            var mainBlocks: [AddressedBlock<T>] = []
+            for i in 0..<overflowingAddressary.count {
+                let address = Block<T>.instantiate(blockFactor).byteSize * i
+                overflowDataFile.seek(toFileOffset: UInt64(address))
+                let bytes = [UInt8](overflowDataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
+                let block =  Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
+                overflowBlocks.append(AddressedBlock(address: address, block: block))
+            }
+            for i in 0..<blockCount {
+                let address = Block<T>.instantiate(blockFactor).byteSize * i
+                dataFile.seek(toFileOffset: UInt64(address))
+                let bytes = [UInt8](dataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
+                let block =  Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
+                mainBlocks.append(AddressedBlock(address: address, block: block))
+            }
+            
+            let result = AllData<T>(mainAddressary: addressary, overflowAddressary: overflowingAddressary, mainFreeAddresses: freeAddresses, overflowAddresses: freeAddresses, mainBlocks: mainBlocks, overflowBlocks: overflowBlocks)
+            return result
+        }
+    }
     func printState(headerOnly: Bool = false) {
         let debugFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("\(fileName)-DEBUG.hsh")
-        
         
         var addressaryPrint = ""
         for adress in addressary {

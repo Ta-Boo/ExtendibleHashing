@@ -27,7 +27,7 @@ class DashBoardViewModel: ObservableObject {
     
     var propertyToBeShown: Property? {
         get {
-            return PDAState.shared.find(Property(registerNumber: Int(idHolder)!, id: Int(idHolder)!, description: "", position: GPS(lat: 0, long: 0)))
+            return PDAState.shared.find(Property(registerNumber: Int(idHolder) ?? 0, id: Int(idHolder) ?? 0, description: "", position: GPS(lat: 0, long: 0)))
         }
     }
     

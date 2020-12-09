@@ -17,6 +17,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     private var fileName: String
     var depth = 1                                   // 1
     var blockFactor: Int                            // 2
+//    var blockFactorOverflowing: Int                            // 2
     var blockCount = 0                              // 3
     var maxSize: Int                                // 4
     var addressary: [BlockInfo] = []                // 5.1 ,5.2
@@ -104,6 +105,9 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             let blockInfo = addressary[hash]
             let block = loadBlock(by: blockInfo.address, from: dataFile)
             if block.isFull {
+                if chainContains(startingBlock: block, startingInfo: blockInfo, element: element){
+                    fatalError("Same elements are prohibited in this structure")
+                }
                 if block.depth == maxSize {
                     addToOverflowing(element, starting: block, at: blockInfo.address)
                     return
@@ -119,15 +123,33 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                 
             } else {
 
-                if block.records.contains(where: {$0.equals(to: element)}) {
-                    fatalError("Same elements are prohibited in this structure")
-                }
+//                if block.records.contains(where: {$0.equals(to: element)}) {
+//                }
                 addToBlock(element: element, block: block, at: blockInfo.address)
                 block.save(with: dataFile, at: blockInfo.address)
                 debug(logger, "💉✅💉 inserted: \(element.name) - \(element.hash.toRealDecimal())  hash:  \(element.hash.desc)   partialHash:  \(element.hash.toDecimal(depth: depth)) at  \(blockInfo.address) 💉✅💉")
                 inProgress = false
             }
         }
+    }
+    
+    private func chainContains(startingBlock: Block<T>, startingInfo: BlockInfo, element: T) -> Bool {
+        if startingBlock.records.contains(where: {$0.equals(to: element)}) {
+            return true
+        } else {
+            if startingInfo.nextBlockAddress == -1 {
+                return false
+            }
+            var blockInfo = startingInfo
+            while blockInfo.nextBlockAddress != -1 {
+                blockInfo = overflowingAddressary.first(where: {$0.address == blockInfo.nextBlockAddress})!
+                let block = loadBlock(by: blockInfo.address, from: overflowDataFile)
+                if block.records.contains(where: {$0.equals(to: element)}) {
+                    return true
+                }
+            }
+        }
+        return false
     }
     
     private func addToOverflowing(_ element: T, starting firstBlock: Block<T>, at address: Int) {
@@ -197,7 +219,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         var blockInfo = addressary[hash]
         var block = loadBlock(by: blockInfo.address, from: dataFile)  //🗄🗄🗄🗄🗄🗄
         debug(logger, "🗑🗑🗑 deleting \(element.desc) from block: \(blockInfo.address) \n🗑🗑🗑")
-       
         
         //If no data found, seek for element in overflowing
         if block.records.contains(where: { $0.equals(to: element) }) {
@@ -221,12 +242,8 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             return
         }
 
-
         deleteFromBlock(element, block: block, at: blockInfo.address)
         
-        // check overflowing file
-        
-
         //Save block and return if merging is not possible
         if blockInfo.recordsCount + getNeighbor(of: blockInfo)!.recordsCount > blockFactor {
             block.save(with: dataFile, at: blockInfo.address) //🗄🗄🗄🗄🗄🗄 once durring method call
@@ -576,8 +593,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         get {
             var overflowBlocks: [AddressedBlock<T>] = []
             var mainBlocks: [AddressedBlock<T>] = []
-            var fetchedOverflowing = 0
-            var overflowingJumps = 0
             var address = 0
             let blockSize = Block<T>.instantiate(blockFactor).byteSize
             while overflowDataFile.seekToEndOfFile() > address {

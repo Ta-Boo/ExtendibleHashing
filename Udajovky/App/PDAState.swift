@@ -33,7 +33,7 @@ class AllData<T> where T:Hashable, T:Storable {
 
 class PDAState {
     static let shared = PDAState()
-    var properties = ExtensibleHashing<Property>(fileName: "GPS_System", blockFactor: 3, maxDepth: 3, delete: false, logger: false)
+    var properties = ExtensibleHashing<Property>(fileName: "GPS_System", blockFactor: 3, maxDepth: 3, delete: false, logger: true)
     var allData : AllData<Property> {
         get {
             return properties.allData

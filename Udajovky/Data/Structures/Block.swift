@@ -67,13 +67,8 @@ final class Block<T>: Identifiable where T: Storable, T: Hashable {
     }
     
     func save(with filehandle: FileHandle, at address: Int) {
-        do {
-            try filehandle.seek(toOffset: UInt64(address))
-            try filehandle.write(contentsOf: Data(toByteArray()))
-        } catch {
-            fatalError("Failed to save block of data")
-        }
-        
+        try filehandle.seek(toFileOffset: UInt64(address))
+        try filehandle.write(Data(toByteArray()))
     }
 }
 

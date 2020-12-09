@@ -18,6 +18,8 @@ struct MainView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel = DashBoardViewModel()
     @State var wrongAttempt: Bool = false
+    @State private var showingAlert = false
+
     
     
     var body: some View {
@@ -36,11 +38,9 @@ struct MainView: View {
                         HStack {
                             List() {
                                 Section(header: Text("Main").font(.title).foregroundColor(.white)) {
-//                                    HStack{
-                                        ForEach(viewModel.allData.mainAddressary.map({$0.desc}), id: \.self) { address in
+                                        ForEach(viewModel.allData.mainAddressary.map({$0.toString()}), id: \.self) { address in
                                             Text(String(address)).lineLimit(nil)
                                         }
-//                                    }
                                     Text("Blocks:").font(.headline).foregroundColor(.white)
                                     ForEach(viewModel.allData.mainBlocks.map({ $0.toString() }), id: \.self) { address in
                                         Text(String(address))
@@ -61,7 +61,6 @@ struct MainView: View {
                                             Text(String(address))
                                         }
                                 }
-                                //                        ForEach()
                             }
                             .listStyle(SidebarListStyle())
                             .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.4), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom))
@@ -97,7 +96,8 @@ struct MainView: View {
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
 //                                .frame(width: 75)
                                 Button("􀊫 Find") {
-                                    viewModel.findObjects()
+                                    viewModel.activeSheet = .detail
+//                                    viewModel.findObjects()
                                 }
                                 .buttonStyle(RoundedBackgroundStyle(color: viewModel.isFilled ? Color.accent : Color.terciary))
 //                                .frame(width: 75)
@@ -156,9 +156,10 @@ struct MainView: View {
             case .placeForm:
                 PlaceFormView()
             case .detail:
-                EmptyView()
+                ShowDetail(viewModel: ShowDetailViewModel(property: viewModel.propertyToBeShown))
             }
         }
+        
         
     }
 }

@@ -25,7 +25,11 @@ class DashBoardViewModel: ObservableObject {
     @Published var allData: AllData<Property> = AllData(mainAddressary: [], overflowAddressary: [], mainFreeAddresses: [], overflowAddresses: [], mainBlocks: [], overflowBlocks: [])
     
     
-    var propertyToBeEdited: Property?
+    var propertyToBeShown: Property? {
+        get {
+            return PDAState.shared.find(Property(registerNumber: Int(idHolder)!, id: Int(idHolder)!, description: "", position: GPS(lat: 0, long: 0)))
+        }
+    }
     
     
     
@@ -48,7 +52,7 @@ class DashBoardViewModel: ObservableObject {
     
     func setUpEditViewModel(item: Property) {
         activeSheet = .detail
-        self.propertyToBeEdited = item
+//        self.propertyToBeEdited = item
     }
     
     func save() {

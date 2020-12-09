@@ -83,7 +83,9 @@ public struct BitSet {
         var result = 0
         for index in 0 ..< depth {
 //            let addition = Int(pow(2, Double(index))) * (isSet(depth - index - 1) ? 1 : 0)
-            let addition = Int(pow(2, Double(index))) * (isSet(depth - index - 1) ? 1 : 0)
+//            let addition = Int(pow(2, Double(index))) * (isSet(size - index - 1) ? 1 : 0)
+            let addition = Int(pow(2, Double(index))) * (isSet(size - depth + index) ? 1 : 0)
+
             result += addition
         }
         return result

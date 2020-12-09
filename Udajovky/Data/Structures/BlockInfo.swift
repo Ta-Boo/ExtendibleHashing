@@ -7,9 +7,17 @@
 
 import Foundation
 
+struct UIBlockInfo {
+    let blockInfo: BlockInfo
+    let neighbor: Int?
+    
+    func toString() -> String {
+        return blockInfo.toString(neighbor: neighbor)
+    }
+}
+
 final class BlockInfo {
     var address: Int
-//    var neigbourAddress: Int
     var nextBlockAddress: Int
     var recordsCount: Int
     var depth: Int
@@ -36,7 +44,12 @@ extension BlockInfo: Storable {
     
     var desc: String {
         return
-            " \t[address: \(address)  recordsCount: \(recordsCount) depth: \(depth), next: \(nextBlockAddress)]\n"
+            " \n\t[address: \(address)  recordsCount: \(recordsCount) depth: \(depth), next: \(nextBlockAddress)]"
+    }
+    
+    func toString(neighbor: Int?) -> String {
+        return
+            " \n\t[address: \(address)  recordsCount: \(recordsCount) depth: \(depth), next: \(nextBlockAddress), neighbor: \(neighbor ?? -1)]"
     }
     
     func toByteArray() -> [UInt8] {

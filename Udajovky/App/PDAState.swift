@@ -8,7 +8,12 @@
 import Foundation
 
 class AllData<T> where T:Hashable, T:Storable {
-    internal init(mainAddressary: [BlockInfo], overflowAddressary: [BlockInfo], mainFreeAddresses: [Int], overflowAddresses: [Int], mainBlocks: [AddressedBlock<T>], overflowBlocks: [AddressedBlock<T>]) {
+    internal init(mainAddressary: [UIBlockInfo],
+                  overflowAddressary: [BlockInfo],
+                  mainFreeAddresses: [Int],
+                  overflowAddresses: [Int],
+                  mainBlocks: [AddressedBlock<T>],
+                  overflowBlocks: [AddressedBlock<T>]) {
         self.mainAddressary = mainAddressary
         self.overflowAddressary = overflowAddressary
         self.mainFreeAddresses = mainFreeAddresses
@@ -17,7 +22,7 @@ class AllData<T> where T:Hashable, T:Storable {
         self.overflowBlocks = overflowBlocks
     }
     
-    let mainAddressary: [BlockInfo]
+    let mainAddressary: [UIBlockInfo]
     let overflowAddressary: [BlockInfo]
     let mainFreeAddresses: [Int]
     let overflowAddresses: [Int]
@@ -28,7 +33,7 @@ class AllData<T> where T:Hashable, T:Storable {
 
 class PDAState {
     static let shared = PDAState()
-    var properties = ExtensibleHashing<Property>(fileName: "GPS_System", blockFactor: 4)
+    var properties = ExtensibleHashing<Property>(fileName: "GPS_System", blockFactor: 3, maxDepth: 3,logger: false)
     var allData : AllData<Property> {
         get {
             return properties.allData
@@ -53,7 +58,7 @@ class PDAState {
     
     func generate() {
         var generator = SeededGenerator(seed: UInt64(123))
-        let repetitions = 1...20
+        let repetitions = 1...30
         let max = repetitions.upperBound
         var randoms = Array(0...max)
         randoms.shuffle(using: &generator)
@@ -62,7 +67,7 @@ class PDAState {
         for i in repetitions {
             if i % 100 == 0 {print("Inserted: \(i)/2_000")}
             let registerNumber = randoms.popLast()!
-            let property = Property(registerNumber: registerNumber, id: registerNumber, description: String.random(length: 23), position: GPS(lat: 1, long: 1))
+            let property = Property(registerNumber: Int.random(in: 0...33000), id: registerNumber, description: String.random(length: 23), position: GPS(lat: Double.random(in: -90...90), long: Double.random(in: -90...90)))
             insertedProperties.append(property)
             properties.add(property)
         }

@@ -15,18 +15,18 @@ func debug(_ logger: Bool, _ text: String) {
 
 final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     private var fileName: String
-    var blockFactor: Int
-    var addressary: [BlockInfo] = []
-    var freeAddresses: [Int] = []
-    var overflowingAddressary: [BlockInfo] = []
-    var freeAddressesOverflowing: [Int] = []
-    var depth = 1
-    var blockCount = 0
+    var depth = 1                                   // 1
+    var blockFactor: Int                            // 2
+    var blockCount = 0                              // 3
+    var maxSize: Int                                // 4
+    var addressary: [BlockInfo] = []                // 5.1 ,5.2
+    var freeAddresses: [Int] = []                   // 6.1, 6.2
+    var overflowingAddressary: [BlockInfo] = []     // 7.1, 7.2
+    var freeAddressesOverflowing: [Int] = []        // 8.1, 8.2
     let configFile: FileHandle
     let dataFile: FileHandle
     let overflowDataFile: FileHandle
     let logger: Bool
-    let maxSize: Int
     
     
     //Initial constructor
@@ -65,21 +65,32 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     // Loader Constructor
-    internal init(fileName: String, blockFactor: Int, addressary: [BlockInfo] = [], freeAddresses: [Int], blockCount: Int, depth: Int, maxDepth: Int) {
+    internal init(fileName: String,
+                  depth: Int,
+                  blockFactor: Int,
+                  blockCount: Int,
+                  maxSize: Int,
+                  addressary: [BlockInfo],
+                  freeAddresses: [Int],
+                  overflowingAddressary: [BlockInfo],
+                  freeAddressesOverflowing: [Int]) {
         self.fileName = fileName
-        self.blockFactor = blockFactor
-        self.addressary = addressary
-        self.blockCount = blockCount
         self.depth = depth
-        let filePath = FileManager.path(to: "\(fileName).hsh")
-        self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
-        let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
-        self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
-        let overflowFilePath = FileManager.path(to: "\(fileName)-overflow.hsh")
-        self.overflowDataFile = FileHandle(forUpdatingAtPath: overflowFilePath)!
-        self.logger = false
+        self.blockFactor = blockFactor
+        self.blockCount = blockCount
+        self.maxSize = maxSize
+        self.addressary = addressary
         self.freeAddresses = freeAddresses
-        self.maxSize = maxDepth
+        self.overflowingAddressary = overflowingAddressary
+        self.freeAddressesOverflowing = freeAddressesOverflowing
+        self.logger = false
+        
+        let filePath = FileManager.path(to: "\(fileName).hsh")
+        let configFilePath = FileManager.path(to: "\(fileName)-config.hsh")
+        let overflowFilePath = FileManager.path(to: "\(fileName)-overflow.hsh")
+        self.dataFile = FileHandle(forUpdatingAtPath: filePath)!
+        self.configFile = FileHandle(forUpdatingAtPath: configFilePath)!
+        self.overflowDataFile = FileHandle(forUpdatingAtPath: overflowFilePath)!
 
     }
     
@@ -505,10 +516,13 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     
     func save() {
         configFile.seek(toFileOffset: 0)
-        configFile.write(Data(toByteArray()))
+//        configFile.write(Data(toByteArray()))
+        let data = Data(toByteArray())
+        try! configFile.write(contentsOf: data)
     }
     
-    private func load() {
+    func load() {
+        configFile.seek(toFileOffset: 0)
         let data = configFile.readDataToEndOfFile()
         let bytes = [UInt8](data)
         let loaded = fromByteArray(array: bytes)
@@ -516,10 +530,14 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     }
     
     private func copy(other: ExtensibleHashing) {
-        self.fileName = other.fileName
+        self.depth = other.depth
         self.blockFactor = other.blockFactor
-        self.addressary = other.addressary
         self.blockCount = other.blockCount
+        self.maxSize = other.maxSize
+        self.addressary = other.addressary
+        self.freeAddresses = other.freeAddresses
+        self.overflowingAddressary = other.overflowingAddressary
+        self.freeAddressesOverflowing = other.freeAddressesOverflowing
         self.depth = other.depth
     }
     
@@ -529,12 +547,11 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                 return
             }
             if max.recordsCount == 0 {
+                overflowDataFile.truncateFile(atOffset: UInt64(max.address))
                 return
-//                overflowingAddressary.remove(at: overflowingAddressary.firstIndex(where: {$0.address == max.address})!)
             } else {
                 return
             }
-            //        overflowDataFile.truncateFile(atOffset: UInt64(max.address))
         }
     }
     
@@ -561,21 +578,19 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
             var mainBlocks: [AddressedBlock<T>] = []
             var fetchedOverflowing = 0
             var overflowingJumps = 0
-            while fetchedOverflowing < overflowingAddressary.count {
-                let address = Block<T>.instantiate(blockFactor).byteSize * overflowingJumps
-                overflowingJumps += 1
+            var address = 0
+            let blockSize = Block<T>.instantiate(blockFactor).byteSize
+            while overflowDataFile.seekToEndOfFile() > address {
+                overflowDataFile.seek(toFileOffset: UInt64(address))
+                let bytes = [UInt8](overflowDataFile.readData(ofLength: blockSize))
                 if overflowingAddressary.map({$0.address}).contains(address) {
-                    fetchedOverflowing += 1
-                    overflowDataFile.seek(toFileOffset: UInt64(address))
-                    let bytes = [UInt8](overflowDataFile.readData(ofLength: Block<T>.instantiate(blockFactor).byteSize))
                     let block =  Block<T>.instantiate(blockFactor).fromByteArray(array: bytes)
                     overflowBlocks.append(AddressedBlock(address: address, block: block))
                 }
-
+                address += blockSize
             }
             
-            var address = 0
-            let blockSize = Block<T>.instantiate(blockFactor).byteSize
+            address = 0
             while dataFile.seekToEndOfFile() > address {
                 dataFile.seek(toFileOffset: UInt64(address))
                 let bytes = [UInt8](dataFile.readData(ofLength: blockSize))
@@ -584,7 +599,6 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
                     mainBlocks.append(AddressedBlock(address: address, block: block))
                 }
                 address += blockSize
-
             }
             
             let result = AllData<T>(mainAddressary: addressary.map({UIBlockInfo(blockInfo: $0, neighbor: getNeighbor(of: $0)?.address)}),
@@ -656,34 +670,60 @@ extension ExtensibleHashing: Storable {
     }
     
     var byteSize: Int {
-        return 20*2 + 3*8 + 8*addressary.count
+        let basics = 4 * 8
+        let addressary = 8 + BlockInfo.instantiate().byteSize * self.addressary.count
+        let freeAddresses = 8 + 8 * self.freeAddresses.count
+        let addressaryOverflowing = 8 + BlockInfo.instantiate().byteSize * self.overflowingAddressary.count
+        let freeAddressesOverflowing = 8 + 8 * self.freeAddressesOverflowing.count
+        
+        return basics + addressary + freeAddresses + addressaryOverflowing + freeAddressesOverflowing
+//        return 20*2 + 3*8 + 8*addressary.count
     }
     
     func toByteArray() -> [UInt8] {
         var result: [UInt8] = []
-        result.append(contentsOf: depth.toByteArray())
-        result.append(contentsOf: blockFactor.toByteArray())
-        result.append(contentsOf: blockCount.toByteArray())
-        result.append(contentsOf: addressary.count.toByteArray())
+        result.append(contentsOf: depth.toByteArray())                              // 1
+        result.append(contentsOf: blockFactor.toByteArray())                        // 2
+        result.append(contentsOf: blockCount.toByteArray())                         // 3
+        result.append(contentsOf: maxSize.toByteArray())                            // 4
         
-        for adress in addressary {
+        result.append(contentsOf: addressary.count.toByteArray())                   // 5.1 --40b
+        for adress in addressary {                                                  // 5.2
+            result.append(contentsOf: adress.toByteArray())
+        }
+        
+        result.append(contentsOf: freeAddresses.count.toByteArray())                // 6.1
+        for adress in freeAddresses {                                               // 6.2
+            result.append(contentsOf: adress.toByteArray())
+        }
+        
+        result.append(contentsOf: overflowingAddressary.count.toByteArray())        // 7.1
+        for blockInfo in overflowingAddressary {                                    // 7.2
+            let bytes = blockInfo.toByteArray()
+            result.append(contentsOf: bytes)
+        }
+        
+        result.append(contentsOf: freeAddressesOverflowing.count.toByteArray())     // 8.1
+        for adress in freeAddressesOverflowing {                                    // 8.2
             result.append(contentsOf: adress.toByteArray())
         }
         return result
     }
     
     func fromByteArray(array: [UInt8]) -> ExtensibleHashing {
-        let depth = Int.fromByteArray(Array(array[0..<8]))
-        let blockFactor = Int.fromByteArray(Array(array[8..<16]))
-        let blockCount = Int.fromByteArray(Array(array[16..<24]))
-        let addressarySize = Int.fromByteArray(Array(array[24..<32]))
+        let depth = Int.fromByteArray(Array(array[0..<8]))              // 1
+        let blockFactor = Int.fromByteArray(Array(array[8..<16]))       // 2
+        let blockCount = Int.fromByteArray(Array(array[16..<24]))       // 3
+        let maxSize = Int.fromByteArray(Array(array[24..<32]))          // 4
         
+        let addressarySize = Int.fromByteArray(Array(array[32..<40]))   // 5.1
+                                                                        // 5.2
         var addressary: [BlockInfo] = []
-        var actualStart = 32
-        var actualEnd: Int
+        var actualStart = 40
+        var actualEnd = 0
         var previousBlockInfo = BlockInfo(address: -11, recordsCount: -11, depth: -11, nextBlockAddress: -11)
         for _ in 0..<addressarySize {
-            actualEnd = actualStart + 32
+            actualEnd = actualStart + BlockInfo.instantiate().byteSize
             let actualBytes = Array(array[actualStart..<actualEnd])
             let actualBlockInfo = BlockInfo().fromByteArray(array: actualBytes)
             if actualBlockInfo.address != previousBlockInfo.address {
@@ -694,13 +734,52 @@ extension ExtensibleHashing: Storable {
             }
             actualStart = actualEnd
         }
+        
+        var freeAddresses: [Int] = []
+        actualEnd = actualStart + 8
+        let freeAddressesCount = Int.fromByteArray(Array(array[actualStart..<actualEnd]))   // 6.1
+        actualStart = actualEnd
+        for _ in 0..<freeAddressesCount {                                                           // 6.2
+            actualEnd = actualStart + 8
+            let actualBytes = Array(array[actualStart..<actualEnd])
+            let address = Int.fromByteArray(actualBytes)
+            freeAddresses.append(address)
+        }
+        
+        
+        var overflowingAddressary: [BlockInfo] = []
+        actualEnd = actualStart + 8
+        let overflowingAddressaryCount = Int.fromByteArray(Array(array[actualStart..<actualEnd]))   // 7.1
+        actualStart = actualEnd
+        for _ in 0..<overflowingAddressaryCount {                                                           // 7.2
+            actualEnd = actualStart + BlockInfo.instantiate().byteSize
+            let actualBytes = Array(array[actualStart..<actualEnd])
+            let actualBlockInfo = BlockInfo().fromByteArray(array: actualBytes)
+            overflowingAddressary.append(actualBlockInfo)
+            actualStart = actualEnd
+        }
+        
+        var freeAddressesOverflowing: [Int] = []
+        actualEnd = actualStart + 8
+        let freeAddressesOverflowingCount = Int.fromByteArray(Array(array[actualStart..<actualEnd]))   // 8.1
+        actualStart = actualEnd
+        for _ in 0..<freeAddressesOverflowingCount {                                                           // 8.2
+            actualEnd = actualStart + 8
+            let actualBytes = Array(array[actualStart..<actualEnd])
+            let address = Int.fromByteArray(actualBytes)
+            freeAddressesOverflowing.append(address)
+        }
+        
+
         let extensibleHashing = ExtensibleHashing(fileName: fileName,
-                                                  blockFactor: blockFactor,
-                                                  addressary: addressary,
-                                                  freeAddresses: [], //FIXME: ❗️❗️❗️❗️❗️❗️❗️❗️❗️❗️
-                                                  blockCount: blockCount,
                                                   depth: depth,
-                                                  maxDepth: 8)
+                                                  blockFactor: blockFactor,
+                                                  blockCount: blockCount,
+                                                  maxSize: maxSize,
+                                                  addressary: addressary,
+                                                  freeAddresses: freeAddresses,
+                                                  overflowingAddressary: overflowingAddressary,
+                                                  freeAddressesOverflowing: freeAddressesOverflowing)
         
         return extensibleHashing
     }

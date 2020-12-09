@@ -59,9 +59,10 @@ class DashBoardViewModel: ObservableObject {
         PDAState.shared.save()
     }
     
-//    func load() {
-//        PDAState.shared.load()
-//    }
+    func load() {
+        PDAState.shared.load()
+        fetchAllData()
+    }
     
 }
 

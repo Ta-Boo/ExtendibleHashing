@@ -115,7 +115,7 @@ class UdajovkyTests: XCTestCase {
 
             var insertedProperties: [Property] = []
             for index in repetitions {
-                if index % 100 == 0 {print("I: \(index)/\(maxRep)")}
+                if index % 500 == 0 {print("I: \(index)/\(maxRep)")}
 
                 let registerNumber = randoms.popLast()!
                 let property = Property(registerNumber: registerNumber,
@@ -127,7 +127,7 @@ class UdajovkyTests: XCTestCase {
             }
 
             for (index, property) in insertedProperties.enumerated() {
-                if index % 100 == 0 {
+                if index % 500 == 0 {
                     print("D: \(index)/\(maxRep)")
                     
                 }
@@ -229,11 +229,7 @@ class UdajovkyTests: XCTestCase {
     }
     
     
-    
-    func testLoadnSave() {
-//        wrappedTestSave()
-//        wrappedTestLoad()
-    }
+
     
     func wrappedTestSave() {
         var generator = SeededGenerator(seed: UInt64(123))

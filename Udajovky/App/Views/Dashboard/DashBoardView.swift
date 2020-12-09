@@ -122,7 +122,7 @@ struct MainView: View {
                                 .buttonStyle(RoundedBackgroundStyle(color: Color.secondary))
                                 
                                 Button("Load") {
-                                    //                                    viewModel.load()
+                                    viewModel.load()
                                 }
                                 .buttonStyle(RoundedBackgroundStyle(color: Color.secondary))
                             }

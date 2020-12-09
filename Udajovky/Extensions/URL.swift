@@ -18,6 +18,6 @@ extension URL {
 extension FileManager {
     static func path(to file: String) -> String{
         return FileManager.default.urls(for: .documentDirectory,
-                                 in: .userDomainMask)[0].appendingPathComponent(file).corrected
+                                 in: .userDomainMask)[0].appendingPathComponent("GPS\\\(file)").corrected
     }
 }

@@ -28,7 +28,7 @@ class UdajovkyTests: XCTestCase {
     ]
 
     func testStaticInsertAndFind() {
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5, delete: true, logger: false)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 5, blockFactorOverflowing: 8, delete: true, logger: false)
         for property in staticProperties {
             print(property.description)
             extensibleHashing.add(property)
@@ -41,22 +41,8 @@ class UdajovkyTests: XCTestCase {
         }
     }
     
-    func testFileHandle() {
-        let filePath = FileManager.path(to: "ahoj.hsh")
-        let file = FileHandle(forUpdatingAtPath: filePath)
-        let block = Block<Property>(blockFactor: 3)
-        block.records = [
-            Property(registerNumber: 1, id: 1, description: "ahoj", position: GPS(lat: 1, long: 1)),
-            Property(registerNumber: 13, id: 13, description: "ahoj3", position: GPS(lat: 1, long: 1)),
-            Property(registerNumber: 134, id: 134, description: "ahoj34", position: GPS(lat: 1, long: 1)),
-        ]
-        file?.write(Data(block.toByteArray()))
-        
-
-    }
-    
     func testStaticDelete() {
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "delete_test", blockFactor: 5, delete: true, logger: false)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "delete_test", blockFactor: 5, blockFactorOverflowing: 8, delete: true, logger: false)
         
         for property in staticProperties {
             extensibleHashing.add(property)
@@ -74,17 +60,8 @@ class UdajovkyTests: XCTestCase {
         }
     }
     
-    func testBitset() {
-        let highBitset = 123.bitSet
-        let mediumBitset = 53.bitSet
-        let lowBitset = 11.bitSet
-        print(123, highBitset.desc, highBitset.toRealDecimal(), highBitset.toDecimal(depth: 4))
-        print(53, mediumBitset.desc, mediumBitset.toRealDecimal(), mediumBitset.toDecimal(depth: 4))
-        print(11, lowBitset.desc, lowBitset.toRealDecimal(), lowBitset.toDecimal(depth: 4))
-    }
-    
     func testInsertingOrder() {
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 1, delete: true, logger: true)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 1, blockFactorOverflowing: 4, delete: true, logger: true)
 //            let repetitions = 12...39
         let ids = [0,8,12,14]
         var properties: [Property] = []
@@ -106,7 +83,7 @@ class UdajovkyTests: XCTestCase {
     
     func testRandomDelete() {
             var generator = SeededGenerator(seed: UInt64(5))
-            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 8, delete: true, logger: false)
+            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 8, blockFactorOverflowing: 8, delete: true, logger: false)
 //            let repetitions = 12...39
             let repetitions = 0...2500
             let maxRep = repetitions.max()!
@@ -139,7 +116,7 @@ class UdajovkyTests: XCTestCase {
     
     func testDelete() {
             var generator = SeededGenerator(seed: UInt64(2))
-            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 6, delete: true, logger: false)
+            let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 6, blockFactorOverflowing: 6, delete: true, logger: false)
             let repetitions = 0...3_000
             let maxRep = repetitions.max()!
             var randoms = Array(0...65535)
@@ -172,17 +149,17 @@ class UdajovkyTests: XCTestCase {
     
     func testRandomOperations() {
         var generator = SeededGenerator(seed: UInt64(4))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 2, logger: false)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 6, blockFactorOverflowing: 8,maxDepth: 8, logger: false)
         
         var actualProperties: [Property] = []
         var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
         let findProb = 0.10
-        let insertProb = 0.5
+        let insertProb = 0.35
         let deleteProb = 1 - insertProb - findProb
         
         for i in 1...10_000 {
-            if i % 2000 == 0 {print(" \(i)/10_000")}
+            if i % 20 == 0 {print(" \(i)/10_000")}
             let probability = Double.random(in: 0...1, using: &generator)
             let registerNumber = randoms.popLast()!
             let property = Property(registerNumber: registerNumber, id: registerNumber, description: "asdadasdad", position: GPS(lat: 1, long: 1))
@@ -203,7 +180,7 @@ class UdajovkyTests: XCTestCase {
     
     func testInsertAndFind() {
         var generator = SeededGenerator(seed: UInt64(123))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 8, logger: false)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 8, blockFactorOverflowing: 14, logger: false)
         
         let repetitions = 1...8000
         let max = repetitions.upperBound
@@ -233,7 +210,7 @@ class UdajovkyTests: XCTestCase {
     
     func wrappedTestSave() {
         var generator = SeededGenerator(seed: UInt64(123))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "debug", blockFactor: 5)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "debug", blockFactor: 5, blockFactorOverflowing: 8)
         
         let repetitions = 1...50
         var randoms = Array(0...255)
@@ -258,7 +235,7 @@ class UdajovkyTests: XCTestCase {
     
     func wrappedTestLoad() {
         var generator = SeededGenerator(seed: UInt64(123))
-        let extensibleHashing = ExtensibleHashing<Property>(fileName: "debug", blockFactor: 5, delete: false)
+        let extensibleHashing = ExtensibleHashing<Property>(fileName: "debug", blockFactor: 5, blockFactorOverflowing: 8, delete: false)
         
         let repetitions = 1...1000
         var randoms = Array(0...65535)

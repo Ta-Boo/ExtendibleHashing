@@ -24,7 +24,6 @@ class AddressedBlock<T> where T: Hashable, T: Storable  {
 }
 
 final class Block<T>: Identifiable where T: Storable, T: Hashable {
-    let id = UUID()
     let blockFactor: Int
     var depth: Int
     var records: [T]
@@ -67,8 +66,8 @@ final class Block<T>: Identifiable where T: Storable, T: Hashable {
     }
     
     func save(with filehandle: FileHandle, at address: Int) {
-        try filehandle.seek(toFileOffset: UInt64(address))
-        try filehandle.write(Data(toByteArray()))
+        filehandle.seek(toFileOffset: UInt64(address))
+        filehandle.write(Data(toByteArray()))
     }
 }
 

@@ -32,7 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
     }
     func applicationWillTerminate(_ notification: Notification) {
-        print("terminating")
+        PDAState.shared.save()
     }
    
     

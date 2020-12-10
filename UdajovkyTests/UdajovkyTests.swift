@@ -148,14 +148,14 @@ class UdajovkyTests: XCTestCase {
     }
     
     func testRandomOperations() {
-        var generator = SeededGenerator(seed: UInt64(4))
+        var generator = SeededGenerator(seed: UInt64(5))
         let extensibleHashing = ExtensibleHashing<Property>(fileName: "first", blockFactor: 6, blockFactorOverflowing: 8,maxDepth: 8, logger: false)
         
         var actualProperties: [Property] = []
         var randoms = Array(0...65535)
         randoms.shuffle(using: &generator)
         let findProb = 0.10
-        let insertProb = 0.35
+        let insertProb = 0.60
         let deleteProb = 1 - insertProb - findProb
         
         for i in 1...10_000 {
@@ -171,7 +171,7 @@ class UdajovkyTests: XCTestCase {
                 let toBeRemoved = actualProperties.popLast()!
                 extensibleHashing.delete(toBeRemoved)
             } else if !actualProperties.isEmpty {
-                    _ = extensibleHashing.find(actualProperties.randomElement(using: &generator)!)
+                    _ = extensibleHashing.find(actualProperties.randomElement(using: &generator)!)!
             }
             
         }

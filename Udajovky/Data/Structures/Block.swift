@@ -43,10 +43,6 @@ final class Block<T>: Identifiable where T: Storable, T: Hashable {
         self.records = [T](repeating: T.instantiate(), count: blockFactor)
     }
     
-    func remove(_e lement: T) {
-        //TODO
-    }
-    
     func add(_ element: T) {
         records[validCount] = element
         validCount += 1
@@ -83,13 +79,13 @@ extension Block: Blockable {
         return Block(blockFactor: blockFactor)
     }
     
-     func recordsToString() -> String {
-        var result = ""
-        for record in records {
-            result.append(record.desc)
-        }
-        return result
+    private func recordsToString() -> String {
+    var result = ""
+    for record in records {
+        result.append(record.desc)
     }
+    return result
+}
     
     func toString() -> String {
         return """

@@ -12,9 +12,7 @@ struct GPS {
     let long: Double
 }
 
-
 final class Property: Identifiable {
-    
     let registerNumber: Int
     let id: Int
     let description: String

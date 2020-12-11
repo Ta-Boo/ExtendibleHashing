@@ -33,7 +33,7 @@ class AllData<T> where T:Hashable, T:Storable {
 
 class PDAState {
     static let shared = PDAState()
-    var properties = ExtensibleHashing<Property>(fileName: "GPS_System", blockFactor: 3, blockFactorOverflowing: 4, maxDepth: 3, delete: false, logger: true)
+    private var properties = ExtensibleHashing<Property>(fileName: "GPS_System", blockFactor: 3, blockFactorOverflowing: 3, maxDepth: 3, delete: false, logger: true)
     var allData : AllData<Property> {
         get {
             return properties.allData
@@ -62,7 +62,7 @@ class PDAState {
     
     func generate() {
         var generator = SeededGenerator(seed: UInt64(123))
-        let repetitions = 1...30
+        let repetitions = 1...40
         let max = repetitions.upperBound
         var randoms = Array(0...max)
         randoms.shuffle(using: &generator)

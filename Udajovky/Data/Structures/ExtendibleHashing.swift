@@ -185,6 +185,9 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     //MARK: FIND
     public func find(_ element: T) -> T? {
         debug(logger, "🔍🔍🔍 Looking for \(element.name) - \(element.hash.toRealDecimal()) hash: \(element.hash.desc) key: \(element.hash.toDecimal(depth: depth))  🔍🔍🔍")
+        if addressary[element.hash.toDecimal(depth: depth)].recordsCount == 0 {
+            return nil
+        }
         let block = loadBlock(by: element, from: dataFile, blockFactor: blockFactor)
         let result = block.records.first{ $0.equals(to: element)}
         if result == nil {
@@ -210,6 +213,22 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
         return result
     }
     
+    func update(from: T, to: T) {
+        var blockInfo = addressary[from.hash.toDecimal(depth: depth)]
+        while true {
+            let block = loadBlock(by: blockInfo.address, from: dataFile, blockFactor: blockFactor)
+            if block.records.contains(where:{ $0.equals(to: from) }) {
+                block.delete(from)
+                block.add(to)
+                break
+            }
+            if blockInfo.nextBlockAddress != -1 {
+                blockInfo = overflowingAddressary.first(where: {$0.address == blockInfo.nextBlockAddress})!
+            } else {
+                break
+            }
+        }
+    }
     //MARK: DELETE
     public func delete(_ element: T) {
         //TODO: shrinking file ❗️
@@ -267,7 +286,7 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
 
     }
     
-    func getNeighbor(of block: BlockInfo) -> BlockInfo? {
+    private func getNeighbor(of block: BlockInfo) -> BlockInfo? {
         if block.depth == 1 {
             return nil
         }

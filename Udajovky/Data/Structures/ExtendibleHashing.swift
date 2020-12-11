@@ -215,15 +215,18 @@ final class ExtensibleHashing<T> where  T: Hashable, T:Storable {
     
     func update(from: T, to: T) {
         var blockInfo = addressary[from.hash.toDecimal(depth: depth)]
+        var isInMain = true
         while true {
             let block = loadBlock(by: blockInfo.address, from: dataFile, blockFactor: blockFactor)
             if block.records.contains(where:{ $0.equals(to: from) }) {
                 block.delete(from)
                 block.add(to)
+                block.save(with: isInMain ? dataFile : overflowDataFile, at: blockInfo.address)                
                 break
             }
             if blockInfo.nextBlockAddress != -1 {
                 blockInfo = overflowingAddressary.first(where: {$0.address == blockInfo.nextBlockAddress})!
+                isInMain = false
             } else {
                 break
             }
